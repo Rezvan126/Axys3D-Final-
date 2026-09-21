@@ -1,0 +1,226 @@
+/* =========================================================
+   PROCESS SECTION (NO IMAGES / TIMELINE ANIMATION)
+========================================================= */
+
+.production-layer {
+  width: 100%;
+  padding: 85px 0 95px;
+  background: #f7f5ef;
+  font-family: "Manrope", sans-serif;
+  overflow: hidden;
+}
+
+.pl-wrap {
+  width: min(1180px, 88%);
+  margin: 0 auto;
+}
+
+/* =========================================================
+   HEADING AREA
+========================================================= */
+
+.pl-heading-area {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: min(1080px, 100%);
+  margin: 0 auto 60px;
+}
+
+.pl-heading-line {
+  flex: 1;
+  height: 1px;
+  background: #132131;
+  opacity: 0.18;
+}
+
+.pl-heading-content {
+  flex: 0 1 720px;
+  text-align: center;
+}
+
+.pl-tag {
+  margin: 0 0 12px;
+  color: #13173f;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pl-heading {
+  margin: 0;
+  color: #132131;
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1.2px;
+}
+
+.pl-heading span {
+  display: block;
+  color: #8eafc9;
+}
+
+.pl-intro {
+  max-width: 610px;
+  margin: 18px auto 0;
+  color: #495158;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* =========================================================
+   4-COLUMN GRID & ANIMATED CARDS
+========================================================= */
+
+.pl-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  position: relative;
+}
+
+.pl-card {
+  position: relative;
+  background: #ffffff;
+  padding: 32px 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(19, 33, 49, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+}
+
+/* Animated Top Accent Bar */
+.pl-card-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #8eafc9;
+  border-radius: 8px 8px 0 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Card Hover State */
+.pl-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(142, 175, 201, 0.4);
+  box-shadow: 0 16px 30px rgba(19, 33, 49, 0.07);
+}
+
+.pl-card:hover .pl-card-indicator {
+  transform: scaleX(1);
+}
+
+/* Card Header (Number & Tag) */
+.pl-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.pl-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(142, 175, 201, 0.12);
+  color: #132131;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.pl-card:hover .pl-num {
+  background: #132131;
+  color: #ffffff;
+}
+
+.pl-step-tag {
+  color: #8eafc9;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+/* Card Content */
+.pl-card-body h3 {
+  margin: 0 0 12px;
+  color: #132131;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+}
+
+.pl-card-body p {
+  margin: 0;
+  color: #495158;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   RESPONSIVE LAYOUT
+========================================================= */
+
+@media (max-width: 1000px) {
+  .production-layer {
+    padding: 70px 0;
+  }
+
+  .pl-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .pl-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .production-layer {
+    padding: 50px 0;
+  }
+
+  .pl-wrap {
+    width: 90%;
+  }
+
+  .pl-heading-area {
+    display: block;
+    margin-bottom: 35px;
+  }
+
+  .pl-heading-line {
+    width: 55px;
+    height: 1px;
+    margin: 0 auto 20px;
+  }
+
+  .pl-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

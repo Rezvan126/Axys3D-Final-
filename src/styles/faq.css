@@ -1,0 +1,163 @@
+/* =========================================================
+   FAQ SECTION (Image-Matched Design)
+   ========================================================= */
+
+.faq-section {
+  --bg-beige: #e3ddd3;
+  --ink: #111111;
+  --blue-accent: #3b597b; /* Heading me dark blue accent */
+  --eyebrow-color: #a88358;
+  --muted: #4a4640;
+  --line-color: rgba(0, 0, 0, 0.08);
+
+  width: 100%;
+  background: var(--bg-beige);
+  color: var(--ink);
+  padding: 100px 0;
+  font-family: "Manrope", sans-serif;
+}
+
+.faq-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr; /* Image wala 2-column layout */
+  gap: 60px;
+  align-items: start;
+}
+
+/* =========================================================
+   LEFT HEADING COLUMN
+   ========================================================= */
+
+.faq-heading {
+  text-align: left;
+}
+
+.faq-eyebrow {
+  display: block;
+  margin-bottom: 20px;
+  color: var(--eyebrow-color);
+  font-family: "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.faq-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+
+/* Aadha text dark blue kar diya gaya hai */
+.faq-heading h2 span {
+  color: var(--blue-accent);
+}
+
+/* =========================================================
+   RIGHT FAQ LIST COLUMN
+   ========================================================= */
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line-color);
+}
+
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question {
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding-right: 20px;
+  transition: color 0.2s ease;
+}
+
+.faq-item:hover .faq-question {
+  color: var(--blue-accent);
+}
+
+.faq-plus {
+  flex-shrink: 0;
+  color: #7a7368;
+  font-size: 20px;
+  font-weight: 300;
+  transition: transform 0.3s ease, color 0.2s ease;
+}
+
+.faq-item[open] .faq-plus {
+  transform: rotate(45deg);
+  color: var(--ink);
+}
+
+/* =========================================================
+   ANSWER AREA
+   ========================================================= */
+
+.faq-answer {
+  padding: 0 40px 28px 0;
+}
+
+.faq-answer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .faq-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 0 30px;
+  }
+
+  .faq-section {
+    padding: 70px 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .faq-inner {
+    padding: 0 20px;
+  }
+
+  .faq-heading h2 {
+    font-size: 32px;
+  }
+
+  .faq-question {
+    font-size: 16px;
+  }
+
+  .faq-item summary {
+    padding: 20px 0;
+  }
+}

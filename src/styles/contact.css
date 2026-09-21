@@ -1,0 +1,767 @@
+/* ==========================================================================
+   CONTACT PAGE STYLING
+   PREMIUM VISUAL SYSTEM — MATCHED WITH WORK / PROCESS PAGES
+   ========================================================================== */
+
+.contact-page {
+  --cnt-blue: #071522; 
+  --cnt-blue-soft: #0b1d2c;
+  --cnt-blue-panel: #102637;
+  --cnt-blue-light: #16364d;
+
+  --cnt-brown: #b38b5a;
+  --cnt-brown-light: #d2b487;
+  --cnt-brown-soft: rgba(179, 139, 90, 0.14);
+
+  --cnt-white: #ffffff;
+  --cnt-text: #d8dde0;
+  --cnt-muted: #8997a1;
+
+  --cnt-line: rgba(255, 255, 255, 0.1);
+
+  position: relative;
+  z-index: 1;
+  background: --cnt-blue;
+  color: var(--cnt-white);
+  overflow: hidden;
+
+  font-family:
+    "Manrope",
+    system-ui,
+    -apple-system,
+    sans-serif;
+
+  line-height: 1.6;
+  padding-bottom: 130px;
+}
+
+
+/* ==========================================================================
+   PAGE BACKGROUND
+   Required markup right after <body class="page-contact">:
+   <div class="cnt-page-bg"><div class="cnt-page-bg-overlay"></div></div>
+   ========================================================================== */
+
+.page-contact {
+  position: relative;
+  background: var(--cnt-blue);
+}
+
+.cnt-page-bg {
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: min(950px, 100vh);
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  background-image: url("https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=85");
+  background-size: cover;
+  background-position: center;
+
+  opacity: 0.34;
+
+  filter:
+    grayscale(0.30)
+    saturate(0.80)
+    contrast(1.02)
+    blur(1px);
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 34%,
+      rgba(0, 0, 0, 0.50) 60%,
+      rgba(0, 0, 0, 0.15) 82%,
+      transparent 100%
+    );
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 34%,
+      rgba(0, 0, 0, 0.50) 60%,
+      rgba(0, 0, 0, 0.15) 82%,
+      transparent 100%
+    );
+}
+
+.cnt-page-bg-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(7, 21, 34, 0.80);
+}
+
+
+/* ==========================================================================
+   WRAPPER
+   ========================================================================== */
+
+.cnt-wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
+
+.page-contact .navbar {
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+
+  background: transparent !important;
+
+  border-bottom: none !important;
+
+  backdrop-filter: none !important;
+
+  -webkit-backdrop-filter: none !important;
+
+  box-shadow: none !important;
+
+  z-index: 50;
+}
+
+.page-contact .logo,
+.page-contact .nav-links a {
+
+  color: var(--cnt-white);
+}
+
+.page-contact .nav-links a {
+
+  opacity: 0.72;
+
+  transition:
+    opacity 0.25s ease,
+    color 0.25s ease;
+}
+
+.page-contact .nav-links a:hover {
+
+  color: var(--cnt-brown-light);
+
+  opacity: 1;
+}
+
+.page-contact .nav-button {
+
+  color: #eee9df;
+
+  border-color: rgba(210, 180, 135, 0.35);
+
+  background: rgba(179, 139, 90, 0.08);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.page-contact .nav-button:hover {
+
+  background: rgba(179, 139, 90, 0.18);
+
+  border-color: rgba(210, 180, 135, 0.6);
+
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
+.cnt-hero {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 40px;
+
+  max-width: none;
+
+  padding: 190px 0 90px;
+}
+
+.cnt-hero-label {
+
+  flex: 0 0 160px;
+
+  padding-top: 10px;
+
+  color: var(--cnt-muted);
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+}
+
+.cnt-hero-label span {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.cnt-hero-label span::before {
+
+  content: "";
+
+  display: inline-block;
+
+  width: 14px;
+
+  height: 1px;
+
+  background: var(--cnt-brown);
+}
+
+.cnt-hero-content {
+
+  flex: 1;
+
+  max-width: 700px;
+
+  animation:
+    cntHeroReveal
+    0.9s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+@keyframes cntHeroReveal {
+
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cnt-eyebrow {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 0 0 25px;
+
+  color: var(--cnt-brown-light);
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.17em;
+
+  text-transform: uppercase;
+}
+
+.cnt-eyebrow::before {
+
+  content: "";
+
+  width: 6px;
+
+  height: 6px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--cnt-brown);
+
+  box-shadow: 0 0 0 5px rgba(179, 139, 90, 0.10);
+
+  animation:
+    cntDotPulse
+    2s
+    ease-in-out
+    infinite;
+}
+
+@keyframes cntDotPulse {
+
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.cnt-h1 {
+
+  max-width: 700px;
+
+  margin: 0 0 30px;
+
+  color: var(--cnt-white);
+
+  font-family: "Manrope", sans-serif;
+
+  font-size: clamp(36px, 4.6vw, 60px);
+
+  font-weight: 650;
+
+  letter-spacing: -0.05em;
+
+  line-height: 1.08;
+}
+
+.cnt-lead {
+
+  max-width: 560px;
+
+  margin: 0;
+
+  color: var(--cnt-text);
+
+  font-size: 16px;
+
+  font-weight: 450;
+
+  line-height: 1.8;
+}
+
+
+/* ==========================================================================
+   2. SECTIONS & HEADERS
+   ========================================================================== */
+.cnt-section {
+  position: relative;
+  background: var(--cnt-blue-panel);
+  border: 1px solid var(--cnt-line);
+  padding: 44px;
+  margin-bottom: 30px;
+
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cnt-section.cnt-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cnt-header-group {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--cnt-line);
+}
+
+.cnt-section-title {
+  font-family: "Manrope", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--cnt-white);
+  margin: 0 0 8px 0;
+}
+
+.cnt-section-sub {
+  font-size: 14px;
+  color: var(--cnt-muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   3. SCOPING CHECKLIST
+   ========================================================================== */
+.cnt-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.cnt-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cnt-text);
+  background: var(--cnt-blue-soft);
+  padding: 15px 16px;
+  border: 1px solid var(--cnt-line);
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s var(--cnt-delay, 0s) ease,
+    transform 0.5s var(--cnt-delay, 0s) cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.cnt-check-item.cnt-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cnt-check-item:hover {
+  border-color: rgba(179, 139, 90, 0.4);
+  background: var(--cnt-blue-light);
+}
+
+.cnt-check-icon {
+  color: var(--cnt-brown-light);
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.cnt-disclaimer-box {
+  background: var(--cnt-brown-soft);
+  border-left: 3px solid var(--cnt-brown);
+  padding: 16px 20px;
+}
+
+.cnt-disclaimer-box p {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cnt-brown-light);
+}
+
+/* ==========================================================================
+   4. PROJECT ENQUIRY FORM & INPUTS
+   ========================================================================== */
+.cnt-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.cnt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cnt-field-full {
+  grid-column: 1 / -1;
+}
+
+.cnt-field label {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--cnt-text);
+}
+
+.cnt-field label span {
+  color: var(--cnt-brown-light);
+}
+
+/* Inputs, Selects & Textareas */
+.cnt-field input,
+.cnt-field select,
+.cnt-field textarea {
+  width: 100%;
+  background: var(--cnt-blue-soft);
+  border: 1px solid var(--cnt-line);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cnt-white);
+  font-family: inherit;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.cnt-field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d2b487' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.cnt-field select option {
+  background-color: var(--cnt-blue-soft);
+  color: var(--cnt-white);
+}
+
+.cnt-field input::placeholder,
+.cnt-field textarea::placeholder {
+  color: var(--cnt-muted);
+  opacity: 0.8;
+}
+
+.cnt-field input:focus,
+.cnt-field select:focus,
+.cnt-field textarea:focus {
+  outline: none;
+  border-color: var(--cnt-brown);
+  background: var(--cnt-blue-light);
+  box-shadow: 0 0 0 3px rgba(179, 139, 90, 0.18);
+}
+
+.cnt-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.cnt-field input[type="date"] {
+  color-scheme: dark;
+}
+
+.cnt-field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+  filter: invert(1);
+}
+
+/* ==========================================================================
+   5. FORM FOOTER & BUTTONS
+   ========================================================================== */
+.cnt-form-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cnt-required-note {
+  font-size: 12.5px;
+  color: var(--cnt-muted);
+  margin: 0;
+}
+
+.cnt-required-note span {
+  color: var(--cnt-brown-light);
+}
+
+.cnt-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--cnt-brown-light);
+  color: var(--cnt-blue);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 16px 28px;
+  border-radius: 0;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+.cnt-submit:hover:not(:disabled) {
+  background: #dfc39a;
+  transform: translateY(-3px);
+  box-shadow: 0 22px 55px rgba(179, 139, 90, 0.20);
+}
+
+.cnt-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.cnt-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cnt-submit span {
+  transition: transform 0.2s ease;
+}
+
+.cnt-submit:hover:not(:disabled) span {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   6. CONTACT CHANNEL SECTION
+   ========================================================================== */
+.cnt-channel-box {
+  background: var(--cnt-blue-soft);
+  border: 1px dashed var(--cnt-line);
+  padding: 26px;
+}
+
+.cnt-channel-desc {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--cnt-white);
+  margin: 0 0 8px 0;
+}
+
+.cnt-channel-note {
+  font-size: 13.5px;
+  color: var(--cnt-muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   7. HONEYPOT & STATUS MESSAGES
+   ========================================================================== */
+.cnt-honeypot {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.cnt-form-message {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 8px;
+  display: none;
+}
+
+.cnt-form-message:not(:empty) {
+  display: block;
+}
+
+.cnt-form-message--success {
+  background: rgba(90, 179, 130, 0.12);
+  border: 1px solid #5ab382;
+  color: #a9e2c2;
+}
+
+.cnt-form-message--error {
+  background: rgba(214, 108, 78, 0.12);
+  border: 1px solid #d66c4e;
+  color: #f2b4a0;
+}
+
+/* ==========================================================================
+   8. RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 1100px) {
+
+  .cnt-wrap {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 860px) {
+
+  .cnt-page-bg {
+    height: min(800px, 95vh);
+    opacity: 0.24;
+  }
+
+  .cnt-wrap {
+    padding: 0 22px;
+  }
+
+  .cnt-hero {
+    flex-direction: column;
+    gap: 20px;
+    padding: 130px 0 60px;
+  }
+
+  .cnt-hero-label {
+    flex: initial;
+  }
+
+  .cnt-h1 {
+    font-size: clamp(30px, 9vw, 42px);
+  }
+
+  .cnt-section {
+    padding: 28px 22px;
+  }
+
+  .cnt-form {
+    grid-template-columns: 1fr;
+  }
+
+  .cnt-form-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cnt-submit {
+    width: 100%;
+  }
+
+  .cnt-checklist {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .cnt-hero-content {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .cnt-eyebrow::before {
+    animation: none;
+  }
+
+  .cnt-section,
+  .cnt-check-item {
+    opacity: 1;
+    transform: none;
+  }
+}

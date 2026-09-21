@@ -1,0 +1,241 @@
+---
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/token.css";
+import "../styles/global.css";
+import "../styles/Navbar.css";
+import "../styles/work.css";
+import "../styles/footer.css";
+import { getEntry, getCollection } from "astro:content";
+
+const workPageEntry = await getEntry("workPage", "index");
+
+if (!workPageEntry) {
+  throw new Error("Could not find index.md in src/content/workPage/");
+}
+
+const pageData = workPageEntry.data;
+
+const rawProjects = await getCollection("projects");
+
+const projects = rawProjects.map((item, index) => ({
+  id: item.id,
+  ...item.data,
+  video: `/videos/video${(index % 3) + 1}.mp4`,
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content={pageData.heroDescription}
+    />
+    <title>{pageData.heroTitle} — Axys3D</title>
+  </head>
+  <script>
+  const cards = document.querySelectorAll<HTMLElement>('.wrk-card');
+  cards.forEach((card, i) => {
+    card.style.setProperty('--wrk-delay', (i % 2) * 0.12 + 's');
+  });
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('wrk-card-visible');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach((card) => cardObserver.observe(card));
+</script>
+  <body class="page-work">
+
+    <Navbar variant="solid" />
+
+    <main class="work-page">
+
+      <!-- BACKGROUND -->
+      <div class="wrk-page-bg" aria-hidden="true">
+        <div class="wrk-page-bg-overlay"></div>
+      </div>
+
+      <div class="wrk-wrap">
+
+        <!-- HERO -->
+       <!-- HERO SECTION -->
+<header class="wrk-hero">
+
+  <div class="wrk-hero-label">
+    <span>WORK</span>
+  </div>
+
+  <div class="wrk-hero-content">
+    <p class="wrk-eyebrow">{pageData.heroTitle}</p>
+
+    <h1 class="wrk-h1">
+      {pageData.heroSubtitle}
+    </h1>
+
+    <p class="wrk-lead">
+      {pageData.heroDescription}
+    </p>
+  </div>
+
+</header>
+
+
+        <!-- CASE STUDIES INTRO -->
+        <section class="wrk-intro">
+
+          <div>
+            <span class="wrk-section-label">CASE STUDIES</span>
+
+            <h2>
+              A closer look at<br />
+              <span class ="wrk-section-title">our selected work. </span>
+            </h2>
+          </div>
+
+          <div class="wrk-intro-meta">
+            <span class="wrk-count">
+              {projects.length} PROJECTS
+            </span>
+
+            <span class="wrk-intro-line"></span>
+          </div>
+
+        </section>
+
+
+        <!-- PROJECT GRID -->
+        <section class="wrk-projects-section">
+
+          <div class="wrk-projects-grid">
+
+            {projects.map((project, index) => (
+
+              <article class="wrk-card">
+
+                <!-- VIDEO -->
+                <a
+                  href={`/work/${project.id}`}
+                  class="wrk-card-media"
+                  aria-label={`View ${project.title} case study`}
+                >
+
+                  <video
+                    class="wrk-card-video"
+                    src={project.video}
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                  ></video>
+
+                  <div class="wrk-card-overlay"></div>
+
+                  <div class="wrk-card-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+
+                  <div class="wrk-card-arrow">
+                    ↗
+                  </div>
+
+                  <div class="wrk-card-media-label">
+                    CASE STUDY
+                  </div>
+
+                </a>
+
+
+                <!-- CONTENT -->
+                <div class="wrk-card-content">
+
+                  <div class="wrk-card-top">
+
+                    <span class="wrk-card-category">
+                      {project.badgeText}
+                    </span>
+
+                    <span class="wrk-card-index">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                  </div>
+
+
+                  <h3 class="wrk-card-title">
+                    <a href={`/work/${project.id}`}>
+                      {project.title}
+                    </a>
+                  </h3>
+
+
+                  <p class="wrk-card-summary">
+                    {project.summary}
+                  </p>
+
+
+                  <a
+                    href={`/work/${project.id}`}
+                    class="wrk-view-link"
+                  >
+                    <span>View case study</span>
+                    <span class="wrk-view-arrow">↗</span>
+                  </a>
+
+                </div>
+
+              </article>
+
+            ))}
+
+          </div>
+
+
+          {projects.length === 0 && (
+            <div class="wrk-no-results">
+              <p>No case studies available yet.</p>
+            </div>
+          )}
+
+        </section>
+
+
+        <!-- CTA -->
+        <section class="wrk-final-cta">
+
+          <div class="wrk-cta-kicker">
+            HAVE A PROJECT IN MIND?
+          </div>
+
+          <h2>
+            Let's turn your project<br />
+           <span class = "wrk-final-title"> into something visual. </span>
+          </h2>
+
+          <p>
+            Tell us what you're building and we'll help you define
+            the right visual production approach.
+          </p>
+
+          <a href="/contact" class="wrk-cta-button">
+            Discuss a project
+            <span>↗</span>
+          </a>
+
+        </section>
+
+      </div>
+
+    </main>
+
+    <Footer />
+
+  </body>
+</html>

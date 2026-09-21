@@ -1,0 +1,1095 @@
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: "Manrope", sans-serif;
+
+  background: #0b1d2d;
+}
+
+
+/* =========================================================
+   BACKGROUND VIDEO
+========================================================= */
+
+.hero-video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  display: block;
+
+  z-index: 0;
+}
+
+
+/* =========================================================
+   DARK BLUE OVERLAY
+========================================================= */
+
+.hero-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 22, 37, 0.88) 0%,
+      rgba(8, 25, 42, 0.76) 45%,
+      rgba(7, 24, 40, 0.68) 100%
+    );
+
+  z-index: 1;
+}
+
+
+/* Slight extra darkening toward bottom */
+
+.hero-overlay::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(5, 18, 31, 0.15) 0%,
+      rgba(5, 18, 31, 0.08) 45%,
+      rgba(4, 18, 29, 0.72) 100%
+    );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.hero-content {
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+  min-height: 100vh;
+
+  box-sizing: border-box;
+
+  padding: 145px 4.5% 30px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    430px;
+
+  grid-template-rows:
+    1fr
+    auto;
+
+  column-gap: 70px;
+
+  align-items: end;
+}
+
+
+/* =========================================================
+   MAIN HERO AREA
+========================================================= */
+
+.hero-main {
+  align-self: center;
+
+  max-width: 850px;
+
+  padding-bottom: 20px;
+}
+
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.hero-eyebrow {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+
+  color: #b38b4c;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  line-height: 1.3;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.45px;
+}
+
+.hero-eyebrow::after {
+  content: "";
+
+  width: 58px;
+  height: 1px;
+
+  background: rgba(179, 139, 76, 0.65);
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.hero h1 {
+  max-width: 900px;
+
+  margin: 0;
+
+  color: #f8f5ef;
+
+  font-size: clamp(52px, 6vw, 78px);
+
+  line-height: 0.96;
+
+  letter-spacing: -3.8px;
+
+  font-weight: 600;
+}
+
+.hero h1 span {
+  color: #f8f5ef;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.hero-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 28px;
+}
+
+.primary-button,
+.secondary-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  min-height: 42px;
+
+  padding: 0 18px;
+
+  border-radius: 999px;
+
+  text-decoration: none;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: -0.1px;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.primary-button:hover,
+.secondary-button:hover {
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+========================================================= */
+
+.primary-button {
+  background: #e5d0a9;
+
+  color: #101b25;
+
+  border: 1px solid #e5d0a9;
+}
+
+.primary-button:hover {
+  background: #f0dfbd;
+}
+
+
+/* =========================================================
+   SECONDARY BUTTON
+========================================================= */
+
+.secondary-button {
+  background: #b38b4c;
+
+  color: #101b25;
+
+  border: 1px solid #b38b4c;
+}
+
+.secondary-button:hover {
+  background: #c39b5d;
+}
+
+
+/* =========================================================
+   ARROW
+========================================================= */
+
+.arrow {
+  font-size: 14px;
+
+  line-height: 1;
+
+  margin-top: -1px;
+}
+
+
+/* =========================================================
+   SOFTWARE WORKFLOW
+========================================================= */
+
+.tech-stack {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-top: 20px;
+}
+
+
+/* Small workflow label */
+
+.tech-label {
+  color: rgba(247, 245, 239, 0.38);
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  letter-spacing: 1.3px;
+
+  white-space: nowrap;
+}
+
+
+/* Icons row */
+
+.tech-items {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  flex-wrap: wrap;
+}
+
+
+/* Individual badge */
+
+.tech-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  height: 28px;
+
+  padding: 0 9px 0 5px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: rgba(7, 24, 40, 0.42);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  backdrop-filter: blur(8px);
+
+  -webkit-backdrop-filter: blur(8px);
+
+  color: rgba(247, 245, 239, 0.7);
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+/* Clean hover */
+
+.tech-badge:hover {
+  background: rgba(179, 139, 76, 0.12);
+
+  border-color: rgba(179, 139, 76, 0.35);
+
+  color: #f8f5ef;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SOFTWARE ICON CIRCLES
+========================================================= */
+
+.tech-icon {
+  width: 19px;
+
+  height: 19px;
+
+  flex: 0 0 19px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 5px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  color: #d5b27a;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+/* SVG */
+
+.tech-icon svg {
+  width: 12px;
+
+  height: 12px;
+
+  display: block;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.4;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+
+/* Revit */
+
+.revit-icon {
+  background: rgba(179, 139, 76, 0.16);
+
+  color: #d5b27a;
+}
+
+
+/* 3ds Max */
+
+.max-icon {
+  background: rgba(179, 139, 76, 0.12);
+
+  color: #d5b27a;
+}
+
+
+/* Unreal */
+
+.unreal-icon {
+  background: rgba(255, 255, 255, 0.07);
+
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* Rhino */
+
+.rhino-icon {
+  background: rgba(255, 255, 255, 0.07);
+
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* BIM */
+
+.bim-icon {
+  background: rgba(179, 139, 76, 0.12);
+
+  color: #d5b27a;
+}
+
+
+/* =========================================================
+   DELIVERY BOX
+========================================================= */
+
+.delivery-box {
+  align-self: end;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 20px 20px 17px;
+
+  margin-bottom: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(10, 28, 44, 0.76),
+      rgba(6, 20, 33, 0.66)
+    );
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(178, 199, 214, 0.2);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================================================
+   DELIVERY HEADER
+========================================================= */
+
+.delivery-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding-bottom: 14px;
+
+  margin-bottom: 0;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+
+  color: rgba(240, 236, 226, 0.62);
+
+  font-size: 8px;
+
+  letter-spacing: 0.9px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   DELIVERY ITEM
+========================================================= */
+
+.delivery-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  min-height: 39px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.delivery-item:last-child {
+  border-bottom: none;
+}
+
+
+/* =========================================================
+   NUMBERS
+========================================================= */
+
+.number {
+  min-width: 23px;
+
+  color: #b38b4c;
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* =========================================================
+   ITEM CONTENT
+========================================================= */
+
+.item-content {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.item-content > span:first-child {
+  color: rgba(247, 244, 237, 0.84);
+
+  font-size: 10.5px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+  flex-shrink: 0;
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.7px;
+}
+
+.ready {
+  color: rgba(232, 235, 232, 0.72);
+}
+
+.open {
+  color: #b38b4c;
+}
+
+
+/* =========================================================
+   BOTTOM INFORMATION
+========================================================= */
+
+.hero-bottom {
+  grid-column: 1 / -1;
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.7fr);
+
+  gap: 80px;
+
+  align-items: start;
+
+  margin-top: 30px;
+
+  padding: 24px 0 8px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.hero-description-wrap {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 22px;
+}
+
+.plus {
+  color: #b38b4c;
+
+  font-size: 24px;
+
+  font-weight: 300;
+
+  line-height: 1;
+
+  margin-top: -3px;
+}
+
+.hero-description {
+  max-width: 720px;
+
+  margin: 0;
+
+  color: rgba(247, 245, 239, 0.83);
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+.hero-description strong {
+  color: #f4f0e8;
+
+  font-weight: 600;
+}
+
+.hero-description.second {
+  max-width: 390px;
+
+  color: rgba(247, 245, 239, 0.52);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .hero-content {
+    padding: 135px 5% 35px;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      360px;
+
+    column-gap: 35px;
+  }
+
+  .hero h1 {
+    font-size: clamp(46px, 6vw, 65px);
+
+    letter-spacing: -3px;
+  }
+
+  .delivery-box {
+    padding: 18px;
+
+    border-radius: 18px;
+  }
+
+  .hero-bottom {
+    gap: 40px;
+  }
+
+  .tech-stack {
+    gap: 11px;
+  }
+
+  .tech-badge {
+    padding-right: 8px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .hero {
+    min-height: 100vh;
+  }
+
+  .hero-content {
+    min-height: 100vh;
+
+    padding: 120px 6% 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    justify-content: flex-end;
+
+    gap: 30px;
+  }
+
+
+  /* Main content */
+
+  .hero-main {
+    align-self: stretch;
+
+    padding-bottom: 0;
+  }
+
+
+  /* Eyebrow */
+
+  .hero-eyebrow {
+    font-size: 9px;
+
+    margin-bottom: 14px;
+  }
+
+  .hero-eyebrow::after {
+    width: 35px;
+  }
+
+
+  /* Heading */
+
+  .hero h1 {
+    font-size: clamp(42px, 12vw, 58px);
+
+    line-height: 0.98;
+
+    letter-spacing: -2.5px;
+  }
+
+
+  /* Buttons */
+
+  .hero-buttons {
+    flex-wrap: wrap;
+
+    margin-top: 24px;
+  }
+
+  .primary-button,
+  .secondary-button {
+    min-height: 40px;
+
+    padding: 0 16px;
+
+    font-size: 10px;
+  }
+
+
+  /* =========================================================
+     SOFTWARE WORKFLOW
+  ========================================================= */
+
+  .tech-stack {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 18px;
+  }
+
+  .tech-items {
+    gap: 5px;
+  }
+
+  .tech-label {
+    font-size: 7px;
+  }
+
+  .tech-badge {
+    height: 27px;
+
+    padding: 0 8px 0 5px;
+
+    font-size: 8px;
+  }
+
+  .tech-icon {
+    width: 18px;
+
+    height: 18px;
+
+    flex-basis: 18px;
+  }
+
+
+  /* Delivery */
+
+  .delivery-box {
+    width: 100%;
+
+    margin-bottom: 0;
+
+    padding: 17px;
+
+    border-radius: 18px;
+  }
+
+  .delivery-header {
+    font-size: 7px;
+  }
+
+  .delivery-item {
+    min-height: 37px;
+  }
+
+  .item-content > span:first-child {
+    font-size: 9.5px;
+  }
+
+
+  /* =========================================================
+     DESCRIPTION
+  ========================================================= */
+
+  .hero-description-wrap {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 22px;
+  }
+
+  .plus {
+    flex-shrink: 0;
+
+    color: #b38b4c;
+
+    font-size: 22px;
+
+    font-weight: 300;
+
+    line-height: 1;
+
+    margin-top: -2px;
+  }
+
+  .hero-description {
+    max-width: 720px;
+
+    margin: 0;
+
+    color: rgba(247, 245, 239, 0.84);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+  }
+
+  .hero-description strong {
+    color: #f4f0e8;
+
+    font-weight: 600;
+  }
+
+  .hero-description.second {
+    max-width: 390px;
+
+    color: rgba(247, 245, 239, 0.52);
+
+    font-size: 11px;
+
+    line-height: 1.55;
+  }
+
+
+  /* =========================================================
+     BOTTOM INFORMATION
+  ========================================================= */
+
+  .hero-bottom {
+    grid-column: 1 / -1;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.45fr)
+      minmax(280px, 0.7fr);
+
+    gap: 80px;
+
+    align-items: start;
+
+    padding: 22px 0 12px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+
+    box-sizing: border-box;
+  }
+
+
+  /* Features */
+
+  .hero-features {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    padding-top: 15px;
+  }
+
+  .feature {
+    padding-left: 10px;
+  }
+
+  .feature h3 {
+    font-size: 9px;
+  }
+
+  .feature p {
+    font-size: 8px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .hero-content {
+    padding: 115px 6% 28px;
+
+    gap: 25px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+
+    letter-spacing: -2px;
+  }
+
+  .hero-buttons {
+    gap: 8px;
+  }
+
+  .primary-button,
+  .secondary-button {
+    min-height: 38px;
+
+    padding: 0 14px;
+
+    gap: 16px;
+  }
+
+  .tech-stack {
+    margin-top: 15px;
+  }
+
+  .tech-badge {
+    height: 26px;
+
+    padding: 0 7px 0 4px;
+
+    font-size: 7.5px;
+  }
+
+  .tech-icon {
+    width: 17px;
+
+    height: 17px;
+
+    flex-basis: 17px;
+  }
+
+  .delivery-box {
+    padding: 15px;
+  }
+
+  .delivery-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 5px;
+  }
+
+  .delivery-item {
+    gap: 10px;
+
+    min-height: 35px;
+  }
+
+  .item-content > span:first-child {
+    font-size: 8.5px;
+  }
+
+  .status {
+    font-size: 7px;
+  }
+
+  .hero-bottom {
+    gap: 12px;
+  }
+
+  .hero-description {
+    font-size: 10px;
+  }
+
+  .hero-features {
+    gap: 5px;
+  }
+
+  .feature {
+    padding-left: 7px;
+  }
+
+  .feature h3 {
+    font-size: 8px;
+  }
+
+  .feature p {
+    display: none;
+  }
+}

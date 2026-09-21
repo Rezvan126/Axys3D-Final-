@@ -1,0 +1,97 @@
+---
+import "../styles/Buyer-segments.css";
+
+const segments = [
+  {
+    num: "01",
+    title: "Architecture practices",
+    desc: "BEP- and template-aligned Revit, BIM, documentation and visual-production capacity.",
+    href: "/industries/architecture-design-practices/",
+  },
+  {
+    num: "02",
+    title: "Engineering multidisciplinary",
+    desc: "Federation, issue-management and model-production support inside engineer-led approvals.",
+    href: "/industries/engineering-multidisciplinary/",
+  },
+  {
+    num: "03",
+    title: "Developers and asset teams",
+    desc: "Traceable planning, approval, marketing and real-time communication packages.",
+    href: "/industries/developers-asset-teams/",
+  },
+  {
+    num: "04",
+    title: "Agencies and production partners",
+    desc: "NDA-first, white-label technical production with controlled contact and publication rights.",
+    href: "/industries/agencies-production-partners/",
+  },
+];
+---
+
+<section class="buyer-segments">
+  <div class="bs-wrap">
+    <div class="bs-layout">
+      <!-- Left Heading Column -->
+      <div class="bs-head">
+        <p class="bs-tag">BUILT FOR ACCOUNTABLE TEAMS</p>
+        <h2 class="bs-heading">
+          The production<br />
+          model adapts to<br />
+          the buyer not the<br />
+          controls.
+        </h2>
+        <p class="bs-sub">
+          Every engagement keeps authoritative inputs, responsibility, review ownership and delivery
+          status visible while adapting the production package to the team commissioning it.
+        </p>
+      </div>
+
+      <!-- Right Accordion Column -->
+      <div class="bs-accordion">
+        {segments.map((seg) => (
+          <div class="bs-item">
+            <button class="bs-item-header" aria-expanded="false">
+              <div class="bs-item-title-wrap">
+                <span class="bs-num">{seg.num}</span>
+                <h3 class="bs-title">{seg.title}</h3>
+              </div>
+              <span class="bs-icon-arrow">↓</span>
+            </button>
+            <div class="bs-item-content">
+              <p class="bs-desc">{seg.desc}</p>
+              <a href={seg.href} class="bs-link">
+                Review workflow <span>→</span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Click Handler for Accordion
+  const accordionItems = document.querySelectorAll('.bs-item');
+
+  accordionItems.forEach((item) => {
+    const header = item.querySelector('.bs-item-header');
+
+    header?.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+
+      // Close all other active items
+      accordionItems.forEach((otherItem) => {
+        otherItem.classList.remove('active');
+        otherItem.querySelector('.bs-item-header')?.setAttribute('aria-expanded', 'false');
+      });
+
+      // Toggle current item
+      if (!isActive) {
+        item.classList.add('active');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>

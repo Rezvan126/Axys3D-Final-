@@ -1,0 +1,51 @@
+---
+import "../styles/case-studies.css";
+
+const studies = [
+  {
+    num: "01",
+    title: "Federated delivery study",
+    href: "/work/aec-study-01/",
+    video: "/videos/video1.mp4",
+  },
+  {
+    num: "02",
+    title: "Real-time campus study",
+    href: "/work/aec-study-02/",
+    video: "/videos/video2.mp4",
+  },
+  {
+    num: "03",
+    title: "Anonymous production-package study",
+    href: "/work/aec-study-03/",
+    video: "/videos/video3.mp4",
+  },
+];
+---
+
+<section class="case-studies">
+  <div class="cs-wrap">
+    <div class="cs-head">
+      <p class="cs-tag">SYNTHETIC CASE-STUDY SYSTEM</p>
+      <h2 class="cs-heading">Delivery evidence, not unverified claims.</h2>
+    </div>
+
+    <div class="cs-grid">
+      {studies.map((s) => (
+        <a class="cs-card" href={s.href}>
+          <div class="cs-media">
+            <video autoplay muted loop playsinline>
+              <source src={s.video} type="video/mp4" />
+            </video>
+          </div>
+
+          <span class="cs-number">{s.num}</span>
+
+          <div class="cs-content">
+            <h3 class="cs-title">{s.title}</h3>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

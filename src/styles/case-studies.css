@@ -1,0 +1,157 @@
+/* =========================================================
+   SYNTHETIC CASE STUDY - DARK GRID DESIGN
+========================================================= */
+
+.case-studies {
+  --bg-dark: #141d31;
+  --card-bg: #131c2a;
+  --text-white: #ffffff;
+  --gold: #d4a373;
+  --muted-text: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  padding: 100px 80px;
+  font-family: "Inter", -apple-system, sans-serif;
+}
+
+.cs-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.cs-head {
+  margin-bottom: 50px;
+}
+
+.cs-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.cs-heading {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: clamp(32px, 3vw, 44px);
+  line-height: 1.2;
+  color: var(--text-white);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* 3-Column Grid Layout */
+.cs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Individual Card Structure */
+.cs-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 420px;
+  background-color: var(--card-bg);
+  /* border-radius: 12px; */
+  overflow: hidden;
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.cs-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212, 163, 115, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Background Media (Video/Image Area) */
+.cs-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.cs-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark Gradient Overlay for text readability */
+.cs-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(11, 19, 31, 0.95) 0%,
+    rgba(11, 19, 31, 0.4) 50%,
+    rgba(11, 19, 31, 0.2) 100%
+  );
+  z-index: 2;
+}
+
+/* Top Numbering */
+.cs-number {
+  position: relative;
+  z-index: 3;
+  padding: 24px 24px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-text);
+  letter-spacing: 0.05em;
+}
+
+/* Bottom Title Text Overlay */
+.cs-content {
+  position: relative;
+  z-index: 3;
+  padding: 0 24px 28px;
+}
+
+.cs-title {
+  font-family: "Manrope", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-white);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.cs-card:hover .cs-title {
+  color: var(--gold);
+}
+
+/* Responsive Grid */
+@media (max-width: 1024px) {
+  .case-studies {
+    padding: 80px 40px;
+  }
+  .cs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .case-studies {
+    padding: 60px 20px;
+  }
+  .cs-grid {
+    grid-template-columns: 1fr;
+  }
+  .cs-card {
+    height: 360px;
+  }
+}

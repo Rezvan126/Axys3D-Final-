@@ -1,0 +1,242 @@
+/* =========================================================
+   AXYS3D — PRODUCTION LAYER (EXACT MATCH)
+========================================================= */
+
+.px-services-wrapper {
+    position: relative;
+    width: 100%;
+    background: #f7f5ef;
+    padding: 70px 0  30px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.px-sketch-bg {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    background-image: url('/images/sketch-bg.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1100px auto;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.px-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+/* =========================================================
+   HEADER WITH LEFT & RIGHT DIVIDER LINES (CENTERED & 2-LINES)
+========================================================= */
+
+.px-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0 40px;
+    margin-bottom: 40px;
+    box-sizing: border-box;
+}
+
+.px-line {
+    flex: 1;
+    max-width: 90px;
+    height: 1px;
+    background-color: rgba(180, 190, 195, 0.6);
+}
+
+.px-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+    max-width: 750px;
+}
+
+.px-eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    color: #0b1928;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+.px-header h2 {
+    margin: 0 0 16px 0;
+    color: #0b1928;
+    font-family: 'Manrope', -apple-system, sans-serif;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+    text-align: center;
+}
+
+.px-header h2 .px-highlight {
+    color: #8daec5;
+}
+
+.px-subtext {
+    margin: 0;
+    font-size: 14px;
+    color: #4a5c6a;
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* =========================================================
+   HORIZONTAL SLIDER & ZIG-ZAG CARDS
+========================================================= */
+
+.px-slider-wrap {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 40px 0 50px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.px-slider-wrap::-webkit-scrollbar {
+    display: none;
+}
+
+.px-slider-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    padding: 0 40px;
+}
+
+/* Card Base Style */
+.px-card {
+    width: 290px;
+    height: 300px;
+    flex: 0 0 290px;
+    background: #fcfdfe;
+    border: 1px solid rgba(210, 220, 225, 0.8);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    box-sizing: border-box;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+}
+
+/* Alternate Height Offset (Zig-Zag Floating) */
+.px-card:nth-child(odd) {
+    transform: translateY(-16px);
+}
+
+.px-card:nth-child(even) {
+    transform: translateY(20px);
+}
+
+.px-card:nth-child(odd):hover {
+    transform: translateY(-24px);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.08);
+}
+
+.px-card:nth-child(even):hover {
+    transform: translateY(12px);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* Image Section */
+.px-card-img {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #e8eff3;
+}
+
+.px-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.px-card-num {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1a2b3c;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Content Area */
+.px-card-content {
+    padding: 14px 2px 0 2px;
+    flex: 0 0 auto;
+}
+
+.px-card-content h3 {
+    margin: 0 0 6px 0;
+    color: #12283a;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.px-card:first-child .px-card-content h3 {
+    color: #2b6cb0;
+}
+
+.px-card-content p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #5a6e7f;
+    line-height: 1.45;
+}
+
+/* Footer Link Area */
+.px-card-footer {
+    padding-top: 12px;
+    padding-left: 2px;
+}
+
+.px-scope-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: #12283a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.px-scope-link .arrow {
+    font-size: 11px;
+}
+
+@media (max-width: 768px) {
+    .px-line {
+        display: none;
+    }
+    .px-header-row {
+        padding: 0 20px;
+    }
+}
