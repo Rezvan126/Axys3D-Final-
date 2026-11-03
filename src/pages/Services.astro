@@ -1,4 +1,5 @@
 ---
+import ServicesShowcase from "../components/ServicesShowcase.astro";
 import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
@@ -8,98 +9,8 @@ import "../styles/Navbar.css";
 import "../styles/Services.css";
 import "../styles/footer.css";
 
-// ⬇⬇ SIRF YAHAN IMAGE LINKS BADLO (https://... ya /images/... dono chalte hain) ⬇⬇
-const orbitImages = {
-  bim: "https://images.unsplash.com/photo-1627141234469-24711efb373c?auto=format&fit=crop&w=400&h=400&q=75",
-  revit: "https://images.unsplash.com/photo-1721244654392-9c912a6eb236?auto=format&fit=crop&w=400&h=400&q=75",
-  mep: "https://images.unsplash.com/photo-1765850262030-1ae93e474473?auto=format&fit=crop&w=400&h=400&q=75",
-  max3ds: "https://images.unsplash.com/photo-1726471809607-b7f016a1696e?auto=format&fit=crop&w=400&h=400&q=75",
-  motion: "https://images.unsplash.com/photo-1722421492323-eaf9c401befe?auto=format&fit=crop&w=400&h=400&q=75",
-  unreal: "https://images.unsplash.com/photo-1706808849780-7a04fbac83ef?auto=format&fit=crop&w=400&h=400&q=75",
-  visualization: "https://images.unsplash.com/photo-1706808849802-8f876ade0d1f?auto=format&fit=crop&w=400&h=400&q=75",
-  model3d: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?auto=format&fit=crop&w=400&h=400&q=75",
-};
-
-/* =========================================================
-   SERVICE PANELS — data
-   Har service ka: slug (detail page /services/<slug>), image, aur "includes" (andar kya kya aata hai).
-   Images upar wali orbitImages se aati hain (wohi relevant images), bas bari size mein.
-   Kisi service ki image badalni ho to sirf us ka `image` link badlo.
-   ========================================================= */
-
-const thumb = (u: string) => u.replace(/w=\d+&h=\d+&q=\d+/, "w=600&h=800&q=75");
-
-const services = [
-  {
-    num: "01",
-    slug: "bim-production",
-    title: "BIM Execution & Model Production",
-    blurb:
-      "Coordinated BIM models built to firm standards, from concept development through construction-ready detail.",
-    includes: ["BIM Modeling", "Model Development", "Model Setup & Standards"],
-    image: thumb(orbitImages.bim),
-  },
-  {
-    num: "02",
-    slug: "revit-production",
-    title: "Revit Production & Documentation",
-    blurb:
-      "Production-ready Revit documentation and drawing sets, coordinated across disciplines and issued on schedule.",
-    includes: ["Construction Drawings", "Revit Documentation", "Drawing Coordination"],
-    image: thumb(orbitImages.revit),
-  },
-  {
-    num: "03",
-    slug: "mep-coordination",
-    title: "MEP Coordination Support",
-    blurb:
-      "Clash-checked mechanical, electrical and plumbing coordination that keeps every system resolved before it hits site.",
-    includes: ["Mechanical", "Electrical", "Plumbing"],
-    image: thumb(orbitImages.mep),
-  },
-  {
-    num: "04",
-    slug: "3d-modeling",
-    title: "3D Modeling",
-    blurb:
-      "Accurate architectural, interior and object models built to support every downstream visualization need.",
-    includes: ["Architectural Modeling", "Interior Modeling", "Furniture & Objects"],
-    image: thumb(orbitImages.model3d),
-  },
-  {
-    num: "05",
-    slug: "3ds-max-production",
-    title: "3ds Max Production",
-    blurb: "Scene setup, materials and lighting built in 3ds Max to a consistent, production-grade pipeline.",
-    includes: ["Scene Setup", "Materials & Texturing", "Lighting & Camera"],
-    image: thumb(orbitImages.max3ds),
-  },
-  {
-    num: "06",
-    slug: "architectural-visualization",
-    title: "Architectural Visualization",
-    blurb: "Exterior, interior and site visualizations that read as photography long before the building exists.",
-    includes: ["Exterior Visualization", "Interior Visualization", "Site Visualization"],
-    image: thumb(orbitImages.visualization),
-  },
-  {
-    num: "07",
-    slug: "animation-motion",
-    title: "Animation & Motion",
-    blurb: "Walkthroughs, fly-throughs and camera sequences that move a project through space with intent.",
-    includes: ["Walkthroughs", "Fly-through Animations", "Camera & Motion"],
-    image: thumb(orbitImages.motion),
-  },
-  {
-    num: "08",
-    slug: "real-time",
-    title: "Real-time / Unreal Engine",
-    blurb:
-      "Real-time environments in Unreal Engine — interactive walkthroughs and virtual showrooms your clients can explore.",
-    includes: ["Interactive Walkthroughs", "Real-time Visualization", "Virtual Showrooms"],
-    image: thumb(orbitImages.unreal),
-  },
-];
+// Service list data lives in src/data/services.ts (shared with the home page).
+// Change service names, text or images there.
 
 /* =========================================================
    HERO CARD — "What we deliver"
@@ -402,51 +313,8 @@ const stages = [
         </div>
       </section>
 
-      <!-- ================= SERVICES GRID (4 rows x 2 columns) =================
-           Har card: number | image | title + text. Card par click -> /services/<slug>. -->
-      <section class="svc-list" aria-label="Our services">
-        <div class="svc-wrap">
-          <h2 class="sr-only">Our services</h2>
-          <div class="svc-grid">
-            {[services.slice(0, 4), services.slice(4)].map((col) => (
-              <div class="svc-col">
-                {col.map((s, idx) => (
-                  <article
-                    class={`svc-card${idx === 0 ? " is-open" : ""}`}
-                    id={s.slug}
-                    data-reveal
-                    style={`--d:${idx * 0.08}s`}
-                  >
-                    <span class="svc-card-num">{s.num}</span>
-                    <div class="svc-card-media">
-                      <img
-                        src={s.image}
-                        alt={`${s.title} — ${s.includes.join(", ")}`}
-                        loading="lazy"
-                        decoding="async"
-                        onerror="this.style.display='none'"
-                      />
-                    </div>
-                    <div class="svc-card-body">
-                      <h3 class="svc-card-title">{s.title}</h3>
-                      <div class="svc-card-more">
-                        <div class="svc-card-more-inner">
-                          <p class="svc-card-blurb">{s.blurb}</p>
-                          <p class="svc-card-tags">{s.includes.map((t) => <span>{t}</span>)}</p>
-                          <a href={`/services/${s.slug}`} class="svc-card-link" aria-label={`Explore ${s.title}`}>
-                            <span>Explore service</span>
-                            <span aria-hidden="true">↗</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <!-- ================= SERVICES (shared with the home page) ================= -->
+      <ServicesShowcase />
 
       <!-- ================= FINAL CTA ================= -->
       <section class="svc-final-cta">
@@ -480,25 +348,6 @@ const stages = [
         { threshold: 0.12 }
       );
       revealItems.forEach((item) => revealObserver.observe(item));
-
-      /* ===== Service cards: ek column mein ek hi card bara hota hai (hover / focus / tap) ===== */
-      document.querySelectorAll(".svc-col").forEach((col) => {
-        const cards = Array.from(col.querySelectorAll(".svc-card"));
-        const open = (card) => cards.forEach((c) => c.classList.toggle("is-open", c === card));
-        cards.forEach((card) => {
-          let t;
-          card.addEventListener("mouseenter", () => {
-            if (!window.matchMedia("(hover: hover)").matches) return;
-            clearTimeout(t);
-            t = setTimeout(() => open(card), 70); // halka delay: flicker na ho
-          });
-          card.addEventListener("mouseleave", () => clearTimeout(t));
-          card.addEventListener("focusin", () => open(card));
-          card.addEventListener("click", (e) => {
-            if (!e.target.closest("a")) open(card);
-          });
-        });
-      });
 
     </script>
   </body>

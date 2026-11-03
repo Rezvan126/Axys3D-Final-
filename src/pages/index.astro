@@ -6,8 +6,7 @@ import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 import "../styles/Navbar.css";
 import "../styles/Hero.css";
-import ProductionLayer from "../components/ProductionLayer.astro";
-import "../styles/production-layer.css";
+import ServicesShowcase from "../components/ServicesShowcase.astro";
 import VisualGallery from "../components/VisualGallery.astro";
 import "../styles/Visual-Gallery.css";
 import FAQSection from "../components/FAQSection.astro";
@@ -18,10 +17,7 @@ import "../styles/Mission.css";
 import "../styles/faq.css";
 import "../styles/cta.css";
 import "../styles/footer.css";
-import "../styles/index.css";                                                                                                                                                                                                                                                                                                                                                  
-import "../styles/Mission.css";
-import Howitworks  from "../components/Howitworks.astro";
-import "../styles/Howitworks.css";
+import "../styles/index.css";                                      
 import Stages from "../components/Stages.astro";
 import "../styles/stages.css";
 
@@ -57,11 +53,9 @@ const orgLd = [
           <Mission />
         </div>
       </div>
-      <!-- Production Layer — own gradient zone -->
+      <!-- Services (same list as the Services page) -->
       <div class="grad-zone">
-        <div class="reveal reveal-up">
-          <ProductionLayer />
-        </div>
+        <ServicesShowcase showHeader />
       </div>
       <div class="grad-zone">
         <div class="reveal reveal-up">
@@ -75,10 +69,7 @@ const orgLd = [
         <VisualGallery />
       </div>
  
-       <div class="grad-zone">
-        <div class="reveal reveal-up">
-          <Howitworks />
-        </div> </div> 
+      <!-- "Brief to delivery in 9 days" moved to the Process page -->
 
     
       <!-- FAQ gradient zone -->

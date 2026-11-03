@@ -7,6 +7,8 @@ import "../styles/global.css";
 import "../styles/Navbar.css";
 import "../styles/processPage.css";
 import "../styles/footer.css";
+import Howitworks from "../components/Howitworks.astro";
+import "../styles/Howitworks.css";
 import { getEntry } from "astro:content";
 
 const processEntry = await getEntry("process", "index");
@@ -177,6 +179,9 @@ const stepIcons = [
           </div>
         </section>
       )}
+
+      <!-- ================= CASE STUDY: brief to delivery (moved from the home page) ================= -->
+      <Howitworks />
 
       <!-- ================= FINAL CTA ================= -->
       {ctaSubtitle && (

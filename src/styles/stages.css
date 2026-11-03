@@ -247,3 +247,73 @@
 @media (pointer: coarse) {
   .stage-tab { min-height: 44px; }
 }
+
+/* =========================================================
+   UI PASS — Nov 2026: stepper tabs, stage readout, badges inside the card
+========================================================= */
+.stages-eyebrow { color: #b8946f; font-size: 12px; letter-spacing: 0.28em; }
+.stages-copy p { color: #a9a29d; font-size: clamp(0.95rem, 1.1vw, 1.1rem); }
+
+/* readout */
+.stage-readout {
+  margin-top: clamp(1.6rem, 4vh, 2.6rem);
+  padding: 18px 20px;
+  max-width: 380px;
+  border-radius: 16px;
+  border: 1px solid rgba(184, 148, 111, 0.25);
+  background: linear-gradient(135deg, rgba(91, 59, 39, 0.28), rgba(20, 16, 13, 0.6));
+  display: grid; gap: 6px;
+}
+.readout-count { font: 500 12px/1 "JetBrains Mono", monospace; letter-spacing: 0.12em; color: #8d8784; }
+.readout-count b { color: #e3c8a8; font-weight: 600; }
+.readout-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+.readout-desc { font-size: 15px; line-height: 1.5; color: #cdc6c0; }
+.readout-title, .readout-desc { transition: opacity 0.3s ease, transform 0.3s ease; }
+
+/* card: softer tilt, bronze edge glow */
+.stage-card {
+  border-color: rgba(184, 148, 111, 0.22);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.4), 0 0 90px rgba(143, 100, 68, 0.12);
+}
+.stage-chip, .stage-tag { font-size: 12px; }
+
+/* badges sit inside the card so they never cover the edge */
+.badge-qc    { right: 3.5%; top: auto; bottom: 5%; }
+.badge-model { left: 3.5%; bottom: 5%; }
+.stage-badge {
+  background: rgba(12, 10, 9, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+
+/* stepper tabs */
+.stage-tabs { position: relative; gap: 12px; }
+.stage-tab {
+  padding: 14px 14px 12px; border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.stage-tab:hover { border-color: rgba(184, 148, 111, 0.35); }
+.stage-tab:focus-visible { outline: 2px solid #b8946f; outline-offset: 2px; }
+.stage-tab.is-active { border-color: rgba(184, 148, 111, 0.5); background: rgba(91, 59, 39, 0.22); }
+.tab-dot {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.tab-dot svg { width: 17px; height: 17px; fill: none; stroke: #8d8784; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.3s ease; }
+.stage-tab.is-active .tab-dot, .stage-tab.is-done .tab-dot { background: #5b3b27; border-color: #8f6444; }
+.stage-tab.is-active .tab-dot svg, .stage-tab.is-done .tab-dot svg { stroke: #fff; }
+.tab-num { color: #77716d; font-size: 11px; }
+.tab-name { color: #b5aea9; font-size: clamp(0.92rem, 1vw, 1.05rem); font-weight: 600; }
+.tab-line { height: 3px; margin-top: 0.2em; }
+
+@media (max-width: 600px) {
+  .stage-tabs { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .stage-tab { padding: 10px; }
+  .tab-dot { width: 30px; height: 30px; }
+  .stage-readout { max-width: none; }
+  .stage-badge { transform: scale(0.85); transform-origin: bottom left; }
+  .badge-qc { transform-origin: bottom right; }
+}

@@ -855,3 +855,69 @@ html body .hero .secondary-button .arrow:not(#a):not(#b) { font-size: 11px !impo
 @media (min-width: 901px) and (max-width: 1366px) and (orientation: landscape) {
   .hero, .hero-content { min-height: min(100svh, 720px); }
 }
+
+/* =========================================================
+   UI PASS — Nov 2026
+   Kept at the end on purpose so it wins over the older layered rules above.
+========================================================= */
+
+/* Eyebrow: readable size, brighter bronze, no dash */
+.hero .hero-eyebrow {
+  font-size: clamp(12px, 0.95vw, 14px);
+  font-weight: 500 !important;
+  letter-spacing: 0.24em;
+  color: #c9a27e;
+  margin-bottom: 18px;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+.hero .hero-eyebrow .term { color: #e8c9a6; }
+
+/* Headline: the old -0.065em tracking made letters collide ("production friction").
+   Moderate tracking + a little more line height keeps it tight without overlaps. */
+.hero h1,
+.hero h1 span,
+.hero h1 .line {
+  letter-spacing: -0.03em !important;
+  word-spacing: 0.04em;
+}
+.hero h1 { line-height: 1.06 !important; }
+.hero h1 .line { padding-right: 0.08em; padding-bottom: 0.04em; }
+
+/* Buttons: arrow sits in its own small circle */
+.hero .primary-button,
+.hero .secondary-button {
+  gap: 14px;
+  padding: 0 6px 0 18px;
+  min-height: 42px;
+  font-size: 13px;
+}
+.hero .arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+}
+.hero .arrow svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hero .primary-button:hover .arrow,
+.hero .secondary-button:hover .arrow {
+  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.24);
+}
+@media (max-width: 600px) {
+  .hero .primary-button, .hero .secondary-button { padding: 0 6px 0 16px; }
+  .hero .hero-eyebrow { font-size: 11px; letter-spacing: 0.18em; }
+}
+/* Manrope's heaviest real weight is 800; ask for it directly so no browser fakes a bold */
+.hero h1, .hero h1 span, .hero h1 .line { font-weight: 800 !important; }

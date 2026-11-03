@@ -1,543 +1,122 @@
-/* 3D WALK-THE-GALLERY — Black + Grey + Coffee Brown (60/30/10) */
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
-
+/* =========================================================
+   VISUAL GALLERY (home) — bento of stills/films, links to /work
+========================================================= */
 .vg {
-  --bg: #000000;
-  --cream: #ffffff;
-  --muted: #b5b0ad;
-  --edge: rgba(255, 255, 255, 0.09);
-  --brown: #5b3b27;
-  --brown-hi: #8f6444;
-  --brown-lt: #b8946f;
+  --vg-edge: rgba(255, 255, 255, 0.09);
+  --vg-brown: #5b3b27;
+  --vg-brown-hi: #8f6444;
+  --vg-brown-lt: #b8946f;
+  --vg-muted: #a49e9a;
+  --vg-ease: cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
-  overflow: hidden;
-  background: var(--bg);
-  color: var(--cream);
-  font-family: 'Manrope', system-ui, sans-serif;
-  padding: clamp(4rem, 12vh, 9rem) 0;
+  background: #000;
+  color: #fff;
+  padding: clamp(64px, 11vh, 130px) 0;
+  font-family: "Inter", system-ui, sans-serif;
 }
+.vg-wrap { width: min(100% - 12%, 1320px); margin: 0 auto; }
 
-/* Left Brown Glow */
-.vg::before {
-  content: ""; position: absolute; top: 50%; left: -280px; width: 560px; height: 560px;
-  transform: translateY(-50%); border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(110, 72, 48, 0.13) 0%, transparent 100%);
-  pointer-events: none; z-index: 1;
-}
-/* Right Soft Grey Glow */
-.vg::after {
-  content: ""; position: absolute; top: 50%; right: -280px; width: 560px; height: 560px;
-  transform: translateY(-50%); border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(174, 167, 163, 0.045) 0%, transparent 100%);
-  pointer-events: none; z-index: 1;
-}
-
-.vg-wrap { position: relative; z-index: 2; width: min(1500px, 88vw); margin: 0 auto; }
-
-.vg-head {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 40px; margin-bottom: clamp(24px, 4vh, 40px);
-}
-
-.vg-tag {
+.vg-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap; margin-bottom: clamp(28px, 5vh, 48px); }
+.vg-eyebrow {
   display: block; margin-bottom: 14px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: clamp(.72rem, .8vw, .82rem); letter-spacing: .24em; color: #b5b0ad;
+  font: 500 12px/1.3 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--vg-brown-lt);
 }
-
-/* Title: white -> grey */
-.vg-head h2 {
-  margin: 0;
-   font-family:  'Manrope', sans-serif;
-  font-size: clamp(2.3rem, 6vw, 4rem);
-  line-height: 0.95;
-  letter-spacing: -0.065em !important;
-  font-weight: 900 !important;
-  margin-top: 10px;
-  color: #ffffff;
-  white-space: nowrap;
-  background: linear-gradient(180deg, #ffffff 0%, #aea7a3 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.vg-title {
+  margin: 0; font-family: "Manrope", system-ui, sans-serif; font-weight: 800;
+  font-size: clamp(2.4rem, 5.4vw, 4.4rem); line-height: 1; letter-spacing: -0.04em;
 }
-
-/* Highlight: coffee brown gradient */
-.vg-head h2 em {
+.vg-title em {
   font-style: normal;
-  background: linear-gradient(90deg, #b8946f 0%, #8f6444 55%, #6b452c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  background: linear-gradient(90deg, #d2ad86 0%, #8f6444 70%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
 }
+.vg-intro { margin: 0; max-width: 34ch; font-size: 16px; line-height: 1.6; color: var(--vg-muted); }
 
-.vg-head p {
-  margin: 0 0 .5em; max-width: 30ch;
-  font-size: clamp(0.85rem, 1.15vw, 1.1rem); line-height: 1.55; letter-spacing: -.01em;
-  color: var(--muted);
+/* bento: 4 columns, 2 rows on desktop */
+.vg-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: clamp(180px, 17vw, 250px);
+  gap: 14px;
 }
+.vg-tile--xl { grid-column: span 2; grid-row: span 2; }
+.vg-tile--md { grid-column: span 1; grid-row: span 1; }
+.vg-tile--wide { grid-column: span 2; }
+.vg-tile:nth-child(4) { grid-column: 3 / span 2; }
+.vg-tile:nth-child(5) { grid-column: 1 / span 4; grid-row: auto; }
 
-/* Stage & Background */
-.vg-stage {
-  position: relative;
-  aspect-ratio: 2 / 1;
-  min-height: 460px;
-  overflow: hidden;
-  border-radius: clamp(20px, 2vw, 32px);
-  border: 1px solid var(--edge);
-  background: radial-gradient(120% 90% at 50% 0%, #1c1c1c, #080808);
-  box-shadow: 0 30px 80px rgba(0,0,0,.85), 0 0 60px rgba(121,82,56,.12);
+.vg-tile {
+  position: relative; display: block; overflow: hidden; min-width: 0;
+  border-radius: 20px; border: 1px solid var(--vg-edge); background: #1a1410;
+  color: #fff; text-decoration: none; isolation: isolate;
+  transition: border-color 0.35s ease, transform 0.5s var(--vg-ease), box-shadow 0.5s var(--vg-ease);
+}
+.vg-tile:hover, .vg-tile:focus-visible {
+  border-color: rgba(184, 148, 111, 0.55);
+  transform: translateY(-3px);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.6);
   outline: none;
-  user-select: none;
-  touch-action: pan-y;
 }
+.vg-tile:focus-visible { outline: 2px solid var(--vg-brown-lt); outline-offset: 3px; }
 
-/* =========================================================
-   ENTRANCE — cards khud scroll hote hain
-========================================================= */
-.vg-marquee {
-  --cw: 270px;
-  --ch: 400px;
-  position: absolute; inset: 0; z-index: 2;
-  display: flex; align-items: center; overflow: hidden;
-  transition: opacity .6s ease, visibility 0s;
+.vg-poster, .vg-video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 1.2s var(--vg-ease), opacity 0.5s ease;
 }
+.vg-video { opacity: 0; }
+.vg-tile.is-playing .vg-video { opacity: 1; }
+.vg-tile.is-letterbox .vg-video { transform: scale(1.37); }
+.vg-tile:hover .vg-poster { transform: scale(1.05); }
 
-.vg-stage.is-walk .vg-marquee {
-  opacity: 0; visibility: hidden; pointer-events: none;
-  transition: opacity .6s ease, visibility 0s linear .6s;
+.vg-shade {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.78) 100%);
 }
-
-.vg-marquee-track { display: flex; gap: 22px; width: max-content; will-change: transform; }
-
-.vg-stage.is-ready .vg-marquee-track { animation: vgScroll 45s linear infinite 1.4s; }
-
-.vg-marquee-track:hover,
-.vg-stage.is-walk .vg-marquee-track,
-.vg-stage.is-off .vg-marquee-track { animation-play-state: paused; }
-
-@keyframes vgScroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - 11px)); }
+.vg-meta {
+  position: absolute; left: 20px; right: 70px; bottom: 18px; z-index: 2;
+  display: flex; flex-direction: column; gap: 6px;
 }
-
-.vg-marquee .vg-card:nth-child(-n+5) { opacity: 0; }
-.vg-stage.is-ready .vg-marquee .vg-card:nth-child(-n+5) { animation: vgCardIn .85s cubic-bezier(.16, 1, .3, 1) forwards; }
-.vg-stage.is-ready .vg-marquee .vg-card:nth-child(1) { animation-delay: .2s; }
-.vg-stage.is-ready .vg-marquee .vg-card:nth-child(2) { animation-delay: .35s; }
-.vg-stage.is-ready .vg-marquee .vg-card:nth-child(3) { animation-delay: .5s; }
-.vg-stage.is-ready .vg-marquee .vg-card:nth-child(4) { animation-delay: .65s; }
-.vg-stage.is-ready .vg-marquee .vg-card:nth-child(5) { animation-delay: .8s; }
-
-@keyframes vgCardIn {
-  0%   { opacity: 0; transform: translateY(45px) scale(.96); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+.vg-tag {
+  align-self: flex-start; padding: 5px 10px; border-radius: 999px;
+  font: 500 11px/1.2 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #f1e2d1; background: rgba(91, 59, 39, 0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
+.vg-name { font-family: "Manrope", system-ui, sans-serif; font-weight: 700; font-size: clamp(17px, 1.5vw, 22px); letter-spacing: -0.015em; line-height: 1.2; }
+.vg-tile--xl .vg-name { font-size: clamp(22px, 2.1vw, 30px); }
 
-/* =========================================================
-   GALLERY — ek waqt mein 4 cards
-========================================================= */
-.vg-pager {
-  --cw: 270px;
-  --ch: 400px;
-  --vw: 1130px;
-  position: absolute; inset: 0; z-index: 3;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; visibility: hidden; pointer-events: none;
-  transition: opacity .6s ease, visibility 0s linear .6s;
+.vg-play {
+  position: absolute; right: 18px; bottom: 18px; z-index: 2;
+  display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: background 0.3s ease, transform 0.4s var(--vg-ease), opacity 0.3s ease;
 }
+.vg-play svg { width: 14px; height: 14px; fill: #fff; margin-left: 2px; }
+.vg-tile:hover .vg-play { background: var(--vg-brown-hi); border-color: transparent; transform: scale(1.06); }
+.vg-tile.is-playing .vg-play { opacity: 0; transform: scale(0.8); }
 
-.vg-stage.is-walk .vg-pager {
-  opacity: 1; visibility: visible; pointer-events: auto; transition-delay: 0s;
+.vg-foot { display: flex; justify-content: center; margin-top: clamp(28px, 5vh, 44px); }
+.vg-cta {
+  display: inline-flex; align-items: center; gap: 14px; padding: 6px 6px 6px 22px; border-radius: 999px;
+  background: var(--vg-brown); color: #fff; text-decoration: none; font-size: 15px; font-weight: 600;
+  transition: background 0.25s ease;
 }
+.vg-cta:hover, .vg-cta:focus-visible { background: var(--vg-brown-hi); outline: none; }
+.vg-cta-arrow { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); transition: transform 0.3s var(--vg-ease); }
+.vg-cta:hover .vg-cta-arrow { transform: translateX(3px); }
+.vg svg path[d^="M3 8"] { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.vg-cta-arrow svg { width: 15px; height: 15px; }
 
-.vg-pager-view { width: var(--vw); padding: 30px 0; overflow: hidden; }
-
-.vg-pager-track {
-  display: flex; gap: 22px;
-  transform: translateX(var(--px, 0px));
-  transition: transform .75s cubic-bezier(.22, 1, .36, 1);
-  will-change: transform;
+@media (max-width: 900px) {
+  .vg-wrap { width: min(100% - 32px, 100%); }
+  .vg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 180px; gap: 10px; }
+  .vg-tile--xl { grid-column: span 2; grid-row: span 2; }
+  .vg-tile:nth-child(4), .vg-tile:nth-child(5) { grid-column: span 2; }
+  .vg-meta { left: 14px; bottom: 14px; right: 60px; }
+  .vg-play { right: 14px; bottom: 14px; width: 36px; height: 36px; }
 }
-
-.vg-pager-track.no-anim { transition: none; }
-
-/* =========================================================
-   CARD
-========================================================= */
-.vg-card {
-  position: relative; display: block;
-  flex: 0 0 var(--cw); width: var(--cw); height: var(--ch);
-  padding: 0; border: 0; border-radius: 24px;
-  overflow: hidden; isolation: isolate; cursor: pointer;
-  background: linear-gradient(160deg, #1c1c1c 0%, #080808 100%);
-  box-shadow: 0 2px 2px rgba(255, 255, 255, 0.05) inset, 0 16px 36px rgba(0, 0, 0, 0.6);
-  contain: layout paint;
-}
-
-/* gradient border: white -> grey -> brown */
-.vg-card::before {
-  content: ""; position: absolute; inset: 0; z-index: 6;
-  border-radius: inherit; padding: 1.4px; pointer-events: none;
-  background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.05) 60%, rgba(143,100,68,0.7) 85%, rgba(184,148,111,0.95) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.7;
-}
-
-.vg-card::after {
-  content: ""; position: absolute; top: 0; left: 10%; right: 10%; height: 45%; z-index: 1;
-  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.12), transparent 70%);
-  pointer-events: none;
-}
-
-.vg-card img {
-  position: absolute; inset: 0; z-index: 0; display: block;
-  width: 100%; height: 100%; object-fit: cover; object-position: center;
-  pointer-events: none;
-  filter: saturate(1.05) contrast(1.08) brightness(0.95);
-  transition: transform .8s cubic-bezier(.25, 1, .5, 1), filter .6s ease;
-}
-
-.vg-card:hover img {
-  transform: scale(1.10);
-  filter: saturate(1.12) contrast(1.12) brightness(1.04);
-}
-
-.vg-card-overlay {
-  position: absolute; inset: 0; z-index: 2;
-  background: linear-gradient(180deg, rgba(0, 0, 0,0.05) 0%, rgba(0, 0, 0,0.12) 50%, rgba(0, 0, 0,0.5) 100%);
-  transition: opacity .5s ease; pointer-events: none;
-}
-
-.vg-card:hover .vg-card-overlay { opacity: .6; }
-
-/* ENTRANCE: cards ke upar halka black overlay */
-.vg-marquee::after {
-  content: ""; position: absolute; inset: 0; z-index: 5;
-  background:
-    radial-gradient(60% 55% at 50% 50%, rgba(0, 0, 0, 0.35), transparent 100%),
-    rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-}
-
-/* GALLERY: card ka naam */
-.vg-card-name {
-  position: absolute; left: 20px; right: 20px; bottom: 20px; z-index: 6;
-  color: #ffffff;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: clamp(15px, 1.5vw, 19px);
-  font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; text-align: left;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-  pointer-events: none;
-}
-
-.vg-pager .vg-card-overlay {
-  background: linear-gradient(180deg, rgba(0, 0, 0,0.05) 0%, rgba(0, 0, 0,0.2) 45%, rgba(0, 0, 0,0.85) 100%);
-}
-
-.vg-card:focus-visible { outline: 2px solid #8f6444; outline-offset: 4px; }
-
-/* Top HUD */
-.vg-hud {
-  position: absolute; top: 18px; left: 20px; right: auto;
-  padding: 8px 18px; border-radius: 12px;
-  background: rgba(8, 8, 8, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-weight: 600;
-  font-size: clamp(.72rem, .8vw, .82rem);
-  line-height: 1.5; letter-spacing: .24em; text-transform: uppercase;
-  color: #aea7a3;
-  pointer-events: none; z-index: 6;
-}
-
-/* Top Modes */
-.vg-modes { position: absolute; top: 20px; right: 28px; display: flex; gap: 14px; z-index: 6; }
-
-.vg-modes button {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: none; border: 0; padding: 0;
-  color: #a5a5a8;
-  font: 600 clamp(.8rem, .9vw, 1rem) 'Manrope', sans-serif;
-  letter-spacing: -.01em; cursor: pointer; transition: color .3s;
-}
-
-.vg-modes button.is-on,
-.vg-modes button:hover { color: #b8946f; }
-
-/* Center Entrance Overlay */
-.vg-enter {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 13px; pointer-events: none;
-  transition: opacity .6s ease, visibility .6s; z-index: 5;
-}
-
-.vg-enter button {
-  pointer-events: auto;
-  padding: 13px 26px; border: 0; border-radius: 999px;
-  background: linear-gradient(135deg, #8f6444, #5b3b27);
-  color: #ffffff;
-  font: 700 clamp(.82rem, .95vw, 1.02rem) 'Manrope', sans-serif;
-  letter-spacing: -.01em; cursor: pointer;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(91, 59, 39, 0.4);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.vg-enter button:hover {
-  transform: scale(1.04);
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.8), 0 0 32px rgba(143, 100, 68, 0.55);
-}
-
-.vg-enter small {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-weight: 600;
-  font-size: clamp(.72rem, .8vw, .82rem);
-  letter-spacing: .2em;
-  color: #b5b0ad;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-}
-
-.vg-stage.is-walk .vg-enter { opacity: 0; visibility: hidden; }
-
-/* Bottom Controls Capsule */
-.vg-ctrl {
-  position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 6;
-  display: flex; align-items: center; gap: 18px;
-  padding: 12px 20px; border-radius: 999px;
-  background: rgba(10, 10, 10, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-}
-
-.vg-ctrl button {
-  display: grid; place-items: center;
-  background: none; border: 0; padding: 0;
-  color: #ffffff; cursor: pointer; opacity: .85; transition: opacity .2s, color .2s;
-}
-
-.vg-ctrl button:hover { opacity: 1; color: #b8946f; }
-
-.vg-dots { display: flex; align-items: center; gap: 7px; }
-
-.vg-dots i {
-  width: 5px; height: 5px; border-radius: 99px;
-  background: rgba(255, 255, 255, 0.28);
-  transition: width .4s, background .4s;
-}
-
-.vg-dots i.is-on { width: 18px; background: linear-gradient(90deg, #b8946f, #6b452c); }
-
-/* Tooltip & Detail Drawer */
-.vg-tip {
-  position: absolute; top: 0; left: 0; z-index: 7;
-  padding: 12px 16px; border-radius: 12px;
-  background: rgba(8, 8, 8, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 260px;
-}
-
-.vg-tip.is-on { opacity: 1; }
-.vg-tip b { display: block; font: 700 clamp(.8rem, 1vw, 1.1rem) 'Manrope', sans-serif; letter-spacing: -.02em; color: #fff; }
-.vg-tip small { display: block; margin-top: 4px; font: 500 11.5px ui-monospace, Menlo, monospace; letter-spacing: .14em; color: #b5b0ad; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.vg-detail { position: absolute; inset: 0; z-index: 10; display: grid; grid-template-columns: 62% 38%; background: #080808; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s linear .6s; }
-.vg-detail.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
-.vg-detail-img { position: relative; overflow: hidden; background: #141210; }
-.vg-detail-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity .7s ease; }
-.vg-detail-img img.is-on { opacity: 1; }
-.vg-detail-info { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 0 44px; }
-.vg-close { position: absolute; top: 16px; right: 16px; width: 42px; height: 42px; border-radius: 50%; border: 0; background: rgba(255,255,255,.12); color: #ffffff; font-size: 15px; cursor: pointer; transition: background .2s; }
-.vg-close:hover { background: #5b3b27; }
-.vg-eyebrow { display: block; margin-bottom: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 500; font-size: clamp(.72rem, .8vw, .8rem); letter-spacing: .2em; color: #c9a07a; }
-.vg-detail-info h3 {
-  margin: 0 0 10px; font-family: 'Inter', system-ui, sans-serif;
-  font-size: clamp(1.4rem, 2.2vw, 2.3rem); line-height: 1.05; font-weight: 800; letter-spacing: -.05em;
-  background: linear-gradient(180deg, #ffffff 0%, #aea7a3 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-.vg-detail-info p { margin: 0 0 20px; font-size: clamp(.88rem, .95vw, .98rem); line-height: 1.6; color: #c4bebb; max-width: 36ch; }
-.vg-detail-info dl { margin: 0 0 26px; display: grid; gap: 9px; }
-.vg-detail-info dl div { display: grid; grid-template-columns: 110px 1fr; font-size: clamp(.82rem, .9vw, .92rem); }
-.vg-detail-info dt { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: clamp(.66rem, .72vw, .74rem); letter-spacing: .16em; color: #a5a5a8; padding-top: 4px; }
-.vg-detail-info dd { margin: 0; color: #ffffff; }
-.vg-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
-.vg-btn-solid, .vg-btn-ghost { padding: 11px 20px; border-radius: 999px; font: 600 13.5px 'Manrope', sans-serif; cursor: pointer; text-decoration: none; transition: transform .3s; }
-.vg-btn-solid { background: linear-gradient(135deg, #8f6444, #5b3b27); color: #ffffff; border: 1px solid #5b3b27; }
-.vg-btn-ghost { background: transparent; color: #ffffff; border: 1px solid rgba(255,255,255,.2); }
-.vg-btn-solid:hover, .vg-btn-ghost:hover { transform: translateY(-2px); }
-
-.vg-swap.hw-swap > * { animation: vgIn .55s cubic-bezier(.22,1,.36,1) both; }
-.vg-swap.hw-swap > *:nth-child(2) { animation-delay: .04s; }
-.vg-swap.hw-swap > *:nth-child(3) { animation-delay: .08s; }
-.vg-swap.hw-swap > *:nth-child(4) { animation-delay: .12s; }
-@keyframes vgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-@media (max-width: 800px) {
-  .vg-head { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .vg-stage { aspect-ratio: 16 / 10; min-height: 420px; }
-  .vg-hud { top: 16px; left: 16px; }
-  .vg-modes { right: 16px; top: 16px; }
-  .vg-detail { grid-template-columns: 1fr; grid-template-rows: 42% 58%; }
-  .vg-detail-info { padding: 20px 24px; justify-content: flex-start; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .vg-detail { transition-duration: .01ms !important; }
-  .vg-stage.is-ready .vg-marquee-track,
-  .vg-stage.is-ready .vg-marquee .vg-card:nth-child(-n+5) { animation: none; }
-  .vg-marquee .vg-card:nth-child(-n+5) { opacity: 1; }
-  .vg-pager-track, .vg-card img { transition: none; }
-}
-
-/* =========================================================
-   SAB HEADINGS + CTA — Inter Tight (sab pages par ek jaisa)
-   Font: Inter Tight 800, letter-spacing -0.015em.
-   Gallery ka title, card ke naam, detail title aur buttons cover hain.
-   Hero title ka size/line-height neeche alag hai, baaki headings apna
-   size rakhti hain. Selector jaan-boojh kar mazboot hai kyunke purane
-   "Tamam Headings" rules !important ke saath Manrope laga rahe the.
-   ========================================================= */
-html body h1:not(#a):not(#b),
-html body h2:not(#a):not(#b),
-html body h3:not(#a):not(#b),
-html body h4:not(#a):not(#b),
-html body h5:not(#a):not(#b),
-html body h6:not(#a):not(#b),
-html body .vg-card-name:not(#a):not(#b),
-html body .vg-detail-info h3:not(#a):not(#b),
-html body .vg-head h2:not(#a):not(#b),
-html body h1:not(#a):not(#b) *,
-html body h2:not(#a):not(#b) *,
-html body h3:not(#a):not(#b) *,
-html body h4:not(#a):not(#b) *,
-html body h5:not(#a):not(#b) *,
-html body h6:not(#a):not(#b) *,
-html body .vg-card-name:not(#a):not(#b) *,
-html body .vg-detail-info h3:not(#a):not(#b) *,
-html body .vg-head h2:not(#a):not(#b) * {
-  font-family: 'Inter Tight', sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.015em !important;
-}
-
-/* HERO TITLE size */
-html body .vg-head h2:not(#a):not(#b) {
-  font-size: clamp(3rem, 4.5vw, 4.5rem) !important;
-  line-height: 0.92 !important;
-  max-width: none !important;
-  overflow-wrap: break-word;
-  white-space: normal !important;   /* pehle nowrap tha, itne bade size par kat jata */
-}
-html body .vg-head h2:not(#a):not(#b) * {
-  font-size: inherit !important;
-  line-height: inherit !important;
-}
-
-/* CTA buttons — sirf font family + spacing (weight apna) */
-html body .vg-btn-solid:not(#a):not(#b),
-html body .vg-btn-ghost:not(#a):not(#b) {
-  font-family: 'Inter Tight', sans-serif !important;
-  letter-spacing: -0.015em !important;
-}
-
-/* =========================================================
-   FIXES — scroll offset, touch size, keyboard focus
-========================================================= */
-.vg { scroll-margin-top: 96px; }
-.vg-ctrl button { min-width: 34px; min-height: 34px; }
-.vg-modes button:focus-visible,
-.vg-ctrl button:focus-visible,
-.vg-close:focus-visible,
-.vg-enter button:focus-visible,
-.vg-btn-solid:focus-visible,
-.vg-btn-ghost:focus-visible { outline: 2px solid #c9a07a; outline-offset: 3px; }
-
-
-/* =========================================================
-   RESPONSIVE — FINAL LAYER (phone / tablet / iPad)
-   Is file ka responsive fix. Isay file ke bilkul END me rakho.
-========================================================= */
-.vg-pager-view { max-width: 100%; }
-.vg-detail-info dt { white-space: nowrap; }
-
-@media (max-width: 1200px) {
-  .vg-marquee, .vg-pager { --cw: 230px; --ch: 340px; }
-}
-
-@media (max-width: 1024px) {
-  .vg-head h2 { white-space: normal; }
-  .vg-stage { aspect-ratio: auto; min-height: 480px; }
-  /* detail khulne par stage bada ho jaye (modern browsers) */
-  .vg-stage:has(.vg-detail.is-open) { min-height: 560px; }
-}
-
-/* iPad / tablet: image + info side by side, label value se na takraye */
-@media (max-width: 1024px) and (min-width: 801px) {
-  .vg-detail { grid-template-columns: 52% 48%; }
-  .vg-detail-info { padding: 24px 28px; overflow-y: auto; justify-content: center; }
-  .vg-detail-info dl div { grid-template-columns: minmax(112px, auto) 1fr; column-gap: 16px; }
-}
-
-/* phone: image upar, info neeche, poora panel scroll hota hai */
-@media (max-width: 800px) {
-  .vg-marquee, .vg-pager { --cw: 190px; --ch: 290px; }
-  .vg-stage { min-height: 440px; }
-  .vg-stage:has(.vg-detail.is-open) { min-height: min(740px, calc(100svh - 120px)); }
-
-  .vg-detail {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-  .vg-detail-img { flex: 0 0 clamp(190px, 32svh, 260px); }
-  .vg-detail-info {
-    position: static;
-    flex: 1 0 auto;
-    justify-content: flex-start;
-    padding: 20px 20px 28px;
-  }
-  .vg-close {
-    z-index: 3;
-    top: 12px;
-    right: 12px;
-    width: 44px;
-    height: 44px;
-    background: rgba(0, 0, 0, 0.55);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-  }
-  .vg-detail-info p { max-width: none; }
-  .vg-detail-info dl { margin-bottom: 22px; gap: 12px; }
-  /* label upar, value neeche (pehle "DELIVERABLES" value par chadh jata tha) */
-  .vg-detail-info dl div { grid-template-columns: 1fr; gap: 2px; }
-  .vg-detail-info dt { padding-top: 0; }
-  .vg-actions .vg-btn-solid, .vg-actions .vg-btn-ghost { flex: 1 1 auto; text-align: center; }
-}
-
-@media (max-width: 680px) {
-  .vg-wrap { width: 92vw; }
-}
-
-@media (max-width: 480px) {
-  .vg-marquee, .vg-pager { --cw: 160px; --ch: 250px; }
-  .vg-marquee-track, .vg-pager-track { gap: 14px; }
-  .vg-hud { font-size: .62rem; padding: 6px 12px; letter-spacing: .16em; }
-}
-
-@media (pointer: coarse) {
-  .vg-ctrl button { min-width: 44px; min-height: 44px; }
-}
-
-@media (hover: none) {
-  .vg-card:hover img { transform: none; }
+  .vg-tile, .vg-poster, .vg-video, .vg-play { transition: none; }
+  .vg-tile:hover { transform: none; }
 }

@@ -6,10 +6,20 @@ import "../styles/stages.css";
 // 3 & 4 aap ki apni hain: unhein public/images mein "before" aur "after" naam se rakhein.
 // Agar extension .jpg nahi (jaise .png / .webp) to yahan badal dein.
 const stages = [
-  { tab: "Sketch",       chip: "Sketch",       tag: "Linework · 1:100", qc: "Brief OK",  model: "Revit · LOD 100", img: "/images/stage1.jpg" },
-  { tab: "Massing",      chip: "Massing",      tag: "Volume study",     qc: "Area OK",   model: "Massing · v2",    img: "/images/stage2.jpg" },
-  { tab: "BIM model",    chip: "BIM model",    tag: "Revit · LOD 300",  qc: "0 clashes", model: "Revit · LOD 300", img: "/images/before.jpg" },
-  { tab: "Final render", chip: "Final render", tag: "Corona · 4K",      qc: "QC passed", model: "Render · 4K",     img: "/images/after.png" },
+  { tab: "Sketch",       chip: "Sketch",       tag: "Linework · 1:100", qc: "Brief OK",  model: "Revit · LOD 100", img: "/images/stage1.jpg",
+    desc: "Your drawings and sketches, checked and scaled before modeling starts." },
+  { tab: "Massing",      chip: "Massing",      tag: "Volume study",     qc: "Area OK",   model: "Massing · v2",    img: "/images/stage2.jpg",
+    desc: "Simple volumes to confirm form, height and site fit." },
+  { tab: "BIM model",    chip: "BIM model",    tag: "Revit · LOD 300",  qc: "0 clashes", model: "Revit · LOD 300", img: "/images/before.jpg",
+    desc: "A coordinated Revit model with real walls, openings and materials." },
+  { tab: "Final render", chip: "Final render", tag: "Corona · 4K",      qc: "QC passed", model: "Render · 4K",     img: "/images/after.png",
+    desc: "Lit, textured and color-graded. Ready for clients and marketing." },
+];
+const icons = [
+  "M4 20l4-1 11-11-3-3L5 16l-1 4z M14 6l3 3",
+  "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z",
+  "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z M12 12l8-4.5 M12 12v9 M12 12L4 7.5",
+  "M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4",
 ];
 ---
 
@@ -27,6 +37,13 @@ const stages = [
         A real Axys3D project moving from linework to coordinated BIM to the
         final render. Hover the card, or pick a stage.
       </p>
+
+      <!-- live readout of the current stage -->
+      <div class="stage-readout" aria-live="polite">
+        <span class="readout-count"><b id="stCount">01</b> / 04</span>
+        <strong class="readout-title" id="stTitle">{stages[0].tab}</strong>
+        <span class="readout-desc" id="stDesc">{stages[0].desc}</span>
+      </div>
     </div>
 
     <!-- RIGHT: card + tabs -->
@@ -63,7 +80,12 @@ const stages = [
             data-tag={s.tag}
             data-qc={s.qc}
             data-model={s.model}
+            data-desc={s.desc}
+            aria-selected={i === 0 ? "true" : "false"}
           >
+            <span class="tab-dot" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d={icons[i]} /></svg>
+            </span>
             <span class="tab-num">0{i + 1}</span>
             <span class="tab-name">{s.tab}</span>
             <span class="tab-line"></span>
@@ -82,20 +104,23 @@ const stages = [
   const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>(".stage-tab"));
   const beam = root.querySelector<HTMLElement>(".stage-beam")!;
   const $ = (id: string) => document.getElementById(id)!;
-  const labels = { chip: $("stChip"), tag: $("stTag"), qc: $("stQc"), model: $("stModel") };
+  const labels = { chip: $("stChip"), tag: $("stTag"), qc: $("stQc"), model: $("stModel"), count: $("stCount"), title: $("stTitle"), desc: $("stDesc") };
 
   const DURATION = 3800; // har stage kitni der rukay (ms)
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let cur = 0, timer: number | undefined, startedAt = 0, remaining = DURATION, inView = false, hover = false;
 
   function setLabels(t: HTMLButtonElement) {
-    const targets = [labels.chip, labels.tag, labels.qc, labels.model];
+    const targets = [labels.chip, labels.tag, labels.qc, labels.model, labels.title, labels.desc];
     targets.forEach((el) => el.classList.add("is-swap"));
     window.setTimeout(() => {
       labels.chip.textContent = t.dataset.chip!;
       labels.tag.textContent = t.dataset.tag!;
       labels.qc.textContent = t.dataset.qc!;
       labels.model.textContent = t.dataset.model!;
+      labels.title.textContent = t.querySelector(".tab-name")!.textContent;
+      labels.desc.textContent = t.dataset.desc!;
+      labels.count.textContent = `0${Number(t.dataset.i) + 1}`;
       targets.forEach((el) => el.classList.remove("is-swap"));
     }, 350);
   }
@@ -124,6 +149,7 @@ const stages = [
     tabs.forEach((t, k) => {
       t.classList.toggle("is-active", k === i);
       t.classList.toggle("is-done", k < i);
+      t.setAttribute("aria-selected", String(k === i));
       if (k === i) { t.classList.remove("is-active"); void t.offsetWidth; t.classList.add("is-active"); }
     });
     setLabels(tabs[i]);
