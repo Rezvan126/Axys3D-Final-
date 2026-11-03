@@ -115,20 +115,8 @@
 .m-day-track svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- 3. featured: projects delivered ---------- */
-.m-projects { display: flex; flex-direction: column; gap: 22px; background: linear-gradient(180deg, #1a130f 0%, #120e0b 100%); }
-/* 50 dots, one per project, light up in sequence */
-.m-matrix { display: grid; grid-template-columns: repeat(10, 11px); justify-content: space-between; row-gap: 12px; padding: 6px 2px 4px; }
-.m-matrix span {
-  width: 11px; height: 11px; border-radius: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.5s var(--m-ease);
-  transition-delay: calc(var(--i) * 22ms + 200ms);
-  transform: scale(0.7);
-}
-.m-projects.is-in .m-matrix span { background: var(--m-brown-hi); transform: scale(1); }
-.m-projects.is-in .m-matrix span:nth-child(7n + 3) { background: var(--m-brown-lt); }
-.m-projects.is-in .m-matrix span:last-child { background: var(--m-sand); box-shadow: 0 0 14px rgba(227, 200, 168, 0.7); }
-.m-projects-body { position: relative; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.m-projects { display: flex; flex-direction: column; justify-content: center; gap: 22px; background: linear-gradient(180deg, #1a130f 0%, #120e0b 100%); }
+.m-projects-body { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 10px; flex: 1; }
 .m-pills { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .m-pills li {
   display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px 7px 10px; border-radius: 999px;
@@ -137,7 +125,7 @@
 }
 .m-pills svg { width: 15px; height: 15px; fill: none; stroke: var(--m-brown-lt); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .m-status {
-  margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 22px; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px;
   padding: 11px 18px; border-radius: 999px; border: 1px solid rgba(123, 196, 127, 0.25); background: rgba(123, 196, 127, 0.06);
   font-size: 15px; font-weight: 500; color: #e9e4df;
 }
@@ -164,15 +152,24 @@
 .m-signoff { width: 100%; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--m-edge); display: flex; flex-direction: column; gap: 10px; }
 .m-sheet { position: relative; }
 .m-sheet svg { display: block; width: 100%; height: auto; }
-.m-sheet-paper { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.1); }
+.m-sh-paper { fill: #16120f; stroke: rgba(255, 255, 255, 0.1); }
+.m-sh-frame { fill: none; stroke: rgba(227, 200, 168, 0.28); stroke-width: 0.6; }
+.m-sh-axis { fill: none; stroke: rgba(255, 255, 255, 0.14); stroke-width: 0.5; stroke-dasharray: 5 2 1 2; }
+.m-sh-bubble { fill: #16120f; stroke: rgba(227, 200, 168, 0.5); stroke-width: 0.6; }
+.m-sh-ground { fill: none; stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.2; }
+.m-sh-hatch { fill: none; stroke: rgba(255, 255, 255, 0.22); stroke-width: 0.5; }
+.m-sh-dim { fill: none; stroke: rgba(255, 255, 255, 0.35); stroke-width: 0.5; }
+.m-sh-txt { font: 500 5.2px "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.04em; fill: rgba(255, 255, 255, 0.5); }
+.m-sh-strong { fill: #e3c8a8; font-weight: 600; }
+.m-sh-c { text-anchor: middle; }
 .m-sheet-draw {
-  fill: none; stroke: var(--m-brown-lt); stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round;
+  fill: none; stroke: var(--m-sand); stroke-width: 0.9; stroke-linejoin: miter; stroke-linecap: square;
   stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 2.2s var(--m-ease) 0.4s;
 }
 .m-sheet-dim { fill: none; stroke: rgba(255, 255, 255, 0.25); stroke-width: 0.8; }
 .m-rating.is-in .m-sheet-draw { stroke-dashoffset: 0; }
 .m-stamp {
-  position: absolute; right: 7%; top: 12%;
+  position: absolute; right: 2.5%; top: 30%;
   padding: 5px 10px; border: 2px solid #7bc47f; border-radius: 6px;
   font: 700 12px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #7bc47f;
   background: rgba(10, 14, 10, 0.6);
@@ -185,14 +182,12 @@
 @media (max-width: 1100px) {
   .mission-grid { grid-template-columns: 1fr 1fr; }
   .m-projects { grid-column: span 2; order: -1; }
-  .m-matrix { grid-template-columns: repeat(25, 11px); }
 }
 @media (max-width: 700px) {
   .mission { padding: 64px 16px 40px; }
   .mission-grid { grid-template-columns: 1fr; gap: 14px; }
   .mission-col { gap: 14px; }
   .m-projects { grid-column: auto; }
-  .m-matrix { grid-template-columns: repeat(10, 11px); }
   .mission-col > .mission-card { flex: none; }
   .m-partners { grid-template-columns: auto minmax(0, 1fr); gap: 18px; min-height: 0; }
   .m-orbit { width: 110px; height: 110px; }
@@ -207,5 +202,5 @@
   .m-gauge-fill { stroke-dashoffset: calc(100 - var(--val)); transition: none; }
   .m-sheet-draw { stroke-dashoffset: 0; transition: none; }
   .m-stamp { opacity: 1; transform: rotate(-8deg); transition: none; }
-  .m-day-track li, .m-matrix span { transition: none; }
+  .m-day-track li { transition: none; }
 }

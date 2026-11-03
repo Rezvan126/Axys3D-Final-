@@ -6,7 +6,6 @@ import "../styles/Mission.css";
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const bookingMonth = (d: Date) => MONTHS[(d.getMonth() + (d.getDate() > 15 ? 1 : 0)) % 12];
 const days = [1, 2, 3, 4, 5, 6, 7];
-const projectDots = Array.from({ length: 50 }, (_, i) => i);
 ---
 
 <!-- STATS — each card leads with a visual; text is one short label. -->
@@ -50,10 +49,6 @@ const projectDots = Array.from({ length: 50 }, (_, i) => i);
 
       <!-- COLUMN 2: featured — projects delivered -->
       <div class="mission-card m-projects" data-reveal>
-        <!-- one dot per delivered project -->
-        <div class="m-matrix" aria-hidden="true">
-          {projectDots.map((i) => <span style={`--i:${i}`}></span>)}
-        </div>
         <div class="m-projects-body">
           <span class="m-num m-num--xl"><span data-count-to="50">50</span><sup>+</sup></span>
           <span class="m-label">Projects delivered</span>
@@ -98,10 +93,35 @@ const projectDots = Array.from({ length: 50 }, (_, i) => i);
         <!-- a drawing sheet gets the client's approval stamp -->
         <div class="m-signoff">
           <div class="m-sheet" aria-hidden="true">
-            <svg viewBox="0 0 160 100">
-              <rect class="m-sheet-paper" x="1" y="1" width="158" height="98" rx="6" />
-              <path class="m-sheet-draw" pathLength="100" d="M18 78 V44 L52 30 L86 44 V78 Z M86 56 H138 V78 H86 M52 30 V20 H64 V35 M30 78 V60 H44 V78 M60 50 H74 V62 H60 Z M98 62 H110 V72 H98 Z M118 62 H130 V72 H118 Z M10 78 H150" />
-              <path class="m-sheet-dim" d="M18 88 H138 M18 85 V91 M138 85 V91" />
+            <!-- elevation sheet: frame, grid bubbles, building, levels, dimension, title block -->
+            <svg viewBox="0 0 240 150">
+              <rect class="m-sh-paper" x="0.5" y="0.5" width="239" height="149" rx="6" />
+              <rect class="m-sh-frame" x="6" y="6" width="228" height="138" />
+              <!-- title block -->
+              <path class="m-sh-frame" d="M184 6 V144 M184 104 H234 M184 118 H234 M184 131 H234 M209 118 V144" />
+              <text class="m-sh-txt m-sh-strong" x="189" y="114">AXYS3D</text>
+              <text class="m-sh-txt" x="189" y="127">ELEVATION A</text>
+              <text class="m-sh-txt" x="189" y="140">1:100</text>
+              <text class="m-sh-txt m-sh-strong" x="213" y="140">A-201</text>
+              <text class="m-sh-txt" x="189" y="16">REV C</text>
+              <!-- grid bubbles + axes -->
+              <path class="m-sh-axis" d="M30 26 V126 M98 26 V126 M166 26 V126" />
+              <circle class="m-sh-bubble" cx="30" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="30" y="22">A</text>
+              <circle class="m-sh-bubble" cx="98" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="98" y="22">B</text>
+              <circle class="m-sh-bubble" cx="166" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="166" y="22">C</text>
+              <!-- building (draws in) -->
+              <path class="m-sheet-draw" pathLength="100" d="M24 112 V70 H112 V112 M58 70 V44 H172 V112 H112 M58 44 V70" />
+              <path class="m-sheet-draw" pathLength="100" d="M34 82 H62 V96 H34 Z M76 84 H86 V112 H76 Z M120 52 H134 V64 H120 Z M140 52 H154 V64 H140 Z M160 52 H168 V64 H160 Z M120 82 H166 V104 H120 Z M143 82 V104" />
+              <!-- ground with hatch -->
+              <path class="m-sh-ground" d="M14 112 H180" />
+              <path class="m-sh-hatch" d="M18 116 l4 -4 M28 116 l4 -4 M38 116 l4 -4 M48 116 l4 -4 M58 116 l4 -4 M68 116 l4 -4 M78 116 l4 -4 M88 116 l4 -4 M98 116 l4 -4 M108 116 l4 -4 M118 116 l4 -4 M128 116 l4 -4 M138 116 l4 -4 M148 116 l4 -4 M158 116 l4 -4 M168 116 l4 -4" />
+              <!-- level markers -->
+              <path class="m-sh-dim" d="M172 44 H180 M172 70 H180 M172 112 H180" />
+              <text class="m-sh-txt" x="160" y="41">+6.40</text>
+              <text class="m-sh-txt" x="160" y="67">+3.20</text>
+              <!-- overall dimension -->
+              <path class="m-sh-dim" d="M24 126 H172 M24 122.5 V129.5 M172 122.5 V129.5 M21.5 128.5 L26.5 123.5 M169.5 128.5 L174.5 123.5" />
+              <text class="m-sh-txt m-sh-c" x="98" y="137">14 800</text>
             </svg>
             <span class="m-stamp">Approved</span>
           </div>
