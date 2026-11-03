@@ -13,6 +13,7 @@ import FAQSection from "../components/FAQSection.astro";
 import CTASection from "../components/CTASection.astro";
 import Footer from "../components/Footer.astro";
 import Mission from "../components/Mission.astro";
+import Polish from "../components/Polish.astro";
 import "../styles/Mission.css";
 import "../styles/faq.css";
 import "../styles/cta.css";
@@ -41,6 +42,7 @@ const orgLd = [
   </head>
 
   <body>
+    <Polish />
     <main>
       <div class="reveal reveal-zoom">
         <Navbar />
@@ -57,12 +59,8 @@ const orgLd = [
       <div class="grad-zone">
         <ServicesShowcase showHeader />
       </div>
-      <div class="grad-zone">
-        <div class="reveal reveal-up">
-          <Stages />
-        </div>
-
-      </div>
+      <!-- pinned scroll section: kept out of the reveal wrapper so sticky positioning works -->
+      <Stages />
       <!-- How it works — own gradient zone -->
     
       <div class="reveal reveal-left">

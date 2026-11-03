@@ -34,6 +34,9 @@ body {
   max-width: 100% !important;
   min-height: 100vh;
   overflow-x: hidden !important;
+  /* clip (where supported) stops sideways scroll without turning body into a
+     scroll container, which would break position: sticky sections */
+  overflow-x: clip !important;
   background-color: black;
   color: var(--color-text-primary);
   font-family: var(--font-primary);

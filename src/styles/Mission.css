@@ -34,6 +34,7 @@
 .mission-inner { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; }
 .mission-grid { display: grid; grid-template-columns: 1fr 1.05fr 1fr; gap: 20px; align-items: stretch; }
 .mission-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.mission-col > .mission-card { flex: 1; }
 
 /* ---------- shared card ---------- */
 .mission-card {
@@ -94,7 +95,7 @@
 @keyframes m-spin { to { transform: rotate(360deg); } }
 
 /* ---------- 2. seven-day track ---------- */
-.m-days { background: var(--m-card-warm); display: flex; flex-direction: column; gap: 22px; }
+.m-days { background: var(--m-card-warm); display: flex; flex-direction: column; justify-content: space-between; gap: 22px; }
 .m-figure--row { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .m-figure--row .m-label { padding-bottom: 6px; }
 .m-day-track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
@@ -113,25 +114,21 @@
 }
 .m-day-track svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- 3. featured projects mosaic ---------- */
-.m-projects { padding: 0; display: flex; flex-direction: column; background: #15100d; }
-.m-mosaic { position: relative; display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; height: 230px; }
-.m-tile { position: relative; overflow: hidden; background: #241a14; }
-.m-tile:first-child { grid-row: span 2; }
-.m-tile:nth-child(4) { display: none; }
-.m-tile img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transform: scale(1.15); filter: saturate(0.85) brightness(0.85);
-  transition: transform 1.4s var(--m-ease), filter 0.6s ease;
-  transition-delay: calc(var(--i) * 0.1s);
+/* ---------- 3. featured: projects delivered ---------- */
+.m-projects { display: flex; flex-direction: column; gap: 22px; background: linear-gradient(180deg, #1a130f 0%, #120e0b 100%); }
+/* 50 dots, one per project, light up in sequence */
+.m-matrix { display: grid; grid-template-columns: repeat(10, 11px); justify-content: space-between; row-gap: 12px; padding: 6px 2px 4px; }
+.m-matrix span {
+  width: 11px; height: 11px; border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.5s var(--m-ease);
+  transition-delay: calc(var(--i) * 22ms + 200ms);
+  transform: scale(0.7);
 }
-.m-projects.is-in .m-tile img { transform: scale(1); }
-.m-projects:hover .m-tile img { filter: saturate(1) brightness(1); }
-.m-mosaic::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, transparent 45%, #15100d 100%);
-}
-.m-projects-body { position: relative; z-index: 2; margin-top: -46px; padding: 0 26px 26px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.m-projects.is-in .m-matrix span { background: var(--m-brown-hi); transform: scale(1); }
+.m-projects.is-in .m-matrix span:nth-child(7n + 3) { background: var(--m-brown-lt); }
+.m-projects.is-in .m-matrix span:last-child { background: var(--m-sand); box-shadow: 0 0 14px rgba(227, 200, 168, 0.7); }
+.m-projects-body { position: relative; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .m-pills { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .m-pills li {
   display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px 7px 10px; border-radius: 999px;
@@ -141,9 +138,10 @@
 .m-pills svg { width: 15px; height: 15px; fill: none; stroke: var(--m-brown-lt); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .m-status {
   margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px;
-  padding: 9px 14px; border-radius: 999px; border: 1px solid var(--m-edge); background: rgba(255, 255, 255, 0.03);
-  font-size: 13px; font-weight: 600; color: #e9e4df;
+  padding: 11px 18px; border-radius: 999px; border: 1px solid rgba(123, 196, 127, 0.25); background: rgba(123, 196, 127, 0.06);
+  font-size: 15px; font-weight: 500; color: #e9e4df;
 }
+.m-status b { font-weight: 700; color: #fff; }
 .m-status i { width: 8px; height: 8px; border-radius: 50%; background: #7bc47f; box-shadow: 0 0 0 0 rgba(123, 196, 127, 0.6); animation: m-pulse 2s ease-out infinite; }
 @keyframes m-pulse { to { box-shadow: 0 0 0 9px rgba(123, 196, 127, 0); } }
 
@@ -163,45 +161,51 @@
 .m-stars { font-size: 13px; letter-spacing: 3px; color: var(--m-brown-lt); }
 .m-label--center { text-align: center; }
 
-.m-curve { width: 100%; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--m-edge); display: flex; flex-direction: column; gap: 8px; }
-.m-curve svg { width: 100%; height: 64px; overflow: visible; }
-.m-curve-area { fill: rgba(143, 100, 68, 0.14); }
-.m-curve-line {
-  fill: none; stroke: var(--m-brown-lt); stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke;
-  stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.6s var(--m-ease) 0.5s;
+.m-signoff { width: 100%; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--m-edge); display: flex; flex-direction: column; gap: 10px; }
+.m-sheet { position: relative; }
+.m-sheet svg { display: block; width: 100%; height: auto; }
+.m-sheet-paper { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.1); }
+.m-sheet-draw {
+  fill: none; stroke: var(--m-brown-lt); stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round;
+  stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 2.2s var(--m-ease) 0.4s;
 }
-.m-rating.is-in .m-curve-line { stroke-dashoffset: 0; }
-.m-curve-dot { fill: var(--m-sand); opacity: 0; transition: opacity 0.4s ease 1.9s; }
-.m-rating.is-in .m-curve-dot { opacity: 1; }
+.m-sheet-dim { fill: none; stroke: rgba(255, 255, 255, 0.25); stroke-width: 0.8; }
+.m-rating.is-in .m-sheet-draw { stroke-dashoffset: 0; }
+.m-stamp {
+  position: absolute; right: 7%; top: 12%;
+  padding: 5px 10px; border: 2px solid #7bc47f; border-radius: 6px;
+  font: 700 12px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #7bc47f;
+  background: rgba(10, 14, 10, 0.6);
+  opacity: 0; transform: rotate(-8deg) scale(1.8);
+  transition: opacity 0.25s ease 2.3s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 2.3s;
+}
+.m-rating.is-in .m-stamp { opacity: 1; transform: rotate(-8deg) scale(1); }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1100px) {
   .mission-grid { grid-template-columns: 1fr 1fr; }
   .m-projects { grid-column: span 2; order: -1; }
-  .m-mosaic { height: 260px; grid-template-columns: 1.3fr 1fr 1fr; }
-  .m-tile:nth-child(4) { display: block; grid-row: span 2; }
+  .m-matrix { grid-template-columns: repeat(25, 11px); }
 }
 @media (max-width: 700px) {
   .mission { padding: 64px 16px 40px; }
   .mission-grid { grid-template-columns: 1fr; gap: 14px; }
   .mission-col { gap: 14px; }
   .m-projects { grid-column: auto; }
-  .m-mosaic { height: 200px; grid-template-columns: 1.3fr 1fr; }
-  .m-tile:nth-child(4) { display: none; }
-  .m-partners { grid-template-columns: 1fr; justify-items: start; min-height: 0; }
+  .m-matrix { grid-template-columns: repeat(10, 11px); }
+  .mission-col > .mission-card { flex: none; }
+  .m-partners { grid-template-columns: auto minmax(0, 1fr); gap: 18px; min-height: 0; }
   .m-orbit { width: 110px; height: 110px; }
   .m-ring--1 { width: 110px; height: 110px; }
   .m-ring--2 { width: 78px; height: 78px; }
   .m-ring--3 { width: 46px; height: 46px; }
   .mission-card { padding: 22px; }
-  .m-projects { padding: 0; }
-  .m-projects-body { padding: 0 22px 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mission-card { opacity: 1; transform: none; transition: none; }
   .m-ring, .m-status i { animation: none; }
   .m-gauge-fill { stroke-dashoffset: calc(100 - var(--val)); transition: none; }
-  .m-curve-line { stroke-dashoffset: 0; transition: none; }
-  .m-curve-dot { opacity: 1; }
-  .m-day-track li, .m-tile img { transition: none; }
+  .m-sheet-draw { stroke-dashoffset: 0; transition: none; }
+  .m-stamp { opacity: 1; transform: rotate(-8deg); transition: none; }
+  .m-day-track li, .m-matrix span { transition: none; }
 }
