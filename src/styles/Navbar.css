@@ -513,20 +513,32 @@ body.menu-open .side-nav {
 
 /* CTA: gold metallic rim, pearl face, brown text */
 .site-header .topbar-cta {
-  display: inline-flex; min-height: 0; padding: 2px; gap: 0; border: 0; border-radius: 999px;
-  background: linear-gradient(135deg, #f1dcb6 0%, #c39a6b 28%, #8f6444 52%, #d9b48c 74%, #7a5236 100%);
-  box-shadow: 0 6px 18px rgba(143, 100, 68, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  display: inline-flex; min-height: 0; padding: 3px; gap: 0; border-radius: 999px;
+  border: 1px solid #4a2f1f;                                   /* dark outer edge */
+  background: linear-gradient(160deg, #f6e4c4 0%, #c9a072 22%, #8f6444 50%, #e0bd94 72%, #6b452c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 225, 0.85),                  /* rim catches light on top */
+    inset 0 -1px 0 rgba(60, 36, 22, 0.8),                     /* rim shadow underneath */
+    0 2px 0 #3a2418,                                           /* thickness below the button */
+    0 8px 20px rgba(143, 100, 68, 0.35);
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
 }
 .topbar-cta-face {
   display: inline-flex; align-items: center; gap: 10px;
   height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box;
-  background: linear-gradient(180deg, #ffffff 0%, #f3efea 45%, #dcd5cd 100%);
-  box-shadow: inset 0 1px 0 #ffffff, inset 0 -2px 4px rgba(107, 69, 44, 0.18);
+  height: 42px;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f1ec 42%, #e2dbd3 78%, #d3cbc2 100%);
+  border: 1px solid rgba(107, 69, 44, 0.45);                  /* fine groove between rim and face */
+  box-shadow: inset 0 1px 0 #ffffff, inset 0 -3px 5px rgba(107, 69, 44, 0.22), inset 0 2px 3px rgba(255, 255, 255, 0.9);
   color: #6b452c; font-size: 13.5px; font-weight: 700; letter-spacing: 0.01em; white-space: nowrap;
 }
 .topbar-cta-arrow { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
-.site-header .topbar-cta:hover { transform: translateY(-1px); background: linear-gradient(135deg, #f6e4c4 0%, #cfa676 28%, #9a6c49 52%, #e3c09a 74%, #84593b 100%); box-shadow: 0 10px 26px rgba(143, 100, 68, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.site-header .topbar-cta:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(160deg, #fbecd2 0%, #d4ab7c 22%, #9a6c49 50%, #e8c7a0 72%, #76503a 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 245, 225, 0.9), inset 0 -1px 0 rgba(60, 36, 22, 0.8), 0 3px 0 #3a2418, 0 12px 26px rgba(143, 100, 68, 0.5);
+}
+.site-header .topbar-cta:active { transform: translateY(1px); box-shadow: inset 0 1px 0 rgba(255, 245, 225, 0.8), inset 0 -1px 0 rgba(60, 36, 22, 0.8), 0 0 0 #3a2418, 0 4px 10px rgba(143, 100, 68, 0.35); }
 .site-header .topbar-cta:hover .topbar-cta-arrow { transform: translateX(2px); }
 .site-header .topbar-cta:focus-visible { outline: 2px solid #e3c8a8; outline-offset: 3px; }
 
