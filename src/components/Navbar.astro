@@ -34,10 +34,12 @@ const isActive = (href: string) =>
 
     <!-- CENTER PILL NAV (desktop) -->
     <nav class="floating-nav" aria-label="Primary">
-      <ul>
+      <ul id="navList">
+        <!-- glass pill: sits behind the current page, glides to the hovered link -->
+        <span class="nav-glass" id="navGlass" aria-hidden="true"></span>
         {links.map((l) => (
           <li>
-            <a href={l.href} class={isActive(l.href) ? "is-active" : ""}>{l.label}</a>
+            <a href={l.href} class={isActive(l.href) ? "is-active" : ""} aria-current={isActive(l.href) ? "page" : undefined}>{l.label}</a>
           </li>
         ))}
       </ul>
@@ -144,4 +146,31 @@ const isActive = (href: string) =>
   window.matchMedia("(min-width: 1301px)").addEventListener("change", (e) => {
     if (e.matches) setOpen(false);
   });
+
+  /* ---------- Glass pill behind the current page (moves to the hovered link) ---------- */
+  const list = document.getElementById("navList");
+  const glass = document.getElementById("navGlass");
+  if (list && glass) {
+    const linksEls = Array.from(list.querySelectorAll<HTMLAnchorElement>("a"));
+    const current = linksEls.find((a) => a.classList.contains("is-active")) || null;
+    const place = (a: HTMLElement | null, instant = false) => {
+      if (!a) { glass.style.opacity = "0"; return; }
+      if (instant) glass.style.transition = "none";
+      glass.style.opacity = "1";
+      // measure against the list, not the link's own <li>
+      const lr = list.getBoundingClientRect(), ar = a.getBoundingClientRect();
+      glass.style.width = `${ar.width}px`;
+      glass.style.transform = `translateX(${ar.left - lr.left}px)`;
+      if (instant) { void glass.offsetWidth; glass.style.transition = ""; }
+    };
+    const ready = () => { list.classList.add("has-glass"); place(current, true); };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(ready); else ready();
+    window.addEventListener("resize", () => place(current, true));
+    linksEls.forEach((a) => {
+      a.addEventListener("mouseenter", () => place(a));
+      a.addEventListener("focus", () => place(a));
+    });
+    list.addEventListener("mouseleave", () => place(current));
+    list.addEventListener("focusout", (e) => { if (!list.contains(e.relatedTarget as Node)) place(current); });
+  }
 </script>
