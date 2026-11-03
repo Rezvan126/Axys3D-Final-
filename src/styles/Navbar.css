@@ -420,3 +420,34 @@ body.menu-open .side-nav {
   width: 100%;
   z-index: 1003 !important;
 }
+
+/* =========================================================
+   HEADER CTA — brown-gold pill, white text, white arrow disc (no ribbon)
+========================================================= */
+.site-header .topbar-cta {
+  gap: 14px;
+  min-height: 46px;
+  padding: 5px 5px 5px 20px;
+  border: 1px solid rgba(227, 200, 168, 0.35);
+  background: linear-gradient(135deg, #c39a6b 0%, #8f6444 55%, #6b452c 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 8px 24px rgba(143, 100, 68, 0.28);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, filter 0.3s ease;
+}
+.site-header .topbar-cta:hover {
+  background: linear-gradient(135deg, #c39a6b 0%, #8f6444 55%, #6b452c 100%);
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 12px 30px rgba(143, 100, 68, 0.4);
+}
+.site-header .topbar-cta:focus-visible { outline: 2px solid #e3c8a8; outline-offset: 3px; }
+.topbar-cta-arrow {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  background: #ffffff; color: #6b452c;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.topbar-cta-arrow svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.topbar-cta:hover .topbar-cta-arrow { transform: translateX(2px); }
