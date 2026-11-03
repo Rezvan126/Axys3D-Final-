@@ -28,7 +28,8 @@ const isActive = (href: string) =>
 
     <!-- LOGO -->
     <a href="/" class="logo" aria-label="Axys3D Home">
-      AXYS<span class="brown-text">3D</span>
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-word">AXYS<span class="brown-text">3D</span></span>
     </a>
 
     <!-- CENTER PILL NAV (desktop) -->
@@ -45,10 +46,11 @@ const isActive = (href: string) =>
     <!-- RIGHT SIDE -->
     <div class="nav-right">
 
+      <!-- gold rim + pearl face, brown text -->
       <a href="/contact" class="topbar-cta">
-        <span>Discuss a production package</span>
-        <span class="topbar-cta-arrow" aria-hidden="true">
-          <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+        <span class="topbar-cta-face">
+          <span>Discuss a production package</span>
+          <svg class="topbar-cta-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
         </span>
       </a>
 
