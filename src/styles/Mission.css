@@ -208,3 +208,15 @@
   .m-sheet-draw { stroke-dashoffset: 0; transition: none; }
   .m-stamp { opacity: 1; transform: rotate(-8deg); transition: none; }
   }
+
+/* Booking line sits at the bottom of the projects card, on the same line as the
+   bottom content of the neighbouring cards; the number group stays centred above it. */
+.m-projects { justify-content: stretch; }
+.m-projects-body { justify-content: flex-start; }
+.m-projects-body > .m-num--xl { margin-top: auto; }
+.m-projects-body > .m-status {
+  margin-top: auto;
+  align-self: stretch;
+  justify-content: center;
+  padding: 12px 16px;
+}

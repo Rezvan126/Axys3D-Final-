@@ -183,4 +183,4 @@ No. Axys3D provides modeling, scene-production and delivery support. Design auth
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Scope a 3ds Max production package](/Contact/)**
+**[Scope a 3ds Max production package](/contact/)**

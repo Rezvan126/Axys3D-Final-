@@ -52,7 +52,7 @@ const serviceLabel: string = data.serviceLabel || "ARCHITECTURE-DESIGN-PRACTICES
 const description: string =
   data.description ||
   "Extend BIM, Revit, modeling and visual communication capacity while the appointed practice retains design authorship, client leadership and professional issue.";
-const operatingContext: string = data.operatingContext || "Production pressure needs a governed response.";
+const operatingContext: string = data.operatingContext || "Deadlines pile up faster than your team can draw.";
 
 const buyerPressures: string[] = data.buyerPressures || [
   "Compressed submission and documentation programmes",
@@ -68,8 +68,9 @@ const productionRequirements: string[] = data.productionRequirements || [
   "Transparent assumptions, issues and structured handoff",
 ];
 
-const engagementModel: Array<{ step: string; description: string }> = data.engagementModel
+const engagementModel: Array<{ step: string; description: string; title?: string }> = data.engagementModel
   ? data.engagementModel.map((item, index) => ({
+      title: item.title,
       step: item.step ?? String(index + 1).padStart(2, "0"),
       description: item.description,
     }))
@@ -209,8 +210,8 @@ const matchService = (name: string) => {
 const svcCards = typicalServices.slice(0, 3).map((name: string, i: number) => {
   const m = matchService(name);
   const slugKey = m ? m.slug : "bim-production";
-  const desc = (m && serviceDescriptions[m.slug]) || "Extend production capacity with governed, template-aligned deliverables.";
-  const tags = (m && serviceTags[m.slug]) || ["Production", "Standard", "Governed"];
+  const desc = (m && serviceDescriptions[m.slug]) || "Extra production capacity that follows your templates and standards.";
+  const tags = (m && serviceTags[m.slug]) || ["Production", "Your standards", "Checked"];
   return {
     name,
     desc,
@@ -291,7 +292,7 @@ const stepIcons = [
           </h1>
           <p class="indd-lead">{lead}</p>
           <div class="indd-actions">
-            <a href="/Contact/" class="indd-btn indd-btn--solid"><span>Start a project</span><span>↗</span></a>
+            <a href="/contact/" class="indd-btn indd-btn--solid"><span>Start a project</span><span>↗</span></a>
             {projects.length > 0 && <a href="#projects" class="indd-btn indd-btn--ghost">See projects</a>}
           </div>
         </div>
@@ -302,10 +303,10 @@ const stepIcons = [
         <div class="indd-wrap">
           <div class="indd-ctx">
             <div class="indd-ctx-text indd-reveal">
-              <span class="indd-label">Operating context</span>
+              <span class="indd-label">The problem we solve</span>
               <h2 class="indd-h2">{operatingContext}</h2>
-              <p>Where the pressure comes from, and what the production response has to cover.</p>
-              <a href="/Contact/" class="indd-btn indd-btn--solid"><span>Discuss your brief</span><span>↗</span></a>
+              <p>What usually slows teams like yours down, and what we deliver to fix it.</p>
+              <a href="/contact/" class="indd-btn indd-btn--solid"><span>Discuss your brief</span><span>↗</span></a>
 
               <div class="indd-collage" aria-hidden="true">
                 {collage.map((src: string) => <span><img src={src} alt="" loading="lazy" decoding="async" /></span>)}
@@ -315,7 +316,7 @@ const stepIcons = [
             <div class="indd-bento">
               <article class="indd-card indd-reveal" style="--d:60ms">
                 <span class="indd-tag">Buyer pressures</span>
-                <h3>Typical buyer pressures</h3>
+                <h3>What gets in the way</h3>
                 <ul class="indd-list">
                   {buyerPressures.map((t: string) => (
                     <li>
@@ -328,7 +329,7 @@ const stepIcons = [
 
               <article class="indd-card indd-reveal" style="--d:120ms">
                 <span class="indd-tag">Requirements</span>
-                <h3>Production requirements</h3>
+                <h3>What you get from us</h3>
                 <ul class="indd-list">
                   {productionRequirements.map((t: string) => (
                     <li>
@@ -340,18 +341,18 @@ const stepIcons = [
               </article>
 
               <article class="indd-tile indd-tile--black indd-reveal" style="--d:180ms">
-                <span class="indd-tag">Pressures mapped</span>
+                <span class="indd-tag">Common problems</span>
                 <div>
                   <b>{pad(buyerPressures.length)}</b>
-                  <p>Buyer-side constraints identified for this workflow.</p>
+                  <p>Challenges we regularly solve for teams like yours.</p>
                 </div>
               </article>
 
               <article class="indd-tile indd-tile--grey indd-reveal" style="--d:240ms">
-                <span class="indd-tag">Governed steps</span>
+                <span class="indd-tag">Simple steps</span>
                 <div>
                   <b>{pad(engagementModel.length)}</b>
-                  <p>Named approvals from first brief to handoff.</p>
+                  <p>From your first brief to the final files.</p>
                 </div>
               </article>
             </div>
@@ -364,10 +365,10 @@ const stepIcons = [
         <div class="indd-wrap">
           <div class="indd-head indd-reveal">
             <div>
-              <span class="indd-label">Engagement model</span>
-              <h2 class="indd-h2">One brief, named approvals, <span class="indd-hl">structured handoff</span></h2>
+              <span class="indd-label">How a project runs</span>
+              <h2 class="indd-h2">Clear brief, steady updates, <span class="indd-hl">clean handoff</span></h2>
             </div>
-            <p class="indd-head-note">The same governed sequence on every package, from first brief to structured handoff.</p>
+            <p class="indd-head-note">The same four steps on every project, so you always know what happens next.</p>
           </div>
 
           <div class="indd-steps">
@@ -379,7 +380,7 @@ const stepIcons = [
                   </span>
                   <span class="indd-step-num">{item.step}</span>
                 </div>
-                <h3>{stepNames[i] ?? `Step ${item.step}`}</h3>
+                <h3>{item.title ?? stepNames[i] ?? `Step ${item.step}`}</h3>
                 <p>{item.description}</p>
               </article>
             ))}
@@ -392,10 +393,10 @@ const stepIcons = [
         <div class="indd-wrap">
           <div class="indd-head indd-reveal">
             <div>
-              <span class="indd-label">Relevant capabilities</span>
-              <h2 class="indd-h2">Connected <span class="indd-hl">service packages</span></h2>
+              <span class="indd-label">What we do for you</span>
+              <h2 class="indd-h2">Services teams like yours <span class="indd-hl">use most</span></h2>
             </div>
-            <p class="indd-head-note">Service packages typically connected to this workflow.</p>
+            <p class="indd-head-note">The services we deliver most often for this kind of team.</p>
           </div>
 
           <div class="indd-svc-list">
@@ -465,8 +466,8 @@ const stepIcons = [
         <div class="indd-wrap">
           <div class="indd-boundary">
             <div class="indd-reveal">
-              <span class="indd-label">Responsibility boundary</span>
-              <h2 class="indd-h2">Clear roles, <span class="indd-hl">clear sign-off</span></h2>
+              <span class="indd-label">Who stays responsible</span>
+              <h2 class="indd-h2">Clear roles, <span class="indd-hl">no surprises</span></h2>
             </div>
             <article class="indd-card indd-card--wide indd-reveal" style="--d:80ms">
               <span class="indd-shield" aria-hidden="true">
@@ -481,9 +482,9 @@ const stepIcons = [
       <!-- =========== FINAL CTA =========== -->
       <section class="indd-final-cta">
         <div class="indd-final-inner indd-reveal">
-          <h2>Ready to configure this <span class="indd-hl">production workflow?</span></h2>
-          <p>Align model authoring and deliverable standards with our studio team.</p>
-          <a href="/Contact/" class="indd-final-btn">
+          <h2>Tell us about <span class="indd-hl">your next project.</span></h2>
+          <p>Share your drawings, deadline and what you need. We will reply with a clear scope and timeline.</p>
+          <a href="/contact/" class="indd-final-btn">
             <span>Define production package</span>
             <span>↗</span>
           </a>

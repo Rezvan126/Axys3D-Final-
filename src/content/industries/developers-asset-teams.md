@@ -1,99 +1,90 @@
 ---
-title: "Developers & Asset Teams"
+title: "Developers & Property Teams"
 serviceNumber: "03"
 serviceLabel: "developers-asset-teams"
-description: "Connect current project information to planning, approval, marketing and interactive communication packages with traceable review gates."
+description: "Planning images, marketing renders, films and interactive tours from your current design, kept up to date as the design changes."
 
-operatingContext: "Production pressure needs a governed response."
+operatingContext: "Buyers, investors and councils need to see the building before it exists."
 
 buyerPressures:
-  - "Different audiences requiring different representations of one project"
-  - "Late design changes invalidating marketing or approval media"
-  - "Unclear source revisions behind stakeholder outputs"
-  - "Rights and publication approvals spread across suppliers"
+  - "Different audiences needing different views of the same project"
+  - "Late design changes making marketing images out of date"
+  - "Not knowing which design version an image was based on"
+  - "Approvals and image rights spread across several suppliers"
 
 productionRequirements:
-  - "Named information freezes and view briefs"
-  - "Audience-specific imagery, animation and real-time derivatives"
-  - "Approval registers for design, identity, claims and rights"
-  - "Versioned delivery masters and reusable source handoff"
+  - "Each image and film tied to a named design version"
+  - "Visuals tailored to each audience: planning, sales or investors"
+  - "Stills, walkthrough films and interactive real-time tours"
+  - "Final masters and source files you own and can reuse"
 
 engagementModel:
   - step: "01"
-    title: "Define intent"
-    description: "Define audience, decision and intended use"
+    title: "Define the goal"
+    description: "Who will see it, and what decision it needs to support"
   - step: "02"
-    title: "Confirm source"
-    description: "Confirm authoritative source and change-control owner"
+    title: "Lock the design"
+    description: "We confirm which drawings and model version to work from"
   - step: "03"
-    title: "Approve prototypes"
-    description: "Approve cameras, look frames and representative prototypes"
+    title: "Approve the look"
+    description: "You sign off camera angles and a sample frame first"
   - step: "04"
-    title: "Controlled issue"
-    description: "Issue only approved derivatives with rights records"
+    title: "Deliver"
+    description: "Final images, films or tours, plus reusable source files"
 
 typicalServices:
-  - "3D modeling"
   - "Architectural visualization"
-  - "Animation"
-  - "Real-time and Unreal Engine"
+  - "Animation and motion"
+  - "Real-time / Unreal Engine"
+  - "3D modeling"
 
-responsibilityBoundary: "Communication outputs support client-led decisions; they do not constitute permit approval, statutory acceptance or professional certification."
+responsibilityBoundary: "You and your design team decide what is shown and approve every image before it is published."
 ---
 
-## 01 / Operating Context
+## 01 / The problem we solve
 
-# Production pressure needs a governed response.
+# Buyers, investors and councils need to see the building before it exists.
 
-Developer and asset communication demands clear alignment between design source versions and investor, planning, or public marketing media.
+Developers and asset teams come to us when a project has to be sold, approved or funded before it is built. We turn the current design into visuals each audience understands.
 
-### Typical Buyer Pressures
+### What usually gets in the way
 
-- Different audiences requiring different representations of one project
-- Late design changes invalidating marketing or approval media
-- Unclear source revisions behind stakeholder outputs
-- Rights and publication approvals spread across suppliers
+- Different audiences needing different views of the same project
+- Late design changes making marketing images out of date
+- Not knowing which design version an image was based on
+- Approvals and image rights spread across several suppliers
 
-### Production Requirements
+### What you get from us
 
-- Named information freezes and view briefs
-- Audience-specific imagery, animation and real-time derivatives
-- Approval registers for design, identity, claims and rights
-- Versioned delivery masters and reusable source handoff
-
----
-
-## 02 / Engagement Model
-
-# One brief, named approvals, structured handoff.
-
-### 01 — Define audience & use
-
-Define audience, decision and intended use.
-
-### 02 — Confirm source ownership
-
-Confirm authoritative source and change-control owner.
-
-### 03 — Look-and-feel approval
-
-Approve cameras, look frames and representative prototypes.
-
-### 04 — Master issue & rights
-
-Issue only approved derivatives with rights records.
+- Each image and film tied to a named design version
+- Visuals tailored to each audience: planning, sales or investors
+- Stills, walkthrough films and interactive real-time tours
+- Final masters and source files you own and can reuse
 
 ---
 
-## 03 / Relevant Capabilities
+## 02 / How a project runs
 
-### Typical Services
+# Clear brief, steady updates, clean handoff.
 
-- 3D modeling
-- Architectural visualization
-- Animation
-- Real-time and Unreal Engine
+### 01 — Define the goal
 
-> **Responsibility Boundary:** Communication outputs support client-led decisions; they do not constitute permit approval, statutory acceptance or professional certification.
+Who will see it, and what decision it needs to support.
 
-[Define the production package](/Contact/)
+### 02 — Lock the design
+
+We confirm which drawings and model version to work from.
+
+### 03 — Approve the look
+
+You sign off camera angles and a sample frame first.
+
+### 04 — Deliver
+
+Final images, films or tours, plus reusable source files.
+
+---
+
+## 03 / Who stays responsible
+
+You and your design team decide what is shown and approve every image before it is published.

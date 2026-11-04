@@ -41,5 +41,5 @@ controlPoints:
 ctaTitle: "Technical brief"
 ctaSubtitle: "Map the first package and approval route."
 ctaLabel: "Prepare the scope"
-ctaLink: "/Contact/"
+ctaLink: "/contact/"
 ---

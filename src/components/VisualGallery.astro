@@ -24,7 +24,7 @@ const items = [
 
     <div class="vg-grid">
       {items.map((it, i) => (
-        <a href="/work" class:list={["vg-tile", `vg-tile--${it.size}`, it.letterbox && "is-letterbox"]} style={`--i:${i}`}>
+        <a href="/visuals#case-studies" class:list={["vg-tile", `vg-tile--${it.size}`, it.letterbox && "is-letterbox"]} style={`--i:${i}`}>
           <img class="vg-poster" src={it.poster} alt={`${it.title}: ${it.tag}`} loading="lazy" decoding="async" />
           <video class="vg-video" muted loop playsinline preload="none" poster={it.poster} data-src={it.video} aria-hidden="true"></video>
           <span class="vg-shade" aria-hidden="true"></span>
@@ -40,7 +40,7 @@ const items = [
     </div>
 
     <div class="vg-foot">
-      <a href="/work" class="vg-cta">
+      <a href="/visuals" class="vg-cta">
         <span>View full portfolio</span>
         <span class="vg-cta-arrow" aria-hidden="true">
           <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg>

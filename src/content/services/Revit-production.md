@@ -184,4 +184,4 @@ Against the client template, parameter schema, naming rules, intended schedules 
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Scope Revit production capacity](/Contact/)**
+**[Scope Revit production capacity](/contact/)**

@@ -183,4 +183,4 @@ Results are reported only against the agreed device, build version, test scene a
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Define the real-time prototype](/Contact/)**
+**[Define the real-time prototype](/contact/)**

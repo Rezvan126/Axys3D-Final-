@@ -1,99 +1,90 @@
 ---
-title: "Engineering & Multidisciplinary Consultancies"
+title: "Engineering & MEP Consultancies"
 serviceNumber: "02"
 serviceLabel: "engineering-multidisciplinary"
-description: "Support controlled discipline-model production, federation, issue tracking and communication outputs inside engineer-led approval workflows."
+description: "Structural and MEP model production, federation and clash coordination, with every issue tracked to the right engineer."
 
-operatingContext: "Production pressure needs a governed response."
+operatingContext: "Clashes found on site cost far more than clashes found on screen."
 
 buyerPressures:
-  - "Multiple discipline models arriving on different cycles"
-  - "High volumes of repetitive model and documentation production"
-  - "Clash reports without clear ownership or review status"
-  - "Coordination outputs becoming detached from authoritative information"
+  - "Discipline models arriving at different times and in different states"
+  - "Large volumes of repetitive modelling and drawing work"
+  - "Clash reports nobody owns or follows up"
+  - "Coordination results drifting away from the latest models"
 
 productionRequirements:
-  - "Defined coordinates, exchanges and version controls"
-  - "Federated review against agreed rules and tolerances"
-  - "Issue routing to client-authorized discipline leads"
-  - "BCF/register-based status and structured handoff"
+  - "Shared coordinates, file exchanges and version control agreed up front"
+  - "Federated clash checks against the tolerances you set"
+  - "Each issue assigned to the right discipline lead"
+  - "Issue status you can track, and a clean handoff at the end"
 
 engagementModel:
   - step: "01"
-    title: "Audit models"
-    description: "Audit incoming models and coordination protocol"
+    title: "Check the models"
+    description: "We audit incoming models and your coordination rules"
   - step: "02"
-    title: "Agree tolerances"
-    description: "Agree checks, tolerances and issue classes"
+    title: "Set the rules"
+    description: "We agree clash tolerances, priorities and who resolves what"
   - step: "03"
-    title: "Federate & route"
-    description: "Federate, rationalize and route findings"
+    title: "Coordinate and track"
+    description: "We run clash checks and track every issue to closure"
   - step: "04"
-    title: "Re-test"
-    description: "Re-test only after authorized discipline decisions"
+    title: "Hand back"
+    description: "You receive updated models, issue reports and open items"
 
 typicalServices:
-  - "BIM production"
-  - "Revit production support"
+  - "BIM execution and model production"
   - "MEP coordination support"
+  - "Revit production"
   - "3D modeling"
 
-responsibilityBoundary: "Axys3D does not provide licensed engineering design, code certification, clash-resolution authority or professional sign-off."
+responsibilityBoundary: "Your engineers keep design responsibility and decide how each clash is resolved. We find, document and track the issues."
 ---
 
-## 01 / Operating Context
+## 01 / The problem we solve
 
-# Production pressure needs a governed response.
+# Clashes found on site cost far more than clashes found on screen.
 
-Multidisciplinary teams handle complex model streams from multiple disciplines. Structured federation and issue tracking prevent loss of authoritative source information.
+Engineering and MEP consultancies use us to add modelling capacity and run coordination, so their engineers spend time on engineering decisions rather than model housekeeping.
 
-### Typical Buyer Pressures
+### What usually gets in the way
 
-- Multiple discipline models arriving on different cycles
-- High volumes of repetitive model and documentation production
-- Clash reports without clear ownership or review status
-- Coordination outputs becoming detached from authoritative information
+- Discipline models arriving at different times and in different states
+- Large volumes of repetitive modelling and drawing work
+- Clash reports nobody owns or follows up
+- Coordination results drifting away from the latest models
 
-### Production Requirements
+### What you get from us
 
-- Defined coordinates, exchanges and version controls
-- Federated review against agreed rules and tolerances
-- Issue routing to client-authorized discipline leads
-- BCF/register-based status and structured handoff
-
----
-
-## 02 / Engagement Model
-
-# One brief, named approvals, structured handoff.
-
-### 01 — Audit incoming models
-
-Audit incoming models and coordination protocol.
-
-### 02 — Agree rules & tolerances
-
-Agree checks, tolerances and issue classes.
-
-### 03 — Federate & route findings
-
-Federate, rationalize and route findings to discipline leads.
-
-### 04 — Re-testing cycle
-
-Re-test only after authorized discipline decisions are signed off.
+- Shared coordinates, file exchanges and version control agreed up front
+- Federated clash checks against the tolerances you set
+- Each issue assigned to the right discipline lead
+- Issue status you can track, and a clean handoff at the end
 
 ---
 
-## 03 / Relevant Capabilities
+## 02 / How a project runs
 
-### Typical Services
+# Clear brief, steady updates, clean handoff.
 
-- BIM production
-- Revit production support
-- MEP coordination support
-- 3D modeling
+### 01 — Check the models
 
-> **Responsibility Boundary:** Axys3D does not provide licensed engineering design, code certification, clash-resolution authority or professional sign-off.
+We audit incoming models and your coordination rules.
 
-[Define the production package](/Contact/)
+### 02 — Set the rules
+
+We agree clash tolerances, priorities and who resolves what.
+
+### 03 — Coordinate and track
+
+We run clash checks and track every issue to closure.
+
+### 04 — Hand back
+
+You receive updated models, issue reports and open items.
+
+---
+
+## 03 / Who stays responsible
+
+Your engineers keep design responsibility and decide how each clash is resolved. We find, document and track the issues.

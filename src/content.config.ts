@@ -8,24 +8,6 @@ const seoFields = {
   seoDescription: z.string().max(160).optional(),
 };
 
-// 1. Services Page Collection
-const servicesPage = defineCollection({
-  loader: glob({ pattern: "index.md", base: "./src/content/servicesPage" }),
-  schema: z.object({
-    title: z.string(),
-    heading: z.string(),
-    description: z.string(),
-    services: z.array(
-      z.object({
-        num: z.string(),
-        shortTitle: z.string(),
-        title: z.string(),
-        description: z.string(),
-        href: z.string(),
-      }),
-    ),
-  }),
-});
 
 // 2. Individual Services Collection
 const services = defineCollection({
@@ -113,24 +95,6 @@ const processPage = defineCollection({
 });
 
 // 6. Work Page Master Metadata & Filters
-const workPage = defineCollection({
-  loader: glob({ pattern: "index.md", base: "./src/content/workPage" }),
-  schema: z.object({
-    heroTitle: z.string(),
-    heroSubtitle: z.string(),
-    heroDescription: z.string(),
-    noticeTitle: z.string(),
-    noticeText: z.string(),
-    filters: z.object({
-      services: z.array(z.string()),
-      stages: z.array(z.string()),
-      sectors: z.array(z.string()),
-      deliveryTypes: z.array(z.string()),
-      publicationStatuses: z.array(z.string()),
-    }),
-    ...seoFields,
-  }),
-});
 
 // 7. Individual Projects / Case Studies
 const projects = defineCollection({
@@ -201,6 +165,11 @@ const insights = defineCollection({
     seoTitle: z.string().optional(),
     seoDescription: z.string().max(160).optional(),
     publishDate: z.coerce.date().optional(),
+    updatedDate: z.coerce.date().optional(),
+    keywords: z.array(z.string()).optional(),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
 
     // Purana field. Build na toote isliye rakha hai.
     // Jab saari .md files me publishDate ho jaye, to ye line delete kar dena.
@@ -273,12 +242,10 @@ const contactPage = defineCollection({
 });
 
 export const collections = {
-  servicesPage,
   services,
   industriesPage,
   industries,
   process: processPage,
-  workPage,
   projects,
   insightsPage,
   insights,

@@ -7,6 +7,8 @@ import "../styles/global.css";
 import "../styles/Navbar.css";
 import "../styles/visual-library.css";
 import "../styles/footer.css";
+import "../styles/work.css";
+import { getCollection } from "astro:content";
 
 const libraryCategories = [
   "All",
@@ -142,10 +144,18 @@ const assets = [
   }
 ];
 
-const heroTitle = "Visual Asset Library";
-const heroSubtitle = "Explore production assets & renders.";
+// Case studies (moved here from the old Work page)
+const caseStudies = (await getCollection("projects")).map((item, index) => ({
+  id: item.id,
+  ...item.data,
+  video: `/videos/video${(index % 3) + 1}.mp4`,
+}));
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const heroTitle = "Work & visual library";
+const heroSubtitle = "Our work, from model to final frame.";
 const heroDescription =
-  "A curated archive of photorealistic visual sets, BIM coordination models, and interactive real-time environments.";
+  "Case studies that show how a brief becomes a delivered package, and a visual library of renders, films and BIM sets organised by discipline.";
 
 /* DITO Sphere Setup from about.astro */
 const sphereImages = [
@@ -196,7 +206,7 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title="Visual Asset Library | Axys3D" description={heroDescription} />
+    <SEO title="Work & Visual Library: Case Studies, Renders, BIM | Axys3D" description={heroDescription} />
 <script is:inline>
       document.documentElement.classList.add("js");
     </script>
@@ -262,6 +272,60 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
       </section>
 
       <!-- ================= LIBRARY SECTION ================= -->
+      <!-- ================= CASE STUDIES (merged from the old Work page) ================= -->
+      <div class="page-work wrk-embed">
+      <section class="wrk-cards-sec" id="case-studies">
+        <div class="wrk-wrap">
+          <div class="wrk-sec-head wrk-sec-head--row" data-reveal>
+            <div>
+              <span class="wrk-kicker">CASE STUDIES</span>
+              <h2 class="wrk-sec-h2">A closer look at <br /><span>our selected work.</span></h2>
+            </div>
+          </div>
+
+          <div class="wrk-cards-grid">
+            {caseStudies.map((project, index) => (
+              <a
+                class="wrk-card"
+                href={`/work/${project.id}`}
+                data-reveal
+                style={`--d: ${(index % 2) * 120}ms`}
+                aria-label={`View ${project.title} case study`}
+              >
+                <video
+                  src={project.video}
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                ></video>
+                <div class="wrk-card-overlay"></div>
+                <div class="wrk-card-shine"></div>
+
+                <div class="wrk-card-body">
+                  <span class="wrk-card-num">{pad(index + 1)}</span>
+                  <span class="wrk-card-target">{project.badgeText}</span>
+                  <h3 class="wrk-card-title">{project.title}</h3>
+                  <p class="wrk-card-desc">{project.summary}</p>
+                  <span class="wrk-card-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          {caseStudies.length === 0 && (
+            <div class="wrk-no-results">
+              <p>No case studies available yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      </div>
+
       <section class="lib-section" id="visual-library">
         <div class="lib-wrap">
           <div class="lib-sec-head lib-sec-head--row" data-reveal>

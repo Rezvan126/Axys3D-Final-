@@ -21,17 +21,46 @@ export async function getStaticPaths() {
 const { article } = Astro.props;
 const { Content } = await render(article);
 
-const pd = article.data.publishedDate ? new Date(article.data.publishedDate) : null;
-const publishedISO = pd && !isNaN(pd.getTime()) ? pd.toISOString() : undefined;
-const articleLd = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: article.data.title,
-  description: article.data.summary,
-  datePublished: publishedISO,
-  author: { "@type": "Organization", name: "Axys3D" },
-  publisher: { "@type": "Organization", name: "Axys3D" },
-};
+const d = article.data;
+const pubDate = d.publishDate ?? (d.publishedDate ? new Date(d.publishedDate) : undefined);
+const publishedISO = pubDate && !isNaN(pubDate.getTime()) ? pubDate.toISOString() : undefined;
+const modifiedISO = d.updatedDate ? d.updatedDate.toISOString() : publishedISO;
+const siteUrl = Astro.site ?? new URL("https://axys3d.com");
+const articleUrl = new URL(`/insights/${article.id}/`, siteUrl).href;
+const shareImage = d.image ?? "/og-default.jpg";
+
+// Structured data for Google: the article, where it sits in the site, and its FAQ
+const articleLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: d.title,
+    description: d.seoDescription ?? d.summary,
+    image: [new URL(shareImage, siteUrl).href],
+    datePublished: publishedISO,
+    dateModified: modifiedISO,
+    keywords: d.keywords?.join(", "),
+    mainEntityOfPage: articleUrl,
+    author: { "@type": "Organization", name: "Axys3D", url: siteUrl.href },
+    publisher: { "@type": "Organization", name: "Axys3D", logo: { "@type": "ImageObject", url: new URL("/favicon.svg", siteUrl).href } },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl.href },
+      { "@type": "ListItem", position: 2, name: "Insights", item: new URL("/insights/", siteUrl).href },
+      { "@type": "ListItem", position: 3, name: d.title, item: articleUrl },
+    ],
+  },
+  ...(d.faq?.length
+    ? [{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: d.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }]
+    : []),
+];
 
 /* ---------- Saare articles (sidebar + related ke liye) ---------- */
 const allArticles = await getCollection("insights");
@@ -65,12 +94,12 @@ const imageFor = (a: any) => {
   return (a.data as any).image ?? articleImages[idx % articleImages.length];
 };
 const heroImage = imageFor(article);
-const aboutImage = `https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=700&q=80`;
+const aboutImage = "/images/gallery/interior-1.jpg";
 
 /* ---------- Meta ---------- */
 const rt = String(article.data.readTime ?? "").trim();
 const author = (article.data as any).author ?? "AXYS3D Editorial";
-const rawDate = (article.data as any).date ?? (article.data as any).pubDate ?? (article.data as any).publishedAt;
+const rawDate = pubDate ?? (article.data as any).date ?? (article.data as any).pubDate ?? (article.data as any).publishedAt;
 const dateText = rawDate
   ? new Date(rawDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
   : "";
@@ -92,7 +121,11 @@ const initials = author.split(/\s+/).map((w: string) => w[0]).join("").slice(0, 
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO title={`${article.data.title} | Axys3D Insights`} description={article.data.summary} type="article" jsonLd={articleLd} />
+    <SEO title={`${d.seoTitle ?? d.title} | Axys3D`} description={d.seoDescription ?? d.summary} image={shareImage} type="article" jsonLd={articleLd} />
+    {publishedISO && <meta property="article:published_time" content={publishedISO} />}
+    {modifiedISO && <meta property="article:modified_time" content={modifiedISO} />}
+    <meta property="article:section" content={d.category} />
+    {d.keywords?.map((k) => <meta property="article:tag" content={k} />)}
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
@@ -154,6 +187,18 @@ const initials = author.split(/\s+/).map((w: string) => w[0]).join("").slice(0, 
           <div class="isd-prose">
             <Content />
           </div>
+
+          {d.faq?.length ? (
+            <section class="isd-faq" aria-labelledby="isd-faq-title">
+              <h2 id="isd-faq-title">Frequently asked questions</h2>
+              {d.faq.map((f) => (
+                <details class="isd-faq-item">
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </section>
+          ) : null}
 
           <!-- Share -->
           <div class="isd-share">

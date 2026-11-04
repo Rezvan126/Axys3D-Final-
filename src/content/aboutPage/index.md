@@ -21,5 +21,5 @@ principles:
 deliveryTitle: "Delivery controls"
 deliveryDescription: "Review the production process."
 ctaLabel: "See the six-stage process"
-ctaLink: "/Process"
+ctaLink: "/process"
 ---

@@ -1,5 +1,5 @@
 ---
-heroTitle: "Insights / Technical production"
-heroSubtitle: "Practical notes for controlled AEC delivery."
-heroDescription: "Fictional development articles demonstrate the editorial structure. They are not client evidence, legal advice or published thought leadership."
+heroTitle: "Insights & case studies"
+heroSubtitle: "Guides and case studies from real AEC production."
+heroDescription: "Practical guides on BIM, Revit documentation, MEP coordination and architectural visualization, plus case studies showing how a brief becomes a delivered package."
 ---

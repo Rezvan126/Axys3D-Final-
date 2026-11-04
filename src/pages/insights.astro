@@ -19,23 +19,64 @@ const pageData = insightsPageEntries[0]?.data || {
     "Fictional development articles demonstrate the editorial structure. They are not client evidence, legal advice or published thought leadership.",
 };
 
-// Fetch All Insight Articles
-const articles = await getCollection("insights");
+// Articles (newest first) and case studies, shown together with filters
+const articleEntries = (await getCollection("insights")).sort(
+  (a, b) => (b.data.publishDate?.getTime() ?? 0) - (a.data.publishDate?.getTime() ?? 0)
+);
+const caseEntries = await getCollection("projects");
 
-/*
- * High-resolution Architecture Imagery Fallbacks
- */
-const q = "?auto=format&fit=crop&w=1400&q=80";
-const articleImages = [
-  `https://images.unsplash.com/photo-1486406146926-c627a92ad1ab${q}`,
-  `https://images.unsplash.com/photo-1600585154340-be6161a56a0c${q}`,
-  `https://images.unsplash.com/photo-1487958449943-2429e8be8625${q}`,
-  `https://images.unsplash.com/photo-1600596542815-ffad4c1539a9${q}`,
-  `https://images.unsplash.com/photo-1518005020951-eccb494ad742${q}`,
-  `https://images.unsplash.com/photo-1613977257363-707ba9348227${q}`,
-  `https://images.unsplash.com/photo-1497366216548-37526070297c${q}`,
-  `https://images.unsplash.com/photo-1600585154526-990dced4db0d${q}`,
+// Local images only (no stock photos)
+const fallbackImages = [
+  "/images/gallery/exterior-1.jpg",
+  "/images/gallery/interior-1.jpg",
+  "/images/gallery/video3.jpg",
+  "/images/gallery/video2.jpg",
+  "/images/gallery/landscape.jpg",
 ];
+const fmtDate = (d?: Date) => (d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "");
+
+type Item = { kind: "article" | "case"; href: string; title: string; summary: string; meta: string; badge: string; cta: string; image: string; alt: string; category: string; date?: Date };
+const items: Item[] = [
+  ...articleEntries.map((a, i) => ({
+    kind: "article" as const,
+    href: `/insights/${a.id}`,
+    title: a.data.title,
+    summary: a.data.summary,
+    meta: `${a.data.category} · ${a.data.readTime} read`,
+    badge: a.data.badgeText,
+    cta: a.data.ctaLabel,
+    image: a.data.image ?? fallbackImages[i % fallbackImages.length],
+    alt: a.data.imageAlt ?? "",
+    category: a.data.category,
+    date: a.data.publishDate,
+  })),
+  ...caseEntries.map((c, i) => ({
+    kind: "case" as const,
+    href: `/work/${c.id}`,
+    title: c.data.title,
+    summary: c.data.summary,
+    meta: `${c.data.sector} · ${c.data.projectStage}`,
+    badge: "Case study",
+    cta: "View case study",
+    image: c.data.coverImage ?? fallbackImages[(i + 2) % fallbackImages.length],
+    alt: "",
+    category: "Case study",
+    date: c.data.publishDate,
+  })),
+];
+const categories = [...new Set(articleEntries.map((a) => a.data.category))];
+
+// Structured data: a listing page of articles and case studies
+const listLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Axys3D Insights & case studies",
+  description: pageData.heroDescription,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, url: it.href, name: it.title })),
+  },
+};
 
 /* Hero title typography split */
 const heroWords = pageData.heroSubtitle.trim().split(/\s+/);
@@ -47,7 +88,7 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title="Technical Production Insights | Axys3D" description={pageData.heroDescription} />
+    <SEO title="Insights: BIM, Revit & Architectural Visualization Guides | Axys3D" description={pageData.heroDescription} jsonLd={listLd} />
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
@@ -204,60 +245,87 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
         </div>
       </section>
 
-      <!-- ================= ARTICLES (NEECHE SHIFT KIYA GAYA) ================= -->
+      <!-- ================= ARTICLES + CASE STUDIES ================= -->
       <section class="isl-cards-sec" id="articles">
         <div class="isl-wrap">
           <div class="isl-sec-head--row" data-reveal>
             <div>
-              <span class="isl-kicker">LATEST ARTICLES</span>
-              <h2 class="isl-sec-h2">Latest reading <br /><span>from our team.</span></h2>
+              <span class="isl-kicker">LATEST</span>
+              <h2 class="isl-sec-h2">Guides and <br /><span>case studies.</span></h2>
             </div>
           </div>
 
-          {articles.length > 0 ? (
+          <!-- filters: type and topic -->
+          <div class="isl-filters" role="group" aria-label="Filter insights" data-reveal>
+            <button type="button" class="isl-filter" data-filter="all" aria-pressed="true">All <span>{items.length}</span></button>
+            <button type="button" class="isl-filter" data-filter="article" aria-pressed="false">Articles <span>{articleEntries.length}</span></button>
+            <button type="button" class="isl-filter" data-filter="case" aria-pressed="false">Case studies <span>{caseEntries.length}</span></button>
+            <span class="isl-filter-sep" aria-hidden="true"></span>
+            {categories.map((c) => (
+              <button type="button" class="isl-filter" data-filter={`cat:${c}`} aria-pressed="false">{c}</button>
+            ))}
+          </div>
+
+          {items.length > 0 ? (
             <div class="isl-cards-grid">
-              {articles.map((article, i) => (
+              {items.map((it, i) => (
                 <a
-                  class="isl-card"
-                  href={`/insights/${article.id}`}
+                  class:list={["isl-card", it.kind === "case" && "isl-card--case"]}
+                  href={it.href}
                   data-reveal
+                  data-kind={it.kind}
+                  data-cat={it.category}
                   style={`--d: ${(i % 2) * 120}ms`}
-                  aria-label={`${article.data.title} — ${article.data.ctaLabel}`}
+                  aria-label={`${it.title}: ${it.cta}`}
                 >
-                  <img
-                    src={(article.data as any).image ?? articleImages[i % articleImages.length]}
-                    alt=""
-                    loading={i < 2 ? "eager" : "lazy"}
-                    decoding="async"
-                    draggable="false"
-                  />
+                  <img src={it.image} alt={it.alt} loading={i < 2 ? "eager" : "lazy"} decoding="async" draggable="false" />
                   <div class="isl-card-overlay"></div>
 
                   <div class="isl-card-top">
-                    <span class="isl-card-meta">
-                      {article.data.category} / {article.data.readTime}
-                    </span>
-                    <span class="isl-card-badge">{article.data.badgeText}</span>
+                    <span class="isl-card-meta">{it.meta}</span>
+                    <span class="isl-card-badge">{it.badge}</span>
                   </div>
 
                   <div class="isl-card-body">
-                    <h3 class="isl-card-title">{article.data.title}</h3>
-                    <p class="isl-card-desc">{article.data.summary}</p>
+                    {it.date && <time class="isl-card-date" datetime={it.date.toISOString()}>{fmtDate(it.date)}</time>}
+                    <h3 class="isl-card-title">{it.title}</h3>
+                    <p class="isl-card-desc">{it.summary}</p>
                     <span class="isl-card-cta">
                       <span class="isl-card-arrow" aria-hidden="true">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                       </span>
-                      <span class="isl-card-cta-label">{article.data.ctaLabel}</span>
+                      <span class="isl-card-cta-label">{it.cta}</span>
                     </span>
                   </div>
                 </a>
               ))}
             </div>
           ) : (
-            <p style="text-align: center; color: #959595; padding: 60px 0;">No articles found in src/content/insights/</p>
+            <p style="text-align: center; color: #959595; padding: 60px 0;">Nothing published yet.</p>
           )}
+          <p class="isl-empty" hidden>Nothing in this filter yet.</p>
         </div>
       </section>
+
+      <script>
+        // Filter cards by type (article / case study) or topic, without reloading
+        const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>(".isl-filter"));
+        const cards = Array.from(document.querySelectorAll<HTMLElement>(".isl-cards-grid .isl-card"));
+        const empty = document.querySelector<HTMLElement>(".isl-empty");
+        buttons.forEach((btn) =>
+          btn.addEventListener("click", () => {
+            const f = btn.dataset.filter || "all";
+            buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+            let shown = 0;
+            cards.forEach((c) => {
+              const ok = f === "all" || (f.startsWith("cat:") ? c.dataset.cat === f.slice(4) : c.dataset.kind === f);
+              c.hidden = !ok;
+              if (ok) shown++;
+            });
+            if (empty) empty.hidden = shown > 0;
+          })
+        );
+      </script>
 
       <!-- ================= FINAL CTA ================= -->
       <section class="isl-final-cta">

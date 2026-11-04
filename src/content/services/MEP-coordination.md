@@ -185,6 +185,6 @@ An authorized discipline lead approves the resolution instruction, the correct s
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Set the coordination protocol](/Contact/)**
+**[Set the coordination protocol](/contact/)**
 
 [def]: /services/3d-modeling/

@@ -185,4 +185,4 @@ The agreed model breakdown, naming, exchange version, checks, open-item record a
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Scope a BIM production package](/Contact/)**
+**[Scope a BIM production package](/contact/)**

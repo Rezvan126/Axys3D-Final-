@@ -186,4 +186,4 @@ Against agreed scale, origin, hierarchy, naming, scope completeness and the geom
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Define the modeling specification](/Contact/)**
+**[Define the modeling specification](/contact/)**

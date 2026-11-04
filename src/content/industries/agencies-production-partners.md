@@ -1,101 +1,90 @@
 ---
-title: "Agencies & Specialist Production Partners"
+title: "Agencies & Production Partners"
 serviceNumber: "04"
 serviceLabel: "agencies-production-partners"
-description: "Provide neutral, accountable production capacity behind an agency-led client relationship, with NDA-first communications and controlled publication rights."
+description: "White-label 3D, BIM and visualization production behind your brand, NDA-first, with nothing published without your permission."
 
-operatingContext: "Production pressure needs a governed response."
+operatingContext: "Your client sees your name. We do the production."
 
 buyerPressures:
-  - "Peak production loads exceeding internal capacity"
-  - "AEC source information requiring technical interpretation"
-  - "White-label communication and client-contact boundaries"
-  - "Portfolio rights that differ by client, asset and territory"
+  - "Busy periods that exceed your in-house capacity"
+  - "Architectural drawings that need technical interpretation"
+  - "Keeping the client relationship strictly yours"
+  - "Portfolio rights that differ by client and project"
 
 productionRequirements:
-  - "Single brief, production owner and review schedule"
-  - "Technically fluent model and media production"
-  - "Neutral communications and agency-led approvals"
-  - "Explicit credits, usage rights and publication register"
+  - "One brief, one production lead and an agreed review schedule"
+  - "Technically accurate models, renders and films"
+  - "No direct contact with your client unless you ask for it"
+  - "Clear credits and usage rights for every piece of work"
 
 engagementModel:
   - step: "01"
-    title: "White-label protocol"
-    description: "Agree white-label protocol and contact boundary"
+    title: "Agree the rules"
+    description: "NDA, white-label terms and who talks to whom"
   - step: "02"
-    title: "Source handoff"
-    description: "Receive agency-approved source information"
+    title: "Receive the brief"
+    description: "You pass us the approved drawings and references"
   - step: "03"
-    title: "Agency reviews"
-    description: "Return reviews through the agency's nominated lead"
+    title: "Review through you"
+    description: "All feedback comes through your nominated lead"
   - step: "04"
-    title: "Archive & rights"
-    description: "Archive sources and rights status without self-publishing"
+    title: "Deliver unbranded"
+    description: "Files delivered ready for you to present as your own"
 
 typicalServices:
+  - "Architectural visualization"
+  - "Animation and motion"
   - "3D modeling"
-  - "Visualization"
-  - "Animation"
-  - "Unreal Engine production"
-  - "Integrated delivery support"
+  - "Real-time / Unreal Engine"
 
-responsibilityBoundary: "No direct end-client contact, attribution or portfolio publication occurs unless the appointing agency gives explicit written approval."
+responsibilityBoundary: "You own the client relationship and decide what can be credited or shown in any portfolio."
 ---
 
-## 01 / Operating Context
+## 01 / The problem we solve
 
-# Production pressure needs a governed response.
+# Your client sees your name. We do the production.
 
-Specialist partners require dependable technical interpretation of architectural sources under strict white-label and NDA protocols.
+Agencies and production studios use us as an extra production team during busy periods. We work under NDA, deliver unbranded, and never contact your client unless you ask.
 
-### Typical Buyer Pressures
+### What usually gets in the way
 
-- Peak production loads exceeding internal capacity
-- AEC source information requiring technical interpretation
-- White-label communication and client-contact boundaries
-- Portfolio rights that differ by client, asset and territory
+- Busy periods that exceed your in-house capacity
+- Architectural drawings that need technical interpretation
+- Keeping the client relationship strictly yours
+- Portfolio rights that differ by client and project
 
-### Production Requirements
+### What you get from us
 
-- Single brief, production owner and review schedule
-- Technically fluent model and media production
-- Neutral communications and agency-led approvals
-- Explicit credits, usage rights and publication register
+- One brief, one production lead and an agreed review schedule
+- Technically accurate models, renders and films
+- No direct contact with your client unless you ask for it
+- Clear credits and usage rights for every piece of work
 
 ---
 
-## 02 / Engagement Model
+## 02 / How a project runs
 
-# One brief, named approvals, structured handoff.
+# Clear brief, steady updates, clean handoff.
 
-### 01 — Agree white-label boundaries
+### 01 — Agree the rules
 
-Agree white-label protocol and contact boundary.
+NDA, white-label terms and who talks to whom.
 
-### 02 — Receive agency sources
+### 02 — Receive the brief
 
-Receive agency-approved source information.
+You pass us the approved drawings and references.
 
-### 03 — Route through agency lead
+### 03 — Review through you
 
-Return reviews through the agency's nominated lead.
+All feedback comes through your nominated lead.
 
-### 04 — Archive & publication controls
+### 04 — Deliver unbranded
 
-Archive sources and rights status without self-publishing.
+Files delivered ready for you to present as your own.
 
 ---
 
-## 03 / Relevant Capabilities
+## 03 / Who stays responsible
 
-### Typical Services
-
-- 3D modeling
-- Visualization
-- Animation
-- Unreal Engine production
-- Integrated delivery support
-
-> **Responsibility Boundary:** No direct end-client contact, attribution or portfolio publication occurs unless the appointing agency gives explicit written approval.
-
-**[Define the production package](/Contact/)**
+You own the client relationship and decide what can be credited or shown in any portfolio.

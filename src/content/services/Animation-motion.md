@@ -186,4 +186,4 @@ The revised source is compared with the locked information freeze, affected shot
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Plan the animation package](/Contact/)**
+**[Plan the animation package](/contact/)**

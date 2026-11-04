@@ -11,6 +11,8 @@ export interface Service {
   image: string;
   /** 24x24 SVG path, shown when the image is missing or still loading */
   icon: string;
+  /** One-line deliverable shown on the closed card */
+  short: string;
   /** Tool or discipline mark (24x24 path, from Simple Icons, CC0) */
   logo: { d: string; name: string; color: string };
 }
@@ -22,6 +24,7 @@ export const services: Service[] = [
   {
     num: "01",
     slug: "bim-production",
+    short: "Coordinated models, LOD 100–400",
     title: "BIM Execution & Model Production",
     blurb:
       "Coordinated BIM models built to firm standards, from concept development through construction-ready detail.",
@@ -33,6 +36,7 @@ export const services: Service[] = [
   {
     num: "02",
     slug: "revit-production",
+    short: "Permit and construction drawing sets",
     title: "Revit Production & Documentation",
     blurb:
       "Production-ready Revit documentation and drawing sets, coordinated across disciplines and issued on schedule.",
@@ -44,6 +48,7 @@ export const services: Service[] = [
   {
     num: "03",
     slug: "mep-coordination",
+    short: "Clash-free services before site",
     title: "MEP Coordination Support",
     blurb:
       "Clash-checked mechanical, electrical and plumbing coordination that keeps every system resolved before it hits site.",
@@ -55,6 +60,7 @@ export const services: Service[] = [
   {
     num: "04",
     slug: "3d-modeling",
+    short: "Architecture, interiors and objects",
     title: "3D Modeling",
     blurb:
       "Accurate architectural, interior and object models built to support every downstream visualization need.",
@@ -66,6 +72,7 @@ export const services: Service[] = [
   {
     num: "05",
     slug: "3ds-max-production",
+    short: "Render-ready scenes and lighting",
     title: "3ds Max Production",
     blurb: "Scene setup, materials and lighting built in 3ds Max to a consistent, production-grade pipeline.",
     includes: ["Scene Setup", "Materials & Texturing", "Lighting & Camera"],
@@ -76,6 +83,7 @@ export const services: Service[] = [
   {
     num: "06",
     slug: "architectural-visualization",
+    short: "Photoreal exteriors and interiors",
     title: "Architectural Visualization",
     blurb: "Exterior, interior and site visualizations that read as photography long before the building exists.",
     includes: ["Exterior Visualization", "Interior Visualization", "Site Visualization"],
@@ -86,6 +94,7 @@ export const services: Service[] = [
   {
     num: "07",
     slug: "animation-motion",
+    short: "Walkthroughs and fly-through films",
     title: "Animation & Motion",
     blurb: "Walkthroughs, fly-throughs and camera sequences that move a project through space with intent.",
     includes: ["Walkthroughs", "Fly-through Animations", "Camera & Motion"],
@@ -96,6 +105,7 @@ export const services: Service[] = [
   {
     num: "08",
     slug: "real-time",
+    short: "Interactive tours and showrooms",
     title: "Real-time / Unreal Engine",
     blurb:
       "Real-time environments in Unreal Engine: interactive walkthroughs and virtual showrooms your clients can explore.",

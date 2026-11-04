@@ -196,7 +196,7 @@ const more = all.length > 1
   : [];
 
 // ---------- SEO ----------
-const siteUrl = Astro.site ?? new URL("https://aapka-domain.com");
+const siteUrl = Astro.site ?? new URL("https://axys3d.com");
 const canonicalURL = new URL(Astro.url.pathname, siteUrl).href;
 const seoTitle = p.seoTitle || `${title} | Axys3D`;
 const seoDescription = p.seoDescription || summary;
@@ -247,7 +247,7 @@ const jsonLd = {
       <!-- =========== HERO (text only, left) =========== -->
       <section class="wrk-hero">
         <div class="wrk-wrap">
-          <a class="wrk-back" href="/Work/">All case studies</a>
+          <a class="wrk-back" href="/visuals#case-studies">All case studies</a>
           <span class="wrk-kicker">{badgeText}{badgeText && sector ? " / " : ""}{sector}</span>
 
           <h1 class="wrk-h1">
@@ -579,7 +579,7 @@ const jsonLd = {
                 <span class="wrk-kicker">Keep exploring</span>
                 <h2 class="wrk-h2">More <span>case studies.</span></h2>
               </div>
-              <a class="wrk-all-link" href="/Work/">All case studies →</a>
+              <a class="wrk-all-link" href="/visuals#case-studies">All case studies →</a>
             </div>
 
             <div class="wrk-more">
@@ -612,7 +612,7 @@ const jsonLd = {
         <div class="wrk-final-inner wrk-reveal">
           <h2>Need similar architectural execution <span>for your project?</span></h2>
           <p>Let's align your production schedules and technical BIM deliverables.</p>
-          <a href="/Contact/" class="wrk-final-btn">
+          <a href="/contact/" class="wrk-final-btn">
             <span>Configure project scope</span>
             <span>↗</span>
           </a>

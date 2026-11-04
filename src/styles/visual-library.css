@@ -819,3 +819,6 @@ html body .lib-h1:not(#a):not(#b) * { line-height: inherit !important; }
   html body .lib-h1:not(#a):not(#b) { font-size: clamp(2.2rem, 10.4vw, 3.2rem) !important; line-height: 1.08 !important; }
   html body .lib-h1:not(#a):not(#b) * { font-size: inherit !important; line-height: inherit !important; }
 }
+/* Case studies section merged in from the old Work page: sit on this page's background */
+.wrk-embed { background: transparent !important; position: relative; z-index: 2; }
+.wrk-embed .wrk-cards-sec { padding-top: clamp(40px, 8vh, 96px); }

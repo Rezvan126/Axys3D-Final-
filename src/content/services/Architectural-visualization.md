@@ -186,4 +186,4 @@ Client technical reviewers approve design-bearing content and source alignment; 
 
 Bring the intended use, available source information, review owners, milestones and required handoff.
 
-**[Prepare the visualization brief](/Contact/)**
+**[Prepare the visualization brief](/contact/)**
