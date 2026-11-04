@@ -93,25 +93,32 @@
 @keyframes m-spin { to { transform: rotate(360deg); } }
 
 /* ---------- 2. seven-day track ---------- */
-.m-days { background: var(--m-card-warm); display: flex; flex-direction: column; justify-content: space-between; gap: 22px; }
+.m-days { background: var(--m-card-warm); display: flex; flex-direction: column; justify-content: space-between; gap: 26px; }
+
+/* milestone timeline */
+.m-tl { position: relative; }
+.m-tl-line { position: absolute; left: 17px; right: 17px; top: 17px; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.m-tl-fill { position: absolute; inset: 0; background: linear-gradient(90deg, var(--m-brown-hi), var(--m-sand)); transform-origin: left; transform: scaleX(0); transition: transform 1.6s var(--m-ease) 0.3s; }
+.m-days.is-in .m-tl-fill { transform: scaleX(1); }
+.m-tl-steps { list-style: none; margin: 0; padding: 0; position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.m-tl-steps li { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.m-tl-steps li:nth-child(n + 2) { align-items: center; text-align: center; }
+.m-tl-steps li:last-child { align-items: flex-end; text-align: right; }
+.m-tl-dot {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+  background: #1d1611; border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  transition-delay: calc(0.4s + var(--i) * 0.38s);
+}
+.m-tl-dot svg { width: 16px; height: 16px; fill: none; stroke: #8d8784; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease; transition-delay: inherit; }
+.m-days.is-in .m-tl-dot { border-color: rgba(184, 148, 111, 0.55); background: #2a1d14; }
+.m-days.is-in .m-tl-dot svg { stroke: var(--m-sand); }
+.m-days.is-in .is-final .m-tl-dot { background: linear-gradient(135deg, var(--m-brown-lt), var(--m-brown)); border-color: transparent; box-shadow: 0 6px 20px rgba(143, 100, 68, 0.5); }
+.m-days.is-in .is-final .m-tl-dot svg { stroke: #fff; }
+.m-tl-day { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--m-brown-lt); margin-top: 4px; }
+.m-tl-text { font-size: 13px; font-weight: 500; line-height: 1.3; color: #e3ddd7; }
 .m-figure--row { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .m-figure--row .m-label { padding-bottom: 6px; }
-.m-day-track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
-.m-day-track li {
-  position: relative; display: grid; place-items: center; height: 46px; border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03);
-  font: 500 11px/1 'Inter', system-ui, sans-serif; color: #6f6965;
-  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
-  transition-delay: calc(var(--i) * 0.12s + 0.2s);
-}
-.m-days.is-in .m-day-track li { background: rgba(143, 100, 68, 0.22); border-color: rgba(184, 148, 111, 0.35); color: var(--m-sand); }
-.m-day-track li.is-render { background: rgba(255, 255, 255, 0.04); }
-.m-days.is-in .m-day-track li.is-render {
-  background: linear-gradient(135deg, var(--m-brown-lt), var(--m-brown));
-  border-color: transparent; box-shadow: 0 6px 22px rgba(143, 100, 68, 0.45);
-}
-.m-day-track svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-
 /* ---------- 3. featured: projects delivered ---------- */
 .m-projects { display: flex; flex-direction: column; justify-content: center; gap: 22px; background: linear-gradient(180deg, #1a130f 0%, #120e0b 100%); }
 .m-projects-body { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 10px; flex: 1; }
@@ -200,5 +207,4 @@
   .m-gauge-fill { stroke-dashoffset: calc(100 - var(--val)); transition: none; }
   .m-sheet-draw { stroke-dashoffset: 0; transition: none; }
   .m-stamp { opacity: 1; transform: rotate(-8deg); transition: none; }
-  .m-day-track li { transition: none; }
-}
+  }

@@ -5,7 +5,12 @@ import "../styles/Mission.css";
 // Worked out at build time and again in the visitor's browser, so it is never stale.
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const bookingMonth = (d: Date) => MONTHS[(d.getMonth() + (d.getDate() > 15 ? 1 : 0)) % 12];
-const days = [1, 2, 3, 4, 5, 6, 7];
+const milestones = [
+  { day: 1, text: "Brief checked", icon: "M6 3h9l3 3v15H6z M9 10h6 M9 14h6 M9 18h4" },
+  { day: 3, text: "Model built", icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z M12 12l8-4.5 M12 12v9 M12 12L4 7.5" },
+  { day: 5, text: "In-house QC", icon: "M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4" },
+  { day: 7, text: "First render", icon: "M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4" },
+];
 ---
 
 <!-- STATS — each card leads with a visual; text is one short label. -->
@@ -23,7 +28,7 @@ const days = [1, 2, 3, 4, 5, 6, 7];
             <span class="m-ring m-ring--3"><i></i><i></i></span>
           </div>
           <div class="m-figure">
-            <span class="m-num"><span data-count-to="40">40</span><sup>+</sup></span>
+            <span class="m-num"><span data-count-to="43">43</span><sup>+</sup></span>
             <span class="m-label">Studio partners worldwide</span>
           </div>
         </div>
@@ -34,23 +39,26 @@ const days = [1, 2, 3, 4, 5, 6, 7];
             <span class="m-num"><span data-count-to="7">7</span><small>days</small></span>
             <span class="m-label">Brief to first render</span>
           </div>
-          <ol class="m-day-track" aria-hidden="true">
-            {days.map((d) => (
-              <li style={`--i:${d}`} class:list={[d === 7 && "is-render"]}>
-                <span>{d === 7 ? "" : `D${d}`}</span>
-                {d === 7 && (
-                  <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4" /></svg>
-                )}
-              </li>
-            ))}
-          </ol>
+          <!-- milestone timeline: what happens on the way to the first render -->
+          <div class="m-tl">
+            <span class="m-tl-line" aria-hidden="true"><span class="m-tl-fill"></span></span>
+            <ol class="m-tl-steps">
+              {milestones.map((m, i) => (
+                <li style={`--i:${i}`} class:list={[i === milestones.length - 1 && "is-final"]}>
+                  <span class="m-tl-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={m.icon} /></svg></span>
+                  <span class="m-tl-day">Day {m.day}</span>
+                  <span class="m-tl-text">{m.text}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
 
       <!-- COLUMN 2: featured — projects delivered -->
       <div class="mission-card m-projects" data-reveal>
         <div class="m-projects-body">
-          <span class="m-num m-num--xl"><span data-count-to="50">50</span><sup>+</sup></span>
+          <span class="m-num m-num--xl"><span data-count-to="172">172</span></span>
           <span class="m-label">Projects delivered</span>
           <ul class="m-pills" aria-label="What you get">
             <li>
