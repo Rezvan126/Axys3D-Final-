@@ -213,7 +213,7 @@
    bottom content of the neighbouring cards; the number group stays centred above it. */
 .m-projects { justify-content: stretch; }
 .m-projects-body { justify-content: flex-start; }
-.m-projects-body > .m-num--xl { margin-top: auto; }
+.m-projects-body > .m-num--xl { margin-top: 0; }  /* number sits at the top, level with the neighbouring cards */
 .m-projects-body > .m-status {
   margin-top: auto;
   align-self: stretch;
