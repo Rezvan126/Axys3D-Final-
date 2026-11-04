@@ -1,287 +1,245 @@
 ---
-// 8 services in two aligned columns. Every card rests compact. Hovering (or keyboard focus,
-// or a tap on touch screens) unfolds its details as a panel over the cards below, so the
-// grid never shifts; it folds away when the pointer leaves. Used on the home page.
+// SERVICES — split showcase. Left: the 8 services as a numbered list. Right: a large panel
+// for the selected service (project image, tool logo, description, deliverables, link).
+// Hover, focus or tap a service to show it; the panel cross-fades, nothing else moves.
 import { services } from "../data/services";
 
 interface Props {
   showHeader?: boolean;
 }
 const { showHeader = false } = Astro.props;
-const columns = [services.slice(0, 4), services.slice(4)];
+
+// Images from your own projects, one per service (swap any path for a better render later)
+const media: Record<string, string> = {
+  "bim-production": "/images/stages/stage-3.jpg",
+  "revit-production": "/images/stages/stage-2.jpg",
+  "mep-coordination": "/images/stages/stage-3.jpg",
+  "3d-modeling": "/images/stages/stage-2.jpg",
+  "3ds-max-production": "/images/gallery/interior-1.jpg",
+  "architectural-visualization": "/images/gallery/exterior-1.jpg",
+  "animation-motion": "/images/gallery/video2.jpg",
+  "real-time": "/images/gallery/landscape.jpg",
+};
 ---
 
-<section class="sx" id="services" aria-label="Our services">
-  <div class="sx-wrap">
+<section class="sv" id="services" aria-label="Our services">
+  <div class="sv-wrap">
     {showHeader && (
-      <header class="sx-head">
-        <div>
-          <span class="sx-eyebrow">What we do</span>
-          <h2 class="sx-title">
-            Eight services. <em>One production team.</em>
-          </h2>
-        </div>
+      <header class="sv-head">
+        <span class="sv-eyebrow">What we do</span>
+        <h2 class="sv-title">Eight services. <em>One production team.</em></h2>
       </header>
     )}
 
-    <div class="sx-grid">
-      {columns.map((col) => (
-        <div class="sx-col">
-          {col.map((s) => (
-            <article class="sx-card" id={s.slug} style={`--brand:${s.logo.color}`}>
-              <button class="sx-toggle" type="button" aria-expanded="false" aria-controls={`sx-body-${s.slug}`}>
-                <span class="sx-num">{s.num}</span>
-                <span class="sx-logo" title={s.logo.name}>
-                  <svg viewBox="0 0 24 24" role="img" aria-label={s.logo.name}><path d={s.logo.d} /></svg>
-                </span>
-                <span class="sx-name-wrap">
-                  <span class="sx-name">{s.title}</span>
-                  <span class="sx-tool">{s.short}</span>
-                </span>
-                <span class="sx-chev" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
-              </button>
+    <div class="sv-grid">
+      <!-- LEFT: list -->
+      <ol class="sv-list" role="tablist" aria-label="Services" aria-orientation="vertical">
+        {services.map((s, i) => (
+          <li>
+            <button
+              class:list={["sv-item", i === 0 && "is-active"]}
+              type="button"
+              role="tab"
+              id={`sv-tab-${s.slug}`}
+              aria-controls={`sv-panel-${s.slug}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              data-i={i}
+              style={`--brand:${s.logo.color}`}
+            >
+              <span class="sv-num">{s.num}</span>
+              <span class="sv-name">{s.title}</span>
+              <span class="sv-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+            </button>
+          </li>
+        ))}
+      </ol>
 
-              <div class="sx-body" id={`sx-body-${s.slug}`}>
-                <div class="sx-body-inner">
-                  <p class="sx-blurb">{s.blurb}</p>
-                  <ul class="sx-tags">
-                    {s.includes.map((t) => <li>{t}</li>)}
-                  </ul>
-                  <a href={`/services/${s.slug}`} class="sx-link">
-                    <span>Explore service</span>
-                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      ))}
+      <!-- RIGHT: panels (one visible at a time) -->
+      <div class="sv-stage">
+        {services.map((s, i) => (
+          <article
+            class:list={["sv-panel", i === 0 && "is-active"]}
+            id={`sv-panel-${s.slug}`}
+            role="tabpanel"
+            aria-labelledby={`sv-tab-${s.slug}`}
+            style={`--brand:${s.logo.color}`}
+            hidden={i !== 0}
+          >
+            <div class="sv-media">
+              <img src={media[s.slug]} alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+              <span class="sv-logo" title={s.logo.name}>
+                <svg viewBox="0 0 24 24" role="img" aria-label={s.logo.name}><path d={s.logo.d} /></svg>
+                <span>{s.logo.name}</span>
+              </span>
+              <span class="sv-count">{s.num} / 0{services.length}</span>
+            </div>
+            <div class="sv-body">
+              <h3 class="sv-panel-title">{s.title}</h3>
+              <p class="sv-short">{s.short}</p>
+              <p class="sv-blurb">{s.blurb}</p>
+              <ul class="sv-tags">
+                {s.includes.map((t) => <li>{t}</li>)}
+              </ul>
+              <a href={`/services/${s.slug}`} class="sv-link">
+                <span>Explore service</span>
+                <span class="sv-link-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .sx {
-    --sx-card: #101010;
-    --sx-edge: rgba(255, 255, 255, 0.08);
-    --sx-brown: #5b3b27;
-    --sx-brown-hi: #8f6444;
-    --sx-brown-lt: #b8946f;
-    --sx-text: #ffffff;
-    --sx-body: #cdc6c0;
-    --sx-muted: #7d7773;
-    --sx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  .sv {
+    --sv-edge: rgba(255, 255, 255, 0.08);
+    --sv-brown: #5b3b27;
+    --sv-brown-hi: #8f6444;
+    --sv-brown-lt: #b8946f;
+    --sv-sand: #d9b48c;
+    --sv-text: #ffffff;
+    --sv-body: #c8c1bb;
+    --sv-muted: #6f6965;
+    --sv-ease: cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
-    z-index: 2;
-    padding: clamp(56px, 9vh, 110px) 0;
+    padding: clamp(64px, 10vh, 120px) 0;
+    color: var(--sv-text);
     font-family: "Inter", system-ui, sans-serif;
-    color: var(--sx-text);
   }
-  .sx-wrap { width: min(100% - 12%, 1320px); margin: 0 auto; }
+  .sv-wrap { width: min(100% - 12%, 1320px); margin: 0 auto; }
 
-  /* ---------- header (home page only) ---------- */
-  .sx-head {
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;
-    margin-bottom: clamp(28px, 5vh, 52px);
-  }
-  .sx-eyebrow {
+  .sv-head { margin-bottom: clamp(32px, 5vh, 56px); }
+  .sv-eyebrow {
     display: block; margin-bottom: 14px;
-    font: 500 12px/1.3 "Inter", system-ui, sans-serif;
-    letter-spacing: 0.28em; text-transform: uppercase; color: var(--sx-brown-lt);
+    font: 500 12px/1.3 "Inter", system-ui, sans-serif; letter-spacing: 0.28em; text-transform: uppercase; color: var(--sv-brown-lt);
   }
-  .sx-title {
-    margin: 0; font-family: "Manrope", system-ui, sans-serif; font-weight: 800;
-    font-size: clamp(2rem, 4.4vw, 3.5rem); line-height: 1.02; letter-spacing: -0.035em;
-    text-wrap: balance;
-  }
-  .sx-title em { font-style: normal; color: var(--sx-brown-hi); }
+  .sv-title { margin: 0; }
+  .sv-title em { font-style: normal; color: var(--sv-brown-hi); }
 
-  /* ---------- grid: right column sits lower for a staggered rhythm ---------- */
-  .sx-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
-  .sx-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .sv-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: stretch; }
 
-  .sx-card {
-    position: relative;
-    border-radius: 20px;
-    border: 1px solid var(--sx-edge);
-    background: var(--sx-card);
-    overflow: hidden;
-    isolation: isolate;
-    transition: background 0.5s var(--sx-ease), border-color 0.4s ease, box-shadow 0.5s var(--sx-ease), transform 0.5s var(--sx-ease);
+  /* ---------- list ---------- */
+  .sv-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--sv-edge); }
+  .sv-list li { border-bottom: 1px solid var(--sv-edge); }
+  .sv-item {
+    all: unset; box-sizing: border-box; cursor: pointer; position: relative; width: 100%;
+    display: grid; grid-template-columns: 48px minmax(0, 1fr) 28px; align-items: center; gap: 14px;
+    padding: 18px 8px 18px 4px;
+    transition: padding 0.45s var(--sv-ease);
   }
-  /* brand-tinted light from the logo corner when open */
-  .sx-card::before {
-    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: radial-gradient(70% 120% at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 60%);
-    opacity: 0; transition: opacity 0.6s ease;
+  /* bronze bar grows from the left on the active row */
+  .sv-item::before {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+    background: linear-gradient(90deg, var(--sv-sand), var(--sv-brown-hi) 60%, transparent);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.6s var(--sv-ease);
   }
-  .sx-card.is-open {
-    background: #141110;
-    border-color: color-mix(in srgb, var(--brand) 40%, rgba(255, 255, 255, 0.1));
-    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
-    transform: translateY(-2px);
-  }
-  .sx-card.is-open::before { opacity: 1; }
+  .sv-item.is-active::before { transform: scaleX(1); }
+  .sv-item:hover, .sv-item.is-active { padding-left: 14px; }
+  .sv-item:focus-visible { outline: 2px solid var(--sv-sand); outline-offset: 2px; border-radius: 8px; }
 
-
-  .sx-toggle {
-    all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
-    display: grid; grid-template-columns: 56px auto minmax(0, 1fr) 34px; align-items: center; gap: 18px;
-    padding: 16px 20px 16px 22px;
-    min-height: 98px;             /* same height whether the title takes one line or two */
-  }
-  .sx-toggle:focus-visible { outline: 2px solid var(--sx-brown-lt); outline-offset: -4px; border-radius: 18px; }
-
-  .sx-num {
-    font-family: "Manrope", system-ui, sans-serif; font-weight: 300;
-    font-size: clamp(26px, 2.2vw, 34px); line-height: 1; letter-spacing: -0.03em;
-    color: #4a4643; font-variant-numeric: tabular-nums;
-    transition: color 0.4s ease;
-  }
-  .sx-card.is-open .sx-num { color: var(--sx-brown-lt); }
-
-  .sx-logo {
-    display: grid; place-items: center;
-    width: 64px; height: 64px; border-radius: 16px;
-    background: linear-gradient(145deg, #1d1a18, #0d0c0b);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    transition: width 0.6s var(--sx-ease), height 0.6s var(--sx-ease), border-color 0.4s ease, background 0.5s ease;
-  }
-  .sx-logo svg { width: 28px; height: 28px; fill: #d8d2cc; transition: fill 0.4s ease, transform 0.6s var(--sx-ease); }
-  .sx-card:hover .sx-logo svg { fill: #fff; }
-  .sx-card.is-open .sx-logo {
-    width: 96px; height: 96px;
-    border-color: color-mix(in srgb, var(--brand) 55%, transparent);
-    background: linear-gradient(145deg, color-mix(in srgb, var(--brand) 18%, #15110f), #0d0c0b);
-  }
-  .sx-card.is-open .sx-logo svg { fill: var(--brand); transform: scale(1.35); }
-
-  .sx-name-wrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .sx-name {
+  .sv-num { font: 500 13px/1 "Inter", system-ui, sans-serif; letter-spacing: 0.08em; color: var(--sv-muted); font-variant-numeric: tabular-nums; transition: color 0.3s ease; }
+  .sv-name {
     font-family: "Manrope", system-ui, sans-serif; font-weight: 700;
-    font-size: clamp(17px, 1.45vw, 21px); line-height: 1.25; letter-spacing: -0.015em; color: #e9e4df;
+    font-size: clamp(18px, 1.7vw, 24px); line-height: 1.2; letter-spacing: -0.02em; color: #7d7773;
     transition: color 0.3s ease;
   }
-  .sx-card:hover .sx-name, .sx-card.is-open .sx-name { color: var(--sx-text); }
-  .sx-tool {
-    font: 500 11px/1.2 "Inter", system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--sx-muted); transition: color 0.3s ease;
-  }
-  .sx-card.is-open .sx-tool { color: color-mix(in srgb, var(--brand) 70%, #fff); }
+  .sv-item:hover .sv-name { color: #d8d2cc; }
+  .sv-item.is-active .sv-name { color: var(--sv-text); }
+  .sv-item.is-active .sv-num { color: var(--sv-sand); }
+  .sv-arrow { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: var(--sv-sand); opacity: 0; transform: translateX(-8px); transition: opacity 0.3s ease, transform 0.45s var(--sv-ease); }
+  .sv-item.is-active .sv-arrow { opacity: 1; transform: none; }
 
-  .sx-chev {
-    display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
-    border: 1px solid var(--sx-edge); color: var(--sx-body);
-    transition: transform 0.5s var(--sx-ease), background 0.3s ease, border-color 0.3s ease;
+  /* ---------- stage ---------- */
+  .sv-stage { position: relative; min-height: 560px; }
+  .sv-panel {
+    position: absolute; inset: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto;
+    border-radius: 24px; overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--brand) 30%, rgba(255, 255, 255, 0.1));
+    background: linear-gradient(180deg, #151210 0%, #0e0c0b 100%);
+    box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
+    opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.6s var(--sv-ease);
   }
-  .sx-card.is-open .sx-chev { transform: rotate(90deg); background: var(--sx-brown); border-color: var(--sx-brown); color: #fff; }
+  .sv-panel[hidden] { display: grid; visibility: hidden; }
+  .sv-panel.is-active { opacity: 1; transform: none; visibility: visible; }
 
-  /* body: smooth height via grid rows */
-  .sx-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.6s var(--sx-ease); }
-  .sx-body-inner {
-    min-height: 0; overflow: hidden;
-    display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
-    padding: 0 24px 0 calc(22px + 56px + 18px);
-    transition: opacity 0.45s ease 0.12s, transform 0.55s var(--sx-ease) 0.08s, padding 0.6s var(--sx-ease);
+  .sv-media { position: relative; min-height: 0; overflow: hidden; }
+  .sv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 1.4s var(--sv-ease); }
+  .sv-panel.is-active .sv-media img { transform: scale(1); }
+  .sv-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 30%, transparent 60%, #151210 100%); }
+  .sv-logo {
+    position: absolute; z-index: 2; left: 18px; top: 18px; display: inline-flex; align-items: center; gap: 10px;
+    padding: 7px 14px 7px 8px; border-radius: 999px;
+    background: rgba(10, 8, 7, 0.65); border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    font-size: 12.5px; font-weight: 600; color: #f1e2d1;
   }
-  .sx-card.is-open .sx-body-inner { padding-bottom: 24px; }
-  .sx-ready .sx-card:not(.is-open) .sx-body { grid-template-rows: 0fr; }
-  .sx-ready .sx-card:not(.is-open) .sx-body-inner { opacity: 0; transform: translateY(-6px); transition-delay: 0s; }
+  .sv-logo svg { width: 26px; height: 26px; padding: 4px; border-radius: 50%; background: color-mix(in srgb, var(--brand) 25%, #15110f); fill: color-mix(in srgb, var(--brand) 75%, #fff); box-sizing: border-box; }
+  .sv-count { position: absolute; z-index: 2; right: 18px; top: 22px; padding: 7px 12px; border-radius: 999px; background: rgba(10, 8, 7, 0.65); border: 1px solid rgba(255, 255, 255, 0.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: #f1e2d1; font-variant-numeric: tabular-nums; }
 
-  .sx-blurb { margin: 0; max-width: 50ch; font-size: 15px; line-height: 1.6; color: var(--sx-body); }
-  .sx-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .sx-tags li {
-    padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: #e3d5c6;
-    background: rgba(143, 100, 68, 0.14); border: 1px solid rgba(184, 148, 111, 0.22);
+  .sv-body { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 4px 28px 28px; }
+  .sv-panel-title { margin: 0; }
+  .sv-short { margin: 0; font-size: 14px; font-weight: 600; color: var(--sv-sand); }
+  .sv-blurb { margin: 0; max-width: 52ch; font-size: 15px; line-height: 1.6; color: var(--sv-body); }
+  .sv-tags { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .sv-tags li { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: #e3d5c6; background: rgba(143, 100, 68, 0.14); border: 1px solid rgba(184, 148, 111, 0.22); }
+  .sv-link {
+    margin-top: 6px; display: inline-flex; align-items: center; gap: 14px; padding: 5px 5px 5px 18px; border-radius: 999px;
+    background: var(--sv-brown); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600;
+    transition: background 0.25s ease;
   }
-  .sx-link {
-    display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px;
-    background: var(--sx-brown); color: #fff; text-decoration: none; font-size: 13.5px; font-weight: 600;
-    transition: background 0.25s ease, gap 0.25s ease;
-  }
-  .sx-link:hover, .sx-link:focus-visible { background: var(--sx-brown-hi); gap: 14px; outline: none; }
-  .sx svg path[d^="M3 8"] { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .sx-link svg, .sx-chev svg { width: 15px; height: 15px; }
+  .sv-link:hover, .sv-link:focus-visible { background: var(--sv-brown-hi); outline: none; }
+  .sv-link-arrow { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); transition: transform 0.35s var(--sv-ease); }
+  .sv-link:hover .sv-link-arrow { transform: translateX(3px); }
+  .sv svg path[d^="M3 8"] { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .sv-arrow svg, .sv-link-arrow svg { width: 15px; height: 15px; }
 
+  /* ---------- phones: list on top, panel below ---------- */
   @media (max-width: 900px) {
-    .sx-wrap { width: min(100% - 32px, 100%); }
-    .sx-grid { grid-template-columns: 1fr; gap: 12px; }
-    .sx-toggle { grid-template-columns: 34px auto minmax(0, 1fr) 30px; gap: 12px; padding: 14px 14px 14px 16px; }
-    .sx-num { font-size: 22px; }
-    .sx-logo { width: 48px; height: 48px; border-radius: 12px; }
-    .sx-logo svg { width: 22px; height: 22px; }
-    .sx-card.is-open .sx-logo { width: 64px; height: 64px; }
-    .sx-chev { width: 30px; height: 30px; }
-    .sx-body-inner { padding-left: 16px; padding-right: 16px; }
+    .sv-wrap { width: min(100% - 32px, 100%); }
+    .sv-grid { grid-template-columns: 1fr; }
+    .sv-stage { min-height: 520px; }
+    .sv-item { padding: 14px 4px; grid-template-columns: 36px minmax(0, 1fr) 24px; }
+    .sv-item:hover, .sv-item.is-active { padding-left: 8px; }
+    .sv-body { padding: 4px 18px 20px; }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .sx *, .sx-card, .sx-card::before { transition: none !important; }
+    .sv-item, .sv-item::before, .sv-panel, .sv-media img, .sv-arrow { transition: none !important; }
   }
-  /* ---------- details unfold as a floating panel (desktop), grid never reflows ---------- */
-  @media (min-width: 901px) {
-    .sx-card { overflow: visible; z-index: 1; }
-    .sx-card.is-open { z-index: 6; transform: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: transparent; box-shadow: none; }
-    .sx-card::before { border-radius: inherit; }
-    .sx-body {
-      position: absolute; left: -1px; right: -1px; top: 100%; margin-top: -1px;
-      border: 1px solid color-mix(in srgb, var(--brand) 40%, rgba(255, 255, 255, 0.1)); border-top: 0;
-      border-radius: 0 0 20px 20px;
-      background: linear-gradient(180deg, #141110 0%, #100d0c 100%);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65);
-      opacity: 0; visibility: hidden;
-      transition: grid-template-rows 0.55s var(--sx-ease), opacity 0.3s ease, visibility 0s linear 0.55s;
-    }
-    .sx-card.is-open .sx-body { opacity: 1; visibility: visible; transition: grid-template-rows 0.55s var(--sx-ease), opacity 0.25s ease; }
-    /* the last card in each column opens upward so the panel stays inside the section */
-    .sx-col .sx-card:last-child .sx-body { top: auto; bottom: 100%; margin-top: 0; margin-bottom: -1px; border-top: 1px solid color-mix(in srgb, var(--brand) 40%, rgba(255, 255, 255, 0.1)); border-bottom: 0; border-radius: 20px 20px 0 0; box-shadow: 0 -30px 60px rgba(0, 0, 0, 0.65); }
-    .sx-col .sx-card:last-child.is-open { border-radius: 0 0 20px 20px; border-bottom-color: color-mix(in srgb, var(--brand) 40%, rgba(255, 255, 255, 0.1)); border-top-color: transparent; }
-    .sx-card.is-open .sx-body-inner { padding-top: 4px; }
-    .sx-col .sx-card:last-child.is-open .sx-body-inner { padding-top: 22px; padding-bottom: 6px; }
-    /* logo tile keeps its size so the row height never changes */
-    .sx-card.is-open .sx-logo { width: 64px; height: 64px; }
-    .sx-card.is-open .sx-logo svg { transform: scale(1.15); }
-  }
-  .sx-tool { text-transform: none; letter-spacing: 0; font-size: 13px; font-weight: 500; color: #9a938e; }
 </style>
 
 <script>
-  // Desktop: a card opens while hovered and closes when the pointer leaves.
-  // Keyboard: opens on focus. Touch: tap toggles, one open at a time.
-  document.querySelectorAll<HTMLElement>(".sx").forEach((root) => {
-    root.classList.add("sx-ready");
-    const cards = Array.from(root.querySelectorAll<HTMLElement>(".sx-card"));
-    const canHover = window.matchMedia("(hover: hover)").matches;
-
-    const set = (card: HTMLElement, on: boolean) => {
-      card.classList.toggle("is-open", on);
-      card.querySelector(".sx-toggle")?.setAttribute("aria-expanded", String(on));
-    };
-    const only = (card: HTMLElement | null) => cards.forEach((c) => set(c, c === card));
-
-    cards.forEach((card) => {
-      let t: number | undefined;
-      if (canHover) {
-        card.addEventListener("mouseenter", () => {
-          window.clearTimeout(t);
-          t = window.setTimeout(() => only(card), 80);
-        });
-        card.addEventListener("mouseleave", () => {
-          window.clearTimeout(t);
-          // a mouse click leaves focus inside; drop it so the card can close
-          if (card.contains(document.activeElement)) (document.activeElement as HTMLElement).blur();
-          set(card, false);
-        });
-      }
-      card.querySelector(".sx-toggle")?.addEventListener("click", () => {
-        if (canHover) return; // hover already handles desktop
-        only(card.classList.contains("is-open") ? null : card);
+  document.querySelectorAll<HTMLElement>(".sv").forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>(".sv-item"));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>(".sv-panel"));
+    let current = 0;
+    const show = (i: number) => {
+      if (i === current) return;
+      current = i;
+      tabs.forEach((t, k) => {
+        t.classList.toggle("is-active", k === i);
+        t.setAttribute("aria-selected", String(k === i));
+        t.tabIndex = k === i ? 0 : -1;
       });
-      card.addEventListener("focusin", () => only(card));
-      card.addEventListener("focusout", (e) => {
-        if (!card.contains(e.relatedTarget as Node)) set(card, false);
+      panels.forEach((p, k) => {
+        p.classList.toggle("is-active", k === i);
+        if (k === i) p.hidden = false;
+        else window.setTimeout(() => { if (!p.classList.contains("is-active")) p.hidden = true; }, 500);
+      });
+    };
+    tabs.forEach((t, i) => {
+      t.tabIndex = i === 0 ? 0 : -1;
+      t.addEventListener("mouseenter", () => { if (window.matchMedia("(hover: hover)").matches) show(i); });
+      t.addEventListener("focus", () => show(i));
+      t.addEventListener("click", () => {
+        show(i);
+        // phones: the panel sits below the list, so bring it into view
+        if (window.matchMedia("(max-width: 900px)").matches) panels[i].scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      t.addEventListener("keydown", (e) => {
+        const n = e.key === "ArrowDown" ? i + 1 : e.key === "ArrowUp" ? i - 1 : -1;
+        if (n >= 0 && n < tabs.length) { e.preventDefault(); tabs[n].focus(); }
       });
     });
   });
