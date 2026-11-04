@@ -29,8 +29,8 @@ const columns = [services.slice(0, 4), services.slice(4)];
     )}
 
     <div class="sx-grid">
-      {columns.map((col, c) => (
-        <div class:list={["sx-col", c === 1 && "sx-col--offset"]}>
+      {columns.map((col) => (
+        <div class="sx-col">
           {col.map((s) => (
             <article class="sx-card" id={s.slug} style={`--brand:${s.logo.color}`}>
               <svg class="sx-watermark" viewBox="0 0 24 24" aria-hidden="true"><path d={s.logo.d} /></svg>
@@ -113,7 +113,6 @@ const columns = [services.slice(0, 4), services.slice(4)];
   /* ---------- grid: right column sits lower for a staggered rhythm ---------- */
   .sx-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
   .sx-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-  .sx-col--offset { margin-top: 56px; }
 
   .sx-card {
     position: relative;
@@ -149,6 +148,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
     all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
     display: grid; grid-template-columns: 56px auto minmax(0, 1fr) 34px; align-items: center; gap: 18px;
     padding: 16px 20px 16px 22px;
+    min-height: 98px;             /* same height whether the title takes one line or two */
   }
   .sx-toggle:focus-visible { outline: 2px solid var(--sx-brown-lt); outline-offset: -4px; border-radius: 18px; }
 
@@ -227,7 +227,6 @@ const columns = [services.slice(0, 4), services.slice(4)];
   @media (max-width: 900px) {
     .sx-wrap { width: min(100% - 32px, 100%); }
     .sx-grid { grid-template-columns: 1fr; gap: 12px; }
-    .sx-col--offset { margin-top: 0; }
     .sx-toggle { grid-template-columns: 34px auto minmax(0, 1fr) 30px; gap: 12px; padding: 14px 14px 14px 16px; }
     .sx-num { font-size: 22px; }
     .sx-logo { width: 48px; height: 48px; border-radius: 12px; }
