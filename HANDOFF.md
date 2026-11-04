@@ -2,6 +2,7 @@
 
 Branch: `fix/linux-build-casing` (local commits **not yet pushed**: GitHub account not connected to the session).
 Read `DESIGN.md` first.
+Full chat backup (every owner message, artifact comment and reply): `docs/chat-history.md`. Search it when you need the exact wording of an earlier request. Regenerate with `python3 tools/chat-backup.py <session .jsonl> docs/chat-history.md`.
 
 ## Done
 
