@@ -1,0 +1,259 @@
+---
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/token.css";
+import "../styles/global.css";
+import "../styles/Navbar.css";
+import "../styles/footer.css";
+import "../styles/hire.css";
+import { platforms, rates } from "../data/hire";
+
+const linkFor = (p: { url: string }) => p.url || "/contact/";
+
+const steps = [
+  { title: "Send your brief", text: "Share drawings, references and your deadline through our contact form or a message on Upwork or Fiverr." },
+  { title: "Get a clear quote", text: "We reply with the scope, a fixed price or hourly estimate, the timeline and how many revisions are included." },
+  { title: "Accept on the platform", text: "Accept our offer on Upwork or Fiverr. Your payment is held by the platform, not by us." },
+  { title: "Review each stage", text: "We deliver in stages. You comment, we revise, and nothing moves on until you approve it." },
+  { title: "Approve and receive files", text: "When you're happy, approve the work. The payment is released and the final files are yours." },
+];
+
+const reasons = [
+  { title: "Your money is protected", text: "The platform holds your payment and releases it only when you approve the delivery.", icon: "M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4" },
+  { title: "Pay the way you already pay", text: "Cards, PayPal and other local options depending on your country. No bank transfers or new accounts with us.", icon: "M3 7h18v10H3z M3 10h18 M7 15h3" },
+  { title: "A contract from day one", text: "Scope, price, deadline and revisions are written into the platform contract before work starts.", icon: "M6 3h9l3 3v15H6z M9 10h6 M9 14h6 M9 18h4" },
+  { title: "Fair help if something goes wrong", text: "Both platforms have their own dispute and resolution teams, so you're never relying on our word alone.", icon: "M12 3v18 M5 8h14 M5 8l-3 6a3 3 0 006 0z M19 8l-3 6a3 3 0 006 0z" },
+  { title: "Reviews you can check", text: "Our ratings and client reviews sit on the platforms, written by real buyers.", icon: "M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" },
+  { title: "Works in any time zone", text: "Messages, files and invoices all stay in one place, so working across borders is simple.", icon: "M12 3a9 9 0 100 18 9 9 0 000-18z M3 12h18 M12 3c2.5 2.7 2.5 15.3 0 18 M12 3c-2.5 2.7-2.5 15.3 0 18" },
+];
+
+const faqs = [
+  { q: "Can I pay you directly instead?", a: "We keep all work and payments on Upwork or Fiverr. It protects you (your money is held until you approve), gives both sides a written contract, and keeps invoices and receipts in one place." },
+  { q: "Which platform should I choose?", a: "Use Upwork for larger, multi-stage or ongoing work, and for hourly or monthly support. Use Fiverr for quick, well-defined jobs with a fixed package. If you already have an account on one, just use that one." },
+  { q: "Are there platform fees?", a: "Yes. Upwork and Fiverr each add a small service or marketplace fee for buyers, shown at checkout before you pay. Our quoted price is what we charge; the platform fee is separate." },
+  { q: "Who owns the files?", a: "You do. Once the work is approved and paid through the platform, the final files are yours to use. Native files (Revit, 3ds Max, Blender) are included when agreed in the offer." },
+  { q: "Will you sign an NDA?", a: "Yes. We sign your NDA before you share any drawings or models, and we never show your project in our portfolio without your permission." },
+  { q: "What if I'm not happy with the result?", a: "Every offer includes an agreed number of revisions. If something still isn't right, the platform's resolution process protects your payment." },
+  { q: "Which currencies and payment methods work?", a: "Both platforms accept most major cards and PayPal, plus local options in many countries. You pay in your account currency and the platform handles conversion." },
+];
+
+const ld = [
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO
+      title="Hire Axys3D: Rates, Payments & Working Through Upwork or Fiverr"
+      description="How to hire Axys3D for BIM, Revit and architectural visualization: fixed-price, hourly or package options, paid securely through Upwork or Fiverr."
+      jsonLd={ld}
+    />
+    <script is:inline>document.documentElement.classList.add("js");</script>
+  </head>
+
+  <body class="page-hire">
+    <div class="hr-page-bg" aria-hidden="true"></div>
+    <Navbar variant="solid" />
+
+    <main class="hr-page">
+      <!-- ================= HERO ================= -->
+      <section class="hr-hero">
+        <div class="hr-wrap hr-hero-grid">
+          <div class="hr-hero-copy" data-reveal>
+            <span class="hr-kicker">Hire us</span>
+            <h1>Hire us the way you <span>already buy online.</span></h1>
+            <p class="hr-lead">
+              We work through Upwork and Fiverr, two platforms trusted by millions of buyers worldwide. No new
+              accounts with us, no bank transfers, no chasing invoices. Your payment is protected until you approve the work.
+            </p>
+            <div class="hr-hero-ctas">
+              <a href={linkFor(platforms.upwork)} class="hr-btn hr-btn--platform" style={`--brand:${platforms.upwork.color}`} target={platforms.upwork.url ? "_blank" : undefined} rel={platforms.upwork.url ? "noopener" : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.upwork.logo} /></svg>
+                <span>Hire on Upwork</span>
+              </a>
+              <a href={linkFor(platforms.fiverr)} class="hr-btn hr-btn--platform" style={`--brand:${platforms.fiverr.color}`} target={platforms.fiverr.url ? "_blank" : undefined} rel={platforms.fiverr.url ? "noopener" : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.fiverr.logo} /></svg>
+                <span>Order on Fiverr</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- visual: how the money moves -->
+          <figure class="hr-flow" data-reveal aria-label="You pay the platform, the platform holds the payment, we deliver, you approve, the payment is released">
+            <div class="hr-flow-row">
+              <span class="hr-node">You</span>
+              <span class="hr-pipe"><i></i></span>
+              <span class="hr-node hr-node--vault">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4" /></svg>
+                Upwork / Fiverr
+                <small>holds your payment</small>
+              </span>
+              <span class="hr-pipe"><i></i></span>
+              <span class="hr-node">Axys3D</span>
+            </div>
+            <ol class="hr-flow-steps">
+              <li><b>1</b> You fund the order</li>
+              <li><b>2</b> We deliver the work</li>
+              <li><b>3</b> You approve</li>
+              <li><b>4</b> Payment is released</li>
+            </ol>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ================= WHY PLATFORMS ================= -->
+      <section class="hr-sec">
+        <div class="hr-wrap">
+          <div class="hr-sec-head" data-reveal>
+            <span class="hr-kicker">Why Upwork and Fiverr</span>
+            <h2>Safer for you, <span>simpler for everyone.</span></h2>
+            <p>Instead of asking you to trust a new payment system, we use the global platforms you may already have an account on.</p>
+          </div>
+          <div class="hr-reasons">
+            {reasons.map((r, i) => (
+              <article class="hr-reason" data-reveal style={`--d:${i * 70}ms`}>
+                <span class="hr-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={r.icon} /></svg></span>
+                <h3>{r.title}</h3>
+                <p>{r.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= RATES ================= -->
+      <section class="hr-sec" id="rates">
+        <div class="hr-wrap">
+          <div class="hr-sec-head" data-reveal>
+            <span class="hr-kicker">Rates</span>
+            <h2>Three ways <span>to work with us.</span></h2>
+            <p>Every job gets a written quote first, so you always know the price before anything starts.</p>
+          </div>
+          <div class="hr-rates">
+            {rates.map((r, i) => (
+              <article class:list={["hr-rate", r.featured && "is-featured"]} data-reveal style={`--d:${i * 90}ms`}>
+                {r.featured && <span class="hr-rate-flag">Most popular with studios</span>}
+                <h3>{r.name}</h3>
+                <p class="hr-rate-best">{r.best}</p>
+                <div class="hr-price">
+                  {r.price ? (<><b>{r.price}</b><span>{r.unit}</span></>) : (<b class="hr-price--quote">Quoted per project</b>)}
+                </div>
+                <ul>
+                  {r.points.map((pt) => (
+                    <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>{pt}</li>
+                  ))}
+                </ul>
+                <span class="hr-rate-where">Available on {r.platform}</span>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PLATFORM PICKER ================= -->
+      <section class="hr-sec">
+        <div class="hr-wrap">
+          <div class="hr-sec-head" data-reveal>
+            <span class="hr-kicker">Choose your platform</span>
+            <h2>Upwork or Fiverr? <span>Use what suits the job.</span></h2>
+          </div>
+          <div class="hr-platforms">
+            <article class="hr-platform" data-reveal style={`--brand:${platforms.upwork.color}`}>
+              <header>
+                <span class="hr-platform-logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.upwork.logo} /></svg></span>
+                <h3>Upwork</h3>
+              </header>
+              <p class="hr-platform-for">Best for larger, multi-stage and ongoing work.</p>
+              <ul>
+                <li>Fixed-price contracts paid in milestones</li>
+                <li>Hourly contracts with tracked time and weekly limits</li>
+                <li>Long-term support for BIM and Revit production</li>
+              </ul>
+              <a href={linkFor(platforms.upwork)} class="hr-btn hr-btn--outline" target={platforms.upwork.url ? "_blank" : undefined} rel={platforms.upwork.url ? "noopener" : undefined}>Hire us on Upwork</a>
+            </article>
+            <article class="hr-platform" data-reveal style={`--brand:${platforms.fiverr.color};--d:120ms`}>
+              <header>
+                <span class="hr-platform-logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.fiverr.logo} /></svg></span>
+                <h3>Fiverr</h3>
+              </header>
+              <p class="hr-platform-for">Best for quick, well-defined jobs.</p>
+              <ul>
+                <li>Ready-made packages with price and delivery time upfront</li>
+                <li>Basic, Standard and Premium tiers</li>
+                <li>Custom offers for anything outside a package</li>
+              </ul>
+              <a href={linkFor(platforms.fiverr)} class="hr-btn hr-btn--outline" target={platforms.fiverr.url ? "_blank" : undefined} rel={platforms.fiverr.url ? "noopener" : undefined}>Order on Fiverr</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEPS ================= -->
+      <section class="hr-sec">
+        <div class="hr-wrap">
+          <div class="hr-sec-head" data-reveal>
+            <span class="hr-kicker">How it works</span>
+            <h2>From brief to files <span>in five steps.</span></h2>
+          </div>
+          <ol class="hr-steps">
+            {steps.map((s, i) => (
+              <li class="hr-step" data-reveal style={`--d:${i * 80}ms`}>
+                <span class="hr-step-num">0{i + 1}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <!-- ================= FAQ ================= -->
+      <section class="hr-sec">
+        <div class="hr-wrap hr-faq-wrap">
+          <div class="hr-sec-head" data-reveal>
+            <span class="hr-kicker">Questions</span>
+            <h2>Payments, <span>answered.</span></h2>
+          </div>
+          <div class="hr-faq">
+            {faqs.map((f) => (
+              <details class="hr-faq-item">
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= CTA ================= -->
+      <section class="hr-cta">
+        <div class="hr-wrap">
+          <div class="hr-cta-inner" data-reveal>
+            <h2>Not sure where to start? <span>Send us your brief.</span></h2>
+            <p>Tell us what you need and we will reply with a clear scope, price and timeline, then send you the offer on the platform you prefer.</p>
+            <a href="/contact/" class="hr-btn hr-btn--primary"><span>Send your brief</span><span class="hr-btn-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+
+    <script is:inline>
+      const items = document.querySelectorAll("[data-reveal]");
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      items.forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
