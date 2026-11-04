@@ -220,3 +220,30 @@
   justify-content: center;
   padding: 12px 16px;
 }
+
+/* Recent work list (fills the projects card with real proof) */
+.m-recent { width: 100%; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--m-edge); }
+.m-recent-head { display: block; margin-bottom: 10px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--m-brown-lt); }
+.m-recent ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.m-recent li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.07); }
+.m-recent li:last-child { border-bottom: 0; }
+.m-recent-name { font-size: 14.5px; font-weight: 600; color: #ece6e0; }
+.m-recent-what { font-size: 13px; color: var(--m-muted); text-align: right; }
+
+/* Booking: static calendar tile + text, links to contact (replaces the pulsing pill) */
+.m-book {
+  margin-top: auto; align-self: stretch; display: flex; align-items: center; gap: 14px;
+  padding: 12px 12px 12px 12px; border-radius: 16px; text-decoration: none; color: inherit;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid var(--m-edge);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.m-book:hover, .m-book:focus-visible { border-color: rgba(184, 148, 111, 0.45); background: rgba(143, 100, 68, 0.08); outline: none; }
+.m-cal { flex: none; width: 46px; border-radius: 10px; overflow: hidden; background: #f3eee8; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35); }
+.m-cal-top { display: block; height: 10px; background: linear-gradient(180deg, #8f6444, #6b452c); }
+.m-cal b { display: block; padding: 5px 0 6px; font-family: "Manrope", system-ui, sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; color: #3a2418; }
+.m-book-text { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.m-book-text small { font-size: 11.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--m-brown-lt); }
+.m-book-text strong { font-size: 16px; font-weight: 600; color: #fff; }
+.m-book-arrow { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: #fff; transition: transform 0.3s ease, background 0.3s ease; }
+.m-book:hover .m-book-arrow { transform: translateX(3px); background: #5b3b27; }
+.m-book-arrow svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }

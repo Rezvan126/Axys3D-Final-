@@ -5,6 +5,14 @@ import "../styles/Mission.css";
 // Worked out at build time and again in the visitor's browser, so it is never stale.
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const bookingMonth = (d: Date) => MONTHS[(d.getMonth() + (d.getDate() > 15 ? 1 : 0)) % 12];
+// Recent projects (from the portfolio). Kept anonymous: type and region only.
+const recentWork = [
+  { name: "Hillside residence", what: "Revit model + final render" },
+  { name: "Two-storey ADU & JADU", what: "Permit drawing set" },
+  { name: "California residence", what: "Permit-ready 3D model" },
+  { name: "Medical pavilion", what: "Exterior renders" },
+];
+
 const milestones = [
   { day: 1, text: "Brief checked", icon: "M6 3h9l3 3v15H6z M9 10h6 M9 14h6 M9 18h4" },
   { day: 3, text: "Model built", icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z M12 12l8-4.5 M12 12v9 M12 12L4 7.5" },
@@ -74,7 +82,31 @@ const milestones = [
               Stills
             </li>
           </ul>
-          <span class="m-status"><i></i>Now booking for <b id="mBookingMonth">{bookingMonth(new Date())}</b></span>
+          <!-- recent work: real projects, described by type only (no client names or addresses) -->
+          <div class="m-recent">
+            <span class="m-recent-head">Recent work</span>
+            <ul>
+              {recentWork.map((r) => (
+                <li>
+                  <span class="m-recent-name">{r.name}</span>
+                  <span class="m-recent-what">{r.what}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- booking: static calendar tile, no animation -->
+          <a class="m-book" href="/contact/">
+            <span class="m-cal" aria-hidden="true">
+              <span class="m-cal-top"></span>
+              <b id="mBookingMonthShort">{bookingMonth(new Date()).slice(0, 3)}</b>
+            </span>
+            <span class="m-book-text">
+              <small>Now booking</small>
+              <strong><span id="mBookingMonth">{bookingMonth(new Date())}</span> projects</strong>
+            </span>
+            <span class="m-book-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+          </a>
         </div>
       </div>
 
@@ -145,7 +177,10 @@ const milestones = [
   const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const now = new Date();
   const monthEl = document.getElementById("mBookingMonth");
-  if (monthEl) monthEl.textContent = MONTHS[(now.getMonth() + (now.getDate() > 15 ? 1 : 0)) % 12];
+  const bookM = MONTHS[(now.getMonth() + (now.getDate() > 15 ? 1 : 0)) % 12];
+  if (monthEl) monthEl.textContent = bookM;
+  const monthShort = document.getElementById("mBookingMonthShort");
+  if (monthShort) monthShort.textContent = bookM.slice(0, 3);
 
   const section = document.getElementById("missionSection");
   if (section) {
