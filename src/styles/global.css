@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap");
-
+/* Site fonts: loaded once, here. Manrope = all headings and big numbers. Inter = everything else. */
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 /* =========================================================
    GLOBAL CSS VARIABLES & THEME SETUP
    ========================================================= */
@@ -87,3 +87,37 @@ video {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================================
+   TYPE SYSTEM — one scale for every page
+   Headings: Manrope 800. Body, buttons, labels: Inter.
+   Sizes scale with the screen between the min and max shown.
+========================================================= */
+:root {
+  --font-display: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --font-text: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --h1: clamp(40px, 4vw, 60px);
+  --h2: clamp(30px, 3.2vw, 48px);
+  --h3: clamp(19px, 1.45vw, 22px);
+  --h4: 16px;
+}
+body { font-family: var(--font-text); }
+
+/* "html body …:not(#_)…" makes these win over the stronger page-specific rules that
+   each page used to set its own heading sizes, so every page follows this one scale. */
+html body :is(h1, h2, h3, h4):not(#_):not(#_):not(#_) {
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  font-style: normal;
+}
+html body h1:not(#_):not(#_):not(#_) { font-size: var(--h1) !important; line-height: 1.05 !important; letter-spacing: -0.032em !important; }
+html body h2:not(#_):not(#_):not(#_) { font-size: var(--h2) !important; line-height: 1.08 !important; letter-spacing: -0.03em !important; }
+html body h3:not(#_):not(#_):not(#_) { font-size: var(--h3) !important; line-height: 1.25 !important; letter-spacing: -0.015em !important; }
+html body h4:not(#_):not(#_):not(#_) { font-size: var(--h4) !important; line-height: 1.35 !important; letter-spacing: -0.01em !important; }
+/* parts of a heading (accent words, line spans) follow the heading */
+html body :is(h1, h2, h3, h4) :is(span, em, strong, b, i):not(#_):not(#_):not(#_) {
+  font-family: inherit !important; font-size: inherit !important; font-weight: inherit !important;
+  letter-spacing: inherit !important; line-height: inherit !important;
+}
+/* labels inside drawings use the body font too */
+svg text { font-family: var(--font-text); }

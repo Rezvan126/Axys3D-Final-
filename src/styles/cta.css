@@ -1,8 +1,6 @@
 /* =========================================================
    CTA SECTION — Black + Grey + Coffee Brown (60/30/10)
    ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500&display=swap');
-
 .cta-section {
   --black: #000000;
   --grey: #b5b0ad;
@@ -57,7 +55,7 @@
   display: block;
   margin-bottom: 18px;
   color: var(--grey);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(.72rem, .85vw, .82rem);
   font-weight: 500;
   letter-spacing: .24em;

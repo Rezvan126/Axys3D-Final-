@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 /* =========================================================
    AXYS3D — SERVICES PAGE
    ========================================================= */
@@ -638,7 +635,7 @@ html:has(.page-services) { scroll-behavior: smooth; }
 .page-services [class*="-h1"],
 .services-page [class*="-h2"],
 .page-services [class*="-h2"] {
-  font-family: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif !important;
+  font-family: 'Manrope', 'Inter', system-ui, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: -0.02em !important;
   line-height: 1.05 !important;
@@ -665,7 +662,7 @@ html:has(.page-services) { scroll-behavior: smooth; }
 .page-services [class*="kicker"],
 .services-page [class*="eyebrow"],
 .page-services [class*="eyebrow"] {
-  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
   font-size: clamp(0.55rem, 0.65vw, 0.72rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;
@@ -924,8 +921,8 @@ html:has(.page-services) { scroll-behavior: smooth; }
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Inter Tight (work.css ke mutabiq)
-   Font: Inter Tight 800, letter-spacing -0.015em.
+   SAB HEADINGS + CTA — Manrope (work.css ke mutabiq)
+   Font: Manrope 800, letter-spacing -0.015em.
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -943,7 +940,7 @@ html body h5:not(#a):not(#b) *,
 html body h6:not(#a):not(#b) *,
 html body .svc-h1:not(#a):not(#b) *,
 html body .svc-card-title:not(#a):not(#b) * {
-  font-family: 'Inter Tight', sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: -0.015em !important;
 }
@@ -967,7 +964,7 @@ html body .final-cta-button:not(#a):not(#b),
 html body .svc-card-link:not(#a):not(#b),
 html body .ins-btn-primary:not(#a):not(#b),
 html body .cnt-submit:not(#a):not(#b) {
-  font-family: 'Inter Tight', sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 

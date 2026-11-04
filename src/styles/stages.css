@@ -39,7 +39,7 @@
 .sg-copy { min-width: 0; }
 .sg-eyebrow {
   display: block; margin-bottom: 16px;
-  font: 500 12px/1.3 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.28em; text-transform: uppercase;
+  font: 500 12px/1.3 "Inter", system-ui, sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
   color: var(--sg-brown-lt);
 }
 .sg-title {
@@ -72,7 +72,7 @@
 .sg-step:hover { background: rgba(255, 255, 255, 0.03); }
 .sg-step.is-active { background: rgba(91, 59, 39, 0.2); }
 .sg-step:focus-visible { outline: 2px solid var(--sg-brown-lt); outline-offset: 2px; }
-.sg-step-num { padding-top: 3px; font: 500 12px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; color: var(--sg-muted); transition: color 0.3s ease; }
+.sg-step-num { padding-top: 3px; font: 500 12px/1 "Inter", system-ui, sans-serif; letter-spacing: 0.08em; color: var(--sg-muted); transition: color 0.3s ease; }
 .sg-step.is-active .sg-step-num { color: var(--sg-sand); }
 .sg-step-text { display: grid; gap: 0; min-width: 0; }
 .sg-step-title { font-family: "Manrope", system-ui, sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.015em; color: #8f8984; transition: color 0.3s ease; }
@@ -115,7 +115,7 @@
   display: inline-flex; align-items: center; gap: 9px; padding: 8px 14px; border-radius: 999px;
   background: rgba(10, 8, 7, 0.62); border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  font: 500 12px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #f1e2d1;
+  font: 500 12px/1 "Inter", system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #f1e2d1;
 }
 .sg-chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--sg-sand); box-shadow: 0 0 10px rgba(217, 180, 140, 0.9); }
 .sg-chip b, .sg-spec b { font-weight: 500; }
@@ -128,7 +128,7 @@
 
 .sg-scroll-hint {
   display: none; position: absolute; left: 50%; bottom: -36px; transform: translateX(-50%);
-  font: 500 11px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sg-muted);
+  font: 500 11px/1 "Inter", system-ui, sans-serif; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sg-muted);
 }
 .sg.is-pinned .sg-scroll-hint { display: block; }
 

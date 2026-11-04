@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 /* =========================================================
    AXYS3D — VISUAL LIBRARY PAGE
    ========================================================= */
@@ -648,7 +645,7 @@
 .page-visual-library [class*="kicker"],
 .library-page [class*="eyebrow"],
 .page-visual-library [class*="eyebrow"] {
-  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
   font-size: clamp(0.55rem, 0.65vw, 0.72rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;
@@ -691,8 +688,8 @@
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Inter Tight (sab pages par ek jaisa)
-   Font: Inter Tight 800, letter-spacing -0.015em.
+   SAB HEADINGS + CTA — Manrope (sab pages par ek jaisa)
+   Font: Manrope 800, letter-spacing -0.015em.
    Page ke h1-h6, section titles, card titles aur CTA (final-cta) sab cover hain.
    Hero title ka size/line-height neeche alag hai, baaki headings apna
    size rakhti hain. Selector jaan-boojh kar mazboot hai kyunke purane
@@ -716,7 +713,7 @@ html body h6:not(#a):not(#b) *,
 html body .lib-sec-h2:not(#a):not(#b) *,
 html body .lib-card-title:not(#a):not(#b) *,
 html body .lib-h1:not(#a):not(#b) * {
-  font-family: 'Inter Tight', sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: -0.015em !important;
 }
@@ -740,7 +737,7 @@ html body .final-cta-button:not(#a):not(#b),
 html body .lib-final-button:not(#a):not(#b),
 html body .ins-btn-primary:not(#a):not(#b),
 html body .cnt-submit:not(#a):not(#b) {
-  font-family: 'Inter Tight', sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 

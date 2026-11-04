@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 /* =========================================================
    AXYS3D — PROCESS PAGE
    ========================================================= */
@@ -980,7 +977,7 @@ html {
 
 .prc-stg-num {
   fill: #8f6444;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: 'Inter', ui-monospace, SFMono-Regular, Menlo, sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1029,7 +1026,7 @@ html {
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Inter Tight (work.css ke mutabiq)
+   SAB HEADINGS + CTA — Manrope (work.css ke mutabiq)
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -1048,7 +1045,7 @@ html body h5:not(#a):not(#b) *,
 html body h6:not(#a):not(#b) *,
 html body .prc-h1:not(#a):not(#b) *,
 html body .prc-sec-h2:not(#a):not(#b) * {
-  font-family: 'Inter Tight', sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: -0.015em !important;
 }
@@ -1067,7 +1064,7 @@ html body .prc-h1:not(#a):not(#b) * {
 html body [class*="final-button"]:not(#a):not(#b),
 html body [class*="final-btn"]:not(#a):not(#b),
 html body .prc-final-button:not(#a):not(#b) {
-  font-family: 'Inter Tight', sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -1125,7 +1122,7 @@ html body .prc-final-button:not(#a):not(#b) {
 /* kicker: About jaisa (mono, grey, spaced) */
 .prc-kicker {
   display: block;
-  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
   font-size: 11px !important;
   font-weight: 500 !important;
   letter-spacing: 0.24em !important;
@@ -1147,7 +1144,7 @@ html body .prc-final-button:not(#a):not(#b) {
 
 /* chhote labels bhi mono (About ke tags jaise) */
 .prc-count {
-  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
   font-weight: 500;
   letter-spacing: 0.24em;
   text-transform: uppercase;

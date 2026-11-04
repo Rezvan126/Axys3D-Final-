@@ -1,8 +1,6 @@
 /* =========================================================
    AXYS3D — THE FULL PIPELINE (SERVICES) — Black + Grey + Coffee Brown (60/30/10)
 ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500&display=swap');
-
 .pl-section {
   --pl-bg: #000000;
   --pl-card-bg: #000000;
@@ -56,7 +54,7 @@
   background: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
-  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
   font-size: clamp(0.5rem, 0.6vw, 0.68rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;

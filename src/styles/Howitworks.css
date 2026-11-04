@@ -1,13 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap');
-
 /* AXYS3D — WATCH A PROJECT GO LIVE — Black + Grey + Coffee Brown (60/30/10) */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
-
 .hw-section {
   --hw-bg: #050505; --hw-card: #0f0f0f; --hw-border: rgba(255,255,255,.08);
   --hw-brown: #795238; --hw-brown-hi: #a8734a; --hw-brown-lt: #d9b08c;
   --hw-muted: #b5b0ad; --hw-cream: #ffffff;
-  --hw-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --hw-mono: 'Inter', system-ui, sans-serif;
   position: relative; width: 100%; background: black; color: var(--hw-cream);
   padding: clamp(4rem, 10vh, 7rem) 5%; box-sizing: border-box; overflow: hidden;
   font-family: 'Manrope', system-ui, sans-serif;
@@ -46,7 +42,7 @@
 .hw-section .hw-title {
   margin: 0 0 16px; font-optical-sizing: auto; font-variation-settings: 'opsz' 32; font-synthesis: none;
   text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
- font-family: 'Inter Tight', sans-serif;
+ font-family: 'Manrope', sans-serif;
   font-size: clamp(2.3rem, 6vw, 4rem);
   line-height: 0.95;
   letter-spacing: -0.055em !important;
@@ -97,7 +93,7 @@
 .hw-day { color: rgba(255,255,255,.65); }
 
 .hw-step-title {
-  margin: 0 0 12px; font-family: 'Inter Tight', system-ui, sans-serif; font-optical-sizing: auto; font-variation-settings: 'opsz' 32;
+  margin: 0 0 12px; font-family: 'Manrope', system-ui, sans-serif; font-optical-sizing: auto; font-variation-settings: 'opsz' 32;
   font-weight: 800; font-size: clamp(1.4rem, 2.1vw, 2.2rem); line-height: 1.05; letter-spacing: -.05em; color: #fff;
 }
 .hw-step-desc { margin: 0 0 clamp(22px, 3.5vh, 34px); padding-bottom: 0; font-size: clamp(.9rem, 1vw, 1.02rem); line-height: 1.55; color: var(--hw-muted); min-height: 3em; }
@@ -183,13 +179,13 @@
 }
 .hw-outcome-num { display: flex; align-items: baseline; gap: 2px; margin-bottom: 8px; }
 .hw-outcome-value {
-  font-family: "Bricolage Grotesque", sans-serif; font-weight: 800;
+  font-family: "Manrope", sans-serif; font-weight: 800;
   font-size: clamp(38px, 3.8vw, 54px); line-height: 1.02; letter-spacing: -0.01em;
   background: linear-gradient(180deg, #ffffff 0%, #aea7a3 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .hw-outcome-suffix {
-  font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: clamp(16px, 1.6vw, 22px);
+  font-family: "Manrope", sans-serif; font-weight: 800; font-size: clamp(16px, 1.6vw, 22px);
   background: linear-gradient(90deg, #d9b08c, #a8734a);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
