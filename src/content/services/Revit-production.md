@@ -135,13 +135,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Shows how documentation checks can be recorded without disclosing project information.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic Revit content register
 
 Illustrates family ownership, parameter scope, version and approval status.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 

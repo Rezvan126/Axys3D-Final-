@@ -135,13 +135,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Demonstrates model provenance, coordinates, review run and package status.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic BCF issue extract
 
 Shows issue ownership and closure evidence without claiming authority or performance.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 

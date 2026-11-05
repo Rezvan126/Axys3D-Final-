@@ -1052,5 +1052,6 @@ html body .isl-h1:not(#a):not(#b) * { line-height: inherit !important; }
 .isd-faq-item summary { cursor: pointer; list-style: none; padding: 16px 20px; font-family: "Manrope", system-ui, sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
 .isd-faq-item summary::-webkit-details-marker { display: none; }
 .isd-faq-item summary::after { content: "+"; float: right; color: #d9b48c; font-weight: 600; }
-.isd-faq-item[open] summary::after { content: "–"; }
+.isd-faq-item summary::after { display: inline-block; transition: transform 0.2s ease; }
+.isd-faq-item[open] summary::after { transform: rotate(45deg); }
 .isd-faq-item p { margin: 0; padding: 0 20px 18px; color: #c6bfb9; line-height: 1.65; }

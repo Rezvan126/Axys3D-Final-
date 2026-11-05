@@ -133,13 +133,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Illustrates scene version, units, source revision, asset paths and review status without representing client work.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic dependency and handoff record
 
 Demonstrates how declared assets, rights, dependencies and limitations accompany a source package.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 
@@ -147,9 +147,9 @@ Demonstrates how declared assets, rights, dependencies and limitations accompany
 
 ### Related services
 
-- [3D-modeling](/services/3d-modeling/)
-- [Architectural0-visualization](/services/architectural-visualization/)
-- [Animation-motion](/services/animation-motion/)
+- [3D modeling](/services/3d-modeling/)
+- [Architectural visualization](/services/architectural-visualization/)
+- [Animation and motion](/services/animation-motion/)
 
 ### Buyer-specific routes
 

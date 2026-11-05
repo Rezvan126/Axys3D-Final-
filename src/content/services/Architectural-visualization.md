@@ -135,13 +135,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Demonstrates how imagery remains connected to approved design information.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic rights and approval record
 
 Shows the publication gate for project identity, assets, credits and channels.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 

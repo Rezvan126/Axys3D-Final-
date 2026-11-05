@@ -10,6 +10,7 @@ Rules for every change to this site. Follow these exactly; ask before deviating.
 - **Never let text overlap other text.** Tooltips open *above* their trigger.
 - **Alignment matters.** Cards in a row/column share tops, bottoms and heights. Check by measuring, not by eye.
 - **Self-review before publishing**, don't wait for the owner to find issues.
+- **No dashes anywhere visitors can read** (hyphens, en and em dashes), even where grammar would use one. Enforced automatically at build time by `src/integrations/no-dashes.mjs`; write new text without dashes anyway.
 - **Keep the theme.** When asked to "improve" a section, keep colours, fonts and dark look unless told otherwise.
 
 ## Visual system

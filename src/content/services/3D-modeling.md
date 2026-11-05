@@ -135,13 +135,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Illustrates scale, origin, topology, naming and scope checks.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic asset optimization register
 
 Shows derivative purpose, source revision and known limitations.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 
@@ -149,9 +149,9 @@ Shows derivative purpose, source revision and known limitations.
 
 ### Related services
 
-- [3ds-Max-production](/services/3ds-max-production/)
-- [Architectural-visualization](/services/architectural-visualization/)
-- [Animation-motion](/services/animation-motion/)
+- [3ds Max production](/services/3ds-max-production/)
+- [Architectural visualization](/services/architectural-visualization/)
+- [Animation and motion](/services/animation-motion/)
 - [Real-time / Unreal](/services/real-time/)
 
 ### Buyer-specific routes

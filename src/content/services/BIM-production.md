@@ -135,13 +135,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Illustrates package ownership, exchanges and review gates without representing a client project.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic model-audit register
 
 Demonstrates issue, assumption and closure fields expected at handoff.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 

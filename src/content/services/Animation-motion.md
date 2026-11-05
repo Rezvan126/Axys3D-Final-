@@ -135,13 +135,13 @@ These development-only artefacts demonstrate the intended evidence and governanc
 
 Illustrates shot intent, source state and client-led approvals.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ### Synthetic shot and revision log
 
 Demonstrates affected-shot tracking without publishing client media.
 
-- [Review fictional case stydy →](/work/aec-study-01/)
+- [Review fictional case study →](/work/aec-study-01/)
 
 ## 05 / Connected delivery
 
@@ -149,9 +149,9 @@ Demonstrates affected-shot tracking without publishing client media.
 
 ### Related services
 
-- [3D-modeling](/services/3d-modeling/)
-- [3ds-Max-production](/services/3ds-max-production/)
-- [Architectural-visualization](/services/architectural-visualization/)
+- [3D modeling](/services/3d-modeling/)
+- [3ds Max production](/services/3ds-max-production/)
+- [Architectural visualization](/services/architectural-visualization/)
 - [Real-time / Unreal](/services/real-time/)
 
 ### Buyer-specific routes

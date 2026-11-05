@@ -134,7 +134,8 @@
 .hr-faq-item summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 16px; padding: 18px 22px; font-family: "Manrope", system-ui, sans-serif; font-weight: 700; font-size: 17px; }
 .hr-faq-item summary::-webkit-details-marker { display: none; }
 .hr-faq-item summary::after { content: "+"; color: var(--hr-sand); font-weight: 600; }
-.hr-faq-item[open] summary::after { content: "–"; }
+.hr-faq-item summary::after { display: inline-block; transition: transform 0.2s ease; }
+.hr-faq-item[open] summary::after { transform: rotate(45deg); }
 .hr-faq-item summary:focus-visible { outline: 2px solid var(--hr-sand); outline-offset: -2px; border-radius: 16px; }
 .hr-faq-item p { margin: 0; padding: 0 22px 20px; font-size: 15.5px; line-height: 1.65; color: var(--hr-body); }
 
