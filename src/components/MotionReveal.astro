@@ -1,0 +1,31 @@
+---
+// Scroll reveal with Motion (motion.dev): inside each [data-motion-group], the [data-motion]
+// children rise into place one after another when the group scrolls into view.
+// Short, no bounce (professional site), skipped entirely for reduced motion.
+---
+
+<script>
+  import { animate, inView, stagger } from "motion";
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) {
+    document.documentElement.classList.add("motion-ready");
+    document.querySelectorAll<HTMLElement>("[data-motion-group]").forEach((group) => {
+      const items = Array.from(group.querySelectorAll<HTMLElement>("[data-motion]")).filter(
+        (el) => el.closest("[data-motion-group]") === group
+      );
+      if (!items.length) return;
+      inView(
+        group,
+        () => {
+          animate(items, { opacity: [0, 1], y: [18, 0] }, { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: stagger(0.07) });
+        },
+        { amount: 0.15 }
+      );
+    });
+  }
+</script>
+
+<style is:global>
+  .motion-ready [data-motion] { opacity: 0; }
+</style>

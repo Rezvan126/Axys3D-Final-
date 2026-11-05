@@ -155,3 +155,22 @@ html body :is(a, button, summary, [tabindex="0"], [role="tab"]):focus-visible {
   outline-offset: 3px;
 }
 .site-footer { overflow: clip; } /* keep the footer glow inside the page width */
+
+/* ---------- quality pass 2: every page (UI/UX Pro Max checklist) ---------- */
+/* contrast: small bronze and faint grey text lifted to readable shades */
+html body :is(.isd-recent-cat, .isd-rel-cat, .wrk-card-num, .wrk-stage-num, .abt-bento-stat-item .abt-stat-num em, .abt-bento-card--handshake h4 span) { color: #c9a07a; }
+html body :is(.wrk-rp-day, .wrk-rp-log-day, .wrk-rp-tab-num) { color: rgba(255, 255, 255, 0.62); }
+html body :is(.isd-meta-dot, .indd-crumbs span, .svcd-crumbs span) { color: #8a8a8c; }
+html body .abt-bubble-stars { color: #8f6444; }
+
+/* tap areas: buttons at least 44px tall; small text links get an invisible 44px hit area */
+html body :is(.lib-filter, .wrk-rp-btn, .wrk-cover-pill, .svcd-more-btn, .abt-bento-pill-btn, .abt-team-linkedin-btn, .isd-share-list a) { min-height: 44px; box-sizing: border-box; }
+html body .isd-links a { min-height: 44px; box-sizing: border-box; display: flex; align-items: center; }
+html body :is(.indd-crumbs a, .svcd-crumbs a, .wrk-back, .wrk-all-link, .svcd-link, .indd-link, .indd-svc-row-link) { position: relative; }
+html body :is(.indd-crumbs a, .svcd-crumbs a, .wrk-back, .wrk-all-link, .svcd-link, .indd-link, .indd-svc-row-link)::before {
+  content: ""; position: absolute; left: -6px; right: -6px; top: 50%; height: 44px; transform: translateY(-50%);
+}
+html body .wrk-rp-tab.is-active .wrk-rp-tab-num { color: #c9a07a; }
+html body :is(.svcd-link, .indd-link, .indd-svc-row-link, .isd-links a, .wrk-all-link) span { color: #c9a07a; }
+html body .abt-team-linkedin-btn { min-width: 44px; }
+html body form :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select) { min-height: 44px; box-sizing: border-box; }

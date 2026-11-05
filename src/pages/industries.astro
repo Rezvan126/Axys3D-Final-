@@ -2,6 +2,7 @@
 import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import MotionReveal from "../components/MotionReveal.astro";
 import "../styles/token.css";
 import "../styles/global.css";
 import "../styles/Navbar.css";
@@ -73,11 +74,11 @@ const sectors = [
     <main class="iw">
       <!-- HERO -->
       <section class="iw-hero">
-        <div class="iw-wrap">
-          <span class="iw-eyebrow">Industries</span>
-          <h1>Who we work with.</h1>
-          <p class="iw-lead">We produce BIM models, Revit drawing sets and visuals for the building industry: architects, engineers, developers and agencies, on residential, healthcare, commercial and interior projects.</p>
-          <nav class="iw-jump" aria-label="Jump to your team">
+        <div class="iw-wrap" data-motion-group>
+          <span class="iw-eyebrow" data-motion>Industries</span>
+          <h1 data-motion>Who we work with.</h1>
+          <p class="iw-lead" data-motion>We produce BIM models, Revit drawing sets and visuals for the building industry: architects, engineers, developers and agencies, on residential, healthcare, commercial and interior projects.</p>
+          <nav data-motion class="iw-jump" aria-label="Jump to your team">
             {audiences.map((a) => <a href={`#${a.slug}`}>{a.name}</a>)}
           </nav>
         </div>
@@ -86,13 +87,13 @@ const sectors = [
       <!-- WHO WE WORK FOR -->
       <section class="iw-sec" aria-labelledby="iwWho">
         <div class="iw-wrap">
-          <header class="iw-head">
-            <h2 id="iwWho">Who we work for, <span>and what you get.</span></h2>
-            <p>Four kinds of teams hire us. Find yours.</p>
+          <header class="iw-head" data-motion-group>
+            <h2 data-motion id="iwWho">Who we work for, <span>and what you get.</span></h2>
+            <p data-motion>Four kinds of teams hire us. Find yours.</p>
           </header>
-          <div class="iw-aud">
+          <div class="iw-aud" data-motion-group>
             {audiences.map((a, i) => (
-              <article class="iw-card" id={a.slug}>
+              <article class="iw-card" id={a.slug} data-motion>
                 <div class="iw-card-media"><img src={a.img} alt="" loading={i < 2 ? "eager" : "lazy"} decoding="async" /></div>
                 <div class="iw-card-body">
                   <span class="iw-card-num">0{i + 1}</span>
@@ -114,13 +115,13 @@ const sectors = [
       <!-- PROJECT TYPES -->
       <section class="iw-sec" aria-labelledby="iwTypes">
         <div class="iw-wrap">
-          <header class="iw-head">
-            <h2 id="iwTypes">Project types <span>we work on.</span></h2>
-            <p>From a single house to a medical pavilion.</p>
+          <header class="iw-head" data-motion-group>
+            <h2 data-motion id="iwTypes">Project types <span>we work on.</span></h2>
+            <p data-motion>From a single house to a medical pavilion.</p>
           </header>
-          <ul class="iw-sectors">
+          <ul class="iw-sectors" data-motion-group>
             {sectors.map((s) => (
-              <li>
+              <li data-motion>
                 <span class="iw-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={s.icon} /></svg></span>
                 <h3>{s.name}</h3>
                 <p>{s.line}</p>
@@ -132,15 +133,16 @@ const sectors = [
 
       <!-- CLOSING CTA -->
       <section class="iw-cta">
-        <div class="iw-wrap iw-cta-in">
-          <h2>Not sure where you fit? <span>Tell us about your project.</span></h2>
-          <p>Tell us what you're building and what you need next. We'll reply with a clear scope.</p>
-          <a href="/contact/" class="iw-cta-btn">Start a project <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
+        <div class="iw-wrap iw-cta-in" data-motion-group>
+          <h2 data-motion>Not sure where you fit? <span>Tell us about your project.</span></h2>
+          <p data-motion>Tell us what you're building and what you need next. We'll reply with a clear scope.</p>
+          <a href="/contact/" class="iw-cta-btn" data-motion>Start a project <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
         </div>
       </section>
     </main>
 
     <Footer />
+    <MotionReveal />
 
   </body>
 </html>

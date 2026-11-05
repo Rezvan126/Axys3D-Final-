@@ -85,7 +85,7 @@
   background: none;
   color: #959595;
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: clamp(.5rem, .6vw, .68rem);
+  font-size: clamp(12px, .6vw, .68rem);
   font-weight: 400;
   letter-spacing: .3em;
   text-transform: uppercase;

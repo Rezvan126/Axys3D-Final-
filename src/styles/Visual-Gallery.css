@@ -79,7 +79,7 @@
 }
 .vg-tag {
   align-self: flex-start; padding: 5px 10px; border-radius: 999px;
-  font: 400 11px/1.2 "Barlow", system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
+  font: 400 12px/1.2 "Barlow", system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
   color: #f1e2d1; background: rgba(91, 59, 39, 0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 .vg-name { font-family: "Barlow", system-ui, sans-serif; font-weight: 600; font-size: clamp(17px, 1.5vw, 22px); letter-spacing: -0.015em; line-height: 1.2; }

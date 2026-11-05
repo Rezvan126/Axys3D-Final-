@@ -56,7 +56,7 @@
   margin-bottom: 18px;
   color: var(--grey);
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: clamp(.72rem, .85vw, .82rem);
+  font-size: clamp(12px, .85vw, .82rem);
   font-weight: 400;
   letter-spacing: .24em;
   text-transform: uppercase;

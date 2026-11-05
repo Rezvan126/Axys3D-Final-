@@ -227,7 +227,7 @@
   display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px;
   background: rgba(10, 8, 7, 0.6); border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  font: 400 11px/1 "Barlow", system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #8d8784;
+  font: 400 12px/1 "Barlow", system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #8d8784;
 }
 .hx-step { transition: color 0.3s ease; }
 .hx-step.is-on { color: #f1e2d1; }
@@ -236,7 +236,7 @@
 
 .hx-coords, .hx-hint {
   position: absolute; z-index: 4; bottom: 26px;
-  font: 400 11px/1 "Barlow", system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(241, 226, 209, 0.75);
+  font: 400 12px/1 "Barlow", system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(241, 226, 209, 0.75);
 }
 .hx-coords { left: 44px; }
 .hx-hint { right: 44px; opacity: 0.0; transition: opacity 0.4s ease; }
@@ -255,7 +255,7 @@
 }
 @media (max-width: 600px) {
   .hx-inner { padding: 104px 16px 40px; gap: 28px; }
-  .hx-eyebrow { font-size: 11px; letter-spacing: 0.16em; margin-bottom: 18px; }
+  .hx-eyebrow { font-size: 12px; letter-spacing: 0.16em; margin-bottom: 18px; }
   .hx-title { font-size: clamp(34px, 10vw, 44px); }
   .hx-lead { font-size: 16px; margin-top: 18px; }
   .hx-buttons { margin-top: 28px; }
@@ -263,7 +263,7 @@
   .hx-frame { aspect-ratio: 4 / 3.4; border-radius: 20px; }
   .hx-meta { left: 16px; right: 16px; top: 16px; }
   .hx-steps { display: none; }
-  .hx-coords { left: 30px; bottom: 20px; font-size: 10px; }
+  .hx-coords { left: 30px; bottom: 20px; font-size: 12px; }
   .hx-mark { width: 14px; height: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {

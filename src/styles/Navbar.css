@@ -195,7 +195,7 @@ body.menu-open .topbar-cta {
 
 .menu-toggle-label {
   color: rgba(248, 245, 239, 0.9);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
 }
@@ -284,7 +284,7 @@ body.menu-open .side-nav {
 
 .side-nav-kicker {
   color: rgba(143, 100, 68, 0.7);
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -324,7 +324,7 @@ body.menu-open .side-nav {
   width: 18px;
   flex-shrink: 0;
   color: rgba(143, 100, 68, 0.55);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
 }
@@ -375,7 +375,7 @@ body.menu-open .side-nav {
   background: #5b3b27;
 
   color: #ffffff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-decoration: none;
 

@@ -281,7 +281,7 @@ html {
 
   color: var(--cnt-brown-light);
 
-  font-size: 11px;
+  font-size: 12px;
 
   font-weight: 600;
 
@@ -409,7 +409,7 @@ html {
 
   margin-bottom: 4px;
 
-  font-size: 11px;
+  font-size: 12px;
 
   font-weight: 600;
 
@@ -563,7 +563,7 @@ html {
 }
 
 .cnt-field label {
-  font-size: 11px;
+  font-size: 12px;
 
   font-weight: 600;
 
@@ -705,7 +705,7 @@ html {
 
   color: var(--cnt-muted);
 
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .cnt-required-note span {

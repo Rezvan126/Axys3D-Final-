@@ -55,7 +55,7 @@
   box-shadow: none !important;
   backdrop-filter: none !important;
   font-family: "Barlow", system-ui, sans-serif !important;
-  font-size: clamp(0.5rem, 0.6vw, 0.68rem) !important;
+  font-size: clamp(12px, 0.6vw, 0.68rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;
   text-transform: uppercase !important;

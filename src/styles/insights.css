@@ -106,7 +106,7 @@
 .isd-kicker {
   display: block;
   font-family: "Barlow", sans-serif !important;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -303,7 +303,7 @@
 
 .isl-card-meta {
   font-family: "Barlow", sans-serif;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -316,7 +316,7 @@
   background: rgba(28, 20, 16, 0.85);
   border: 1px solid rgba(143, 100, 68, 0.45);
   font-family: "Barlow", sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -508,7 +508,7 @@
   justify-content: center;
   gap: 6px 10px;
   font-family: "Barlow", sans-serif;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -540,7 +540,7 @@
 .isd-widget-title {
   margin: 0 0 16px;
   font-family: "Barlow", sans-serif;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -697,7 +697,7 @@
 }
 .isd-share-label {
   font-family: "Barlow", sans-serif;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -770,7 +770,7 @@
   display: block;
   margin: 12px 0 4px;
   font-family: "Barlow", sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ins-brown);
@@ -795,7 +795,7 @@
   display: block;
   margin-bottom: 5px;
   font-family: "Barlow", sans-serif;
-  font-size: 9.5px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ins-brown);
@@ -971,7 +971,7 @@ html body .isd-share-list button:not(#a):not(#b) {
 /* tags: Process jaisi styling (mono, grey, wide spacing) */
 .isl-kicker {
   font-family: "Barlow", system-ui, sans-serif !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 400 !important;
   letter-spacing: 0.24em !important;
   text-transform: uppercase !important;

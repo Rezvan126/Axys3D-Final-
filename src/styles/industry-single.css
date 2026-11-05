@@ -55,7 +55,7 @@
   display: block;
   margin-bottom: 14px;
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -66,7 +66,7 @@
   display: block;
   margin-bottom: 18px;
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -188,7 +188,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   gap: 10px;
   margin-bottom: 26px;
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -247,7 +247,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   display: block;
   margin-bottom: 12px;
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -349,7 +349,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 }
 .indd-step-num { 
   font-family: "Barlow", system-ui, sans-serif; 
-  font-size: 11px; 
+  font-size: 12px; 
   letter-spacing: 0.18em; 
   color: rgba(255, 255, 255, 0.55); 
 }
@@ -494,7 +494,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   background: #1c1c1f;
   border: 1px solid rgba(255, 255, 255, 0.14);
   font-family: "Barlow", sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   color: #cfc9c5;
 }
 
@@ -632,7 +632,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 .indd-proj-body { display: flex; flex-direction: column; gap: 4px; padding: 14px 8px 8px; }
 .indd-proj-body em {
   font-family: "Barlow", system-ui, sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   font-style: normal;
   letter-spacing: 0.18em;
   text-transform: uppercase;

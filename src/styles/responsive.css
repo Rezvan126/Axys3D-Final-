@@ -152,7 +152,7 @@ h1, h2, h3, h4, p, li, a, span, label, dd, dt {
 @media (max-width: 380px) {
   .hero h1 { font-size: 26px; }
   .hero-eyebrow { letter-spacing: 0.22em; }
-  .fit-chip { padding: 7px 10px; font-size: 11px; }
+  .fit-chip { padding: 7px 10px; font-size: 12px; }
 }
 
 /* landscape phone: text kam, sab screen me aa jaye */
@@ -182,7 +182,7 @@ h1, h2, h3, h4, p, li, a, span, label, dd, dt {
 }
 
 @media (max-width: 600px) {
-  .stage-chip, .stage-tag { padding: 6px 10px; font-size: 0.55rem; }
+  .stage-chip, .stage-tag { padding: 6px 10px; font-size: 0.75rem; }
   .stage-tag { display: none; }
   .stage-badge { min-width: 84px; }
   .stage-badge strong { font-size: 0.85rem; }
@@ -381,7 +381,7 @@ h1, h2, h3, h4, p, li, a, span, label, dd, dt {
   .abt-team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   .abt-team-floating-badge { left: 8px; right: 8px; bottom: 8px; padding: 8px 10px; border-radius: 10px; }
   .abt-team-badge-info h4 { font-size: 13px; }
-  .abt-team-badge-info span { font-size: 11px; }
+  .abt-team-badge-info span { font-size: 12px; }
   .abt-team-linkedin-btn { width: 28px; height: 28px; flex: none; }
 
   .abt-principles-grid-2x2 { grid-template-columns: 1fr; }
@@ -535,7 +535,7 @@ h1, h2, h3, h4, p, li, a, span, label, dd, dt {
 @media (max-width: 480px) {
   .vg-marquee, .vg-pager { --cw: 160px; --ch: 250px; }
   .vg-marquee-track, .vg-pager-track { gap: 14px; }
-  .vg-hud { font-size: .62rem; padding: 6px 12px; letter-spacing: .16em; }
+  .vg-hud { font-size: 0.75rem; padding: 6px 12px; letter-spacing: .16em; }
 }
 
 
