@@ -403,3 +403,6 @@
   .pf-lead { font-size: 16px; }
 }
 .pf-quality .m-stamp { top: -18px; }
+/* real drawing sheet in the Quality card (replaces the drawn placeholder) */
+.pf-sheet img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); filter: brightness(0.9) contrast(1.05); }
+.pf-quality.is-in .pf-sheet .m-stamp { opacity: 1; transform: rotate(-8deg) scale(1); }

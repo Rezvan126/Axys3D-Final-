@@ -5,7 +5,7 @@
 // Only the heading, edges, corners and images were changed to match the proof section above.
 import { services } from "../data/services";
 
-// Project image for each service
+// Photo for each service (Unsplash License, see public/images/CREDITS.md)
 const media: Record<string, string> = {
   "bim-production": "/images/services/bim.jpg",
   "revit-production": "/images/services/revit.jpg",
@@ -15,6 +15,17 @@ const media: Record<string, string> = {
   "architectural-visualization": "/images/services/archviz.jpg",
   "animation-motion": "/images/services/animation.jpg",
   "real-time": "/images/services/realtime.jpg",
+};
+// which part of each photo stays in view when the card is small
+const focus: Record<string, string> = {
+  "bim-production": "35% 50%",
+  "revit-production": "45% 55%",
+  "mep-coordination": "60% 45%",
+  "3d-modeling": "40% 60%",
+  "3ds-max-production": "45% 60%",
+  "architectural-visualization": "60% 50%",
+  "animation-motion": "30% 60%",
+  "real-time": "78% 40%",
 };
 const columns = [services.slice(0, 4), services.slice(4)];
 ---
@@ -33,7 +44,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
             <article class="svc-card" data-reveal style={`--d:${idx * 0.08}s`} tabindex="0">
               <span class="svc-card-num">{s.num}</span>
               <div class="svc-card-media">
-                <img src={media[s.slug]} alt={`${s.title}: ${s.includes.join(", ")}`} loading="lazy" decoding="async" />
+                <img src={media[s.slug]} alt={`${s.title}: ${s.includes.join(", ")}`} loading="lazy" decoding="async" style={`object-position:${focus[s.slug]}`} />
               </div>
               <div class="svc-card-body">
                 <h3 class="svc-card-title">{s.title}</h3>
