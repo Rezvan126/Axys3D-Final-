@@ -1,23 +1,12 @@
 ---
-// Site-wide finishing layer: weighted smooth scrolling, a thin scroll-progress line,
+// Site-wide finishing layer: weighted smooth scrolling,
 // a barely visible film grain, and bronze text selection. Include once per page.
 ---
 
-<div class="px-progress" aria-hidden="true"><span id="pxProgress"></span></div>
 <div class="px-grain" aria-hidden="true"></div>
 
 <style is:global>
   ::selection { background: rgba(143, 100, 68, 0.55); color: #fff; }
-
-  .px-progress {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 9999; height: 2px; pointer-events: none;
-  }
-  .px-progress span {
-    display: block; height: 100%;
-    background: linear-gradient(90deg, #5b3b27, #b8946f 60%, #e3c8a8);
-    transform-origin: left; transform: scaleX(0);
-    box-shadow: 0 0 10px rgba(217, 180, 140, 0.5);
-  }
 
   /* very faint animated grain gives the black a filmic, printed feel */
   .px-grain {
@@ -47,19 +36,12 @@
 <script>
   import Lenis from "lenis";
 
-  const bar = document.getElementById("pxProgress");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine = window.matchMedia("(pointer: fine)").matches;
-
-  const update = () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (bar) bar.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
-  };
 
   // Smooth wheel scrolling on desktop only; touch devices keep native scrolling.
   if (!reduce && fine) {
     const lenis = new Lenis({ duration: 1.15, easing: (t: number) => 1 - Math.pow(1 - t, 4), smoothWheel: true });
-    lenis.on("scroll", update);
     const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
     // in-page anchor links glide too
@@ -72,6 +54,4 @@
       })
     );
   }
-  window.addEventListener("scroll", update, { passive: true });
-  update();
 </script>

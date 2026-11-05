@@ -1,167 +1,120 @@
 ---
 import "../styles/stages.css";
 
-// ONE BUILDING, FOUR STAGES — scroll-driven.
-// Desktop: the section pins while you scroll and the building moves from sketch to render.
-// Phones / reduced motion: the same viewer with tappable steps that also advance on their own.
-// Images live in public/images/stages/stage-1..4.jpg (same building, each stage).
+// SKETCH IN. RENDER OUT. Pure visuals, driven by the scroll.
+// The section pins while you scroll. The image starts lined up with the other sections,
+// expands to fill the screen, then the same building moves from sketch to massing,
+// BIM model and final render (each stage sweeps in from the left). No labels on the image.
+// Images: public/images/stages/stage-1..4.jpg (same building, each stage).
 const stages = [
-  { title: "Sketch", desc: "Your drawings and sketches, checked and scaled before modeling starts.", tag: "Linework · 1:100", spec: "Brief checked", img: "/images/stages/stage-1.jpg" },
-  { title: "Massing", desc: "Simple volumes confirm the form, height and fit on the site.", tag: "Volume study · v2", spec: "Areas checked", img: "/images/stages/stage-2.jpg" },
-  { title: "BIM model", desc: "A coordinated Revit model with real walls, openings and materials.", tag: "Revit · LOD 300", spec: "0 clashes", img: "/images/stages/stage-3.jpg" },
-  { title: "Final render", desc: "Lit, textured and color-graded. Ready for clients and marketing.", tag: "Corona · 4K", spec: "QC passed", img: "/images/stages/stage-4.jpg" },
+  { title: "Sketch", img: "/images/stages/stage-1.jpg" },
+  { title: "Massing", img: "/images/stages/stage-2.jpg" },
+  { title: "BIM model", img: "/images/stages/stage-3.jpg" },
+  { title: "Final render", img: "/images/stages/stage-4.jpg" },
 ];
 ---
 
 <section class="sg" id="stages" aria-labelledby="sg-title">
   <div class="sg-pin">
-    <div class="sg-inner">
-      <!-- LEFT: heading + step list -->
-      <div class="sg-copy">
-        <span class="sg-eyebrow">One building, four stages</span>
-        <h2 class="sg-title" id="sg-title">Sketch in.<br /><em>Render out.</em></h2>
-
-        <ol class="sg-steps" role="tablist" aria-label="Project stages">
-          <span class="sg-rail" aria-hidden="true"><span class="sg-rail-fill" id="sgRail"></span></span>
-          {stages.map((s, i) => (
-            <li>
-              <button class:list={["sg-step", i === 0 && "is-active"]} type="button" role="tab" data-i={i} aria-selected={i === 0 ? "true" : "false"}>
-                <span class="sg-step-num">0{i + 1}</span>
-                <span class="sg-step-text">
-                  <span class="sg-step-title">{s.title}</span>
-                  <span class="sg-step-desc">{s.desc}</span>
-                </span>
-              </button>
-            </li>
-          ))}
-        </ol>
+    <div class="sg-head">
+      <div class="sg-head-in">
+        <h2 class="sg-title" id="sg-title">Sketch in. <span>Render out.</span></h2>
       </div>
-
-      <!-- RIGHT: viewer -->
-      <figure class="sg-viewer" aria-label="The same building at each production stage">
-        <div class="sg-frame">
-          {stages.map((s, i) => (
-            <img class="sg-layer" src={s.img} alt={`${s.title} stage of the building`} style={`--k:${i}`} loading={i < 2 ? "eager" : "lazy"} decoding="async" />
-          ))}
-          <span class="sg-scan" aria-hidden="true"></span>
-
-          <figcaption class="sg-hud">
-            <span class="sg-chip"><i aria-hidden="true"></i><b id="sgTitle">{stages[0].title}</b></span>
-            <span class="sg-count"><b id="sgCount">01</b> / 04</span>
-          </figcaption>
-          <div class="sg-foot" aria-hidden="true">
-            <span class="sg-tag" id="sgTag">{stages[0].tag}</span>
-            <span class="sg-spec"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" /></svg><b id="sgSpec">{stages[0].spec}</b></span>
-          </div>
-        </div>
-        <span class="sg-scroll-hint" aria-hidden="true">Scroll to build</span>
-      </figure>
     </div>
-  </div>
 
-  <script type="application/json" id="sgData" set:html={JSON.stringify(stages.map(({ title, tag, spec }) => ({ title, tag, spec })))} />
+    <figure class="sg-frame" aria-label="The same building as a sketch, a massing model, a BIM model and a final render">
+      <div class="sg-zoom">
+        {stages.map((s, i) => (
+          <img class="sg-layer" src={s.img} alt={`${s.title} stage of the building`} loading={i < 2 ? "eager" : "lazy"} decoding="async" />
+        ))}
+      </div>
+      <span class="sg-scan" aria-hidden="true"></span>
+    </figure>
+  </div>
 </section>
 
 <script>
   const root = document.getElementById("stages") as HTMLElement | null;
-  const dataEl = document.getElementById("sgData");
-  if (root && dataEl) {
-    const data: { title: string; tag: string; spec: string }[] = JSON.parse(dataEl.textContent || "[]");
-    const layers = Array.from(root.querySelectorAll<HTMLElement>(".sg-layer"));
-    const steps = Array.from(root.querySelectorAll<HTMLButtonElement>(".sg-step"));
+  if (root) {
+    const pin = root.querySelector<HTMLElement>(".sg-pin")!;
+    const head = root.querySelector<HTMLElement>(".sg-head")!;
+    const frame = root.querySelector<HTMLElement>(".sg-frame")!;
+    const zoom = root.querySelector<HTMLElement>(".sg-zoom")!;
     const scan = root.querySelector<HTMLElement>(".sg-scan")!;
-    const rail = document.getElementById("sgRail")!;
-    const out = { title: document.getElementById("sgTitle")!, tag: document.getElementById("sgTag")!, spec: document.getElementById("sgSpec")!, count: document.getElementById("sgCount")! };
+    const layers = Array.from(root.querySelectorAll<HTMLElement>(".sg-layer"));
     const N = layers.length;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const pinned = () => window.matchMedia("(min-width: 1000px)").matches && !reduce;
+    const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
     const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-    let active = -1;
+    const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
 
-    // p runs from 0 (sketch) to N-1 (render); fractional values are mid-wipe
-    function render(p: number) {
+    // card insets (inside the frame) for the "lined up with the page" state
+    let ins = { t: 0, r: 0, b: 0, l: 0 };
+    const RADIUS = 24;
+
+    function layout() {
+      const vw = pin.clientWidth, vh = pin.clientHeight;
+      const phone = vw < 700;
+      // expanded frame: the whole screen on desktop, a tall full-width band on phones
+      // card: under the heading, same side edges as the other sections (6% sides, 1240px max)
+      const content = phone ? vw - 32 : Math.min(1240, vw * 0.88);
+      const side = (vw - content) / 2;
+      const cardTop = head.offsetTop + head.offsetHeight + (phone ? 24 : 32);
+      const fh = phone ? Math.min(vh * 0.7, vw * 1.1) : vh;
+      // phones: the band starts right under the heading, so card and band share their top edge
+      const ft = phone ? Math.max(0, Math.min(cardTop, vh - fh)) : 0;
+      frame.style.top = `${ft}px`;
+      frame.style.height = `${fh}px`;
+      const cardH = phone ? content * 0.8 : vh - cardTop - 40;
+      ins = {
+        t: Math.max(0, cardTop - ft),
+        r: side,
+        b: Math.max(0, ft + fh - (cardTop + cardH)),
+        l: side,
+      };
+    }
+
+    // e: 0 = card, 1 = full screen. p: 0 = sketch ... N-1 = render
+    function render(e: number, p: number) {
+      const k = ease(clamp01(e));
+      const r = lerp(RADIUS, 0, k);
+      frame.style.clipPath = `inset(${lerp(ins.t, 0, k).toFixed(1)}px ${lerp(ins.r, 0, k).toFixed(1)}px ${lerp(ins.b, 0, k).toFixed(1)}px ${lerp(ins.l, 0, k).toFixed(1)}px round ${r.toFixed(1)}px)`;
+      head.style.opacity = String((1 - k * 1.2).toFixed(3));
+      // slow push in across the whole sequence
+      zoom.style.transform = `scale(${(1.08 - k * 0.06 + (p / (N - 1)) * 0.04).toFixed(4)})`;
+
       p = Math.max(0, Math.min(N - 1, p));
       let scanAt = -1;
-      layers.forEach((el, k) => {
-        if (k === 0) return;
-        const local = ease(Math.max(0, Math.min(1, p - (k - 1))));
+      layers.forEach((el, i) => {
+        if (i === 0) return;
+        const local = ease(clamp01(p - (i - 1)));
         el.style.clipPath = `inset(0 ${(100 - local * 100).toFixed(2)}% 0 0)`;
-        el.style.transform = `scale(${(1.06 - local * 0.06).toFixed(4)})`;
         if (local > 0 && local < 1) scanAt = local * 100;
       });
       scan.style.left = `${scanAt}%`;
       scan.classList.toggle("is-on", scanAt >= 0);
-      rail.style.transform = `scaleY(${(p / (N - 1)).toFixed(4)})`;
-
-      const a = Math.round(p);
-      if (a !== active) {
-        active = a;
-        steps.forEach((s, i) => {
-          s.classList.toggle("is-active", i === a);
-          s.classList.toggle("is-done", i < a);
-          s.setAttribute("aria-selected", String(i === a));
-        });
-        out.title.textContent = data[a].title;
-        out.tag.textContent = data[a].tag;
-        out.spec.textContent = data[a].spec;
-        out.count.textContent = `0${a + 1}`;
-        root.classList.remove("sg-swap"); void root.offsetWidth; root.classList.add("sg-swap");
-      }
     }
 
-    // ---- desktop: progress from scroll position inside the tall section ----
     function onScroll() {
-      if (!pinned()) return;
+      if (!root.classList.contains("is-pinned")) return;
       const r = root.getBoundingClientRect();
       const total = r.height - window.innerHeight;
-      const t = Math.max(0, Math.min(1, -r.top / total));
-      // small hold at both ends so the first and last stage can be read
-      const held = Math.max(0, Math.min(1, (t - 0.06) / 0.88));
-      render(held * (N - 1));
+      const t = clamp01(-r.top / total);
+      // 0 to 16%: expand. 20 to 92%: sketch to render. Then hold the render.
+      const e = t / 0.16;
+      const p = clamp01((t - 0.2) / 0.72) * (N - 1);
+      render(e, p);
     }
-
-    // ---- phones: steps are buttons, plus a gentle auto-advance ----
-    let current = 0, anim = 0, timer: number | undefined;
-    function animateTo(target: number) {
-      cancelAnimationFrame(anim);
-      const from = current, start = performance.now(), dur = reduce ? 0 : 1100;
-      const tick = (now: number) => {
-        const k = dur ? Math.min(1, (now - start) / dur) : 1;
-        current = from + (target - from) * k;
-        render(current);
-        if (k < 1) anim = requestAnimationFrame(tick);
-      };
-      anim = requestAnimationFrame(tick);
-    }
-    function autoplay() {
-      window.clearTimeout(timer);
-      if (pinned() || reduce) return;
-      timer = window.setTimeout(() => { animateTo((Math.round(current) + 1) % N); autoplay(); }, 3600);
-    }
-
-    steps.forEach((s) =>
-      s.addEventListener("click", () => {
-        const i = Number(s.dataset.i);
-        if (pinned()) {
-          // scroll to the point where that stage is fully shown
-          const r = root.getBoundingClientRect();
-          const total = r.height - window.innerHeight;
-          const t = 0.06 + (i / (N - 1)) * 0.88;
-          window.scrollTo({ top: window.scrollY + r.top + t * total, behavior: "smooth" });
-        } else {
-          animateTo(i);
-          autoplay();
-        }
-      })
-    );
 
     function setup() {
-      root.classList.toggle("is-pinned", pinned());
-      if (pinned()) { window.clearTimeout(timer); onScroll(); }
-      else { render(current); autoplay(); }
+      root.classList.toggle("is-pinned", !reduce);
+      if (!reduce) layout();
+      if (reduce) render(0, N - 1);
+      else onScroll();
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", setup);
+    if (document.fonts?.ready) document.fonts.ready.then(setup);
     setup();
   }
 </script>
