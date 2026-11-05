@@ -1,7 +1,7 @@
 ---
-// SERVICES: a production pipeline. Left: the 8 services as stages on one bronze line; hovering a
-// stage fills the line down to it (each service builds on the one before). Right: the project image
-// (clean, no text on it) wipes in from left to right; the details sit in a separate block below.
+// SERVICES: eight image cards. Idea: "from model to finished result". Each image rests in a
+// muted model state; on hover a bronze scan line sweeps across and reveals the full render, then
+// the project film plays where one exists. Text sits in its own block under the image.
 import { services } from "../data/services";
 
 interface Props {
@@ -9,274 +9,215 @@ interface Props {
 }
 const { showHeader = false } = Astro.props;
 
-// Images from your own projects, one per service (swap any path for a better render later)
-const media: Record<string, string> = {
-  "bim-production": "/images/stages/stage-3.jpg",
-  "revit-production": "/images/stages/stage-2.jpg",
-  "mep-coordination": "/images/stages/stage-3.jpg",
-  "3d-modeling": "/images/stages/stage-2.jpg",
-  "3ds-max-production": "/images/gallery/interior-1.jpg",
-  "architectural-visualization": "/images/gallery/exterior-1.jpg",
-  "animation-motion": "/images/gallery/video2.jpg",
-  "real-time": "/images/gallery/landscape.jpg",
+// One image per service (from your projects), and a film where a matching one exists
+const media: Record<string, { img: string; video?: string }> = {
+  "bim-production": { img: "/images/services/bim.jpg" },
+  "revit-production": { img: "/images/services/revit.jpg" },
+  "mep-coordination": { img: "/images/services/mep.jpg" },
+  "3d-modeling": { img: "/images/services/modeling.jpg" },
+  "3ds-max-production": { img: "/images/services/max.jpg", video: "/videos/services/max.mp4" },
+  "architectural-visualization": { img: "/images/services/archviz.jpg", video: "/videos/services/archviz.mp4" },
+  "animation-motion": { img: "/images/services/animation.jpg", video: "/videos/services/animation.mp4" },
+  "real-time": { img: "/images/services/realtime.jpg", video: "/videos/services/realtime.mp4" },
 };
 ---
 
-<section class="sv" id="services" aria-labelledby="svTitle">
-  <div class="sv-wrap">
+<section class="sx" id="services" aria-labelledby="sxTitle">
+  <div class="sx-wrap">
     {showHeader && (
-      <header class="sv-head">
-        <h2 class="sv-title" id="svTitle">Eight services. <em>One production team.</em></h2>
-        <p class="sv-lead">One team carries your project from the first model to the final film. <span class="sv-hint-hover">Hover</span><span class="sv-hint-tap">Tap</span> a service to see it.</p>
+      <header class="sx-head">
+        <h2 class="sx-title" id="sxTitle">Eight services. <em>One production team.</em></h2>
+        <p class="sx-lead"><span class="sx-hint-hover">Hover</span><span class="sx-hint-tap">Scroll through</span> the services and watch each model turn into the finished result.</p>
       </header>
     )}
 
-    <div class="sv-grid">
-      <!-- LEFT: the pipeline -->
-      <ol class="sv-list" role="tablist" aria-label="Services" aria-orientation="vertical">
-        <span class="sv-track" aria-hidden="true"><span class="sv-track-fill"></span></span>
-        {services.map((s, i) => (
-          <li>
-            <button
-              class:list={["sv-item", i === 0 && "is-active is-passed"]}
-              type="button"
-              role="tab"
-              id={`sv-tab-${s.slug}`}
-              aria-controls={`sv-panel-${s.slug}`}
-              aria-selected={i === 0 ? "true" : "false"}
-              data-i={i}
-            >
-              <span class="sv-node" aria-hidden="true"></span>
-              <span class="sv-num">{s.num}</span>
-              <span class="sv-text">
-                <span class="sv-name">{s.title}</span>
-                <span class="sv-sub"><span>{s.short}</span></span>
-              </span>
-              <span class="sv-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
-            </button>
-          </li>
-        ))}
-      </ol>
-
-      <!-- RIGHT: one panel per service, stacked in the same spot -->
-      <div class="sv-stage">
-        {services.map((s, i) => (
-          <article
-            class:list={["sv-panel", i === 0 && "is-active"]}
-            id={`sv-panel-${s.slug}`}
-            role="tabpanel"
-            aria-labelledby={`sv-tab-${s.slug}`}
-            style={`--brand:${s.logo.color}`}
-            hidden={i !== 0}
-          >
-            <div class="sv-media">
-              <img src={media[s.slug]} alt={`${s.title}: project image`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
-              <span class="sv-wipe" aria-hidden="true"></span>
-            </div>
-            <div class="sv-body">
-              <div class="sv-meta">
-                <span class="sv-tool">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.logo.d} /></svg>
-                  {s.logo.name}
-                </span>
-                <span class="sv-count">{s.num} / 0{services.length}</span>
+    <div class="sx-grid">
+      {services.map((s, i) => {
+        const m = media[s.slug];
+        return (
+          <a class={`sx-card sx-c${i}`} href={`/services/${s.slug}`}>
+            <div class="sx-media">
+              <img class="sx-img sx-img--model" src={m.img} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+              <div class="sx-render">
+                <img class="sx-img" src={m.img} alt={`${s.title}: project image`} loading="lazy" decoding="async" />
+                {m.video && <video class="sx-video" muted loop playsinline preload="none" data-src={m.video} aria-hidden="true"></video>}
               </div>
-              <h3 class="sv-panel-title">{s.title}</h3>
-              <p class="sv-blurb">{s.blurb}</p>
-              <ul class="sv-tags">
-                {s.includes.map((t) => <li>{t}</li>)}
-              </ul>
-              <a href={`/services/${s.slug}`} class="sv-link">
-                <span>Explore service</span>
-                <span class="sv-link-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
-              </a>
+              <span class="sx-scan" aria-hidden="true"></span>
+              <span class="sx-glare" aria-hidden="true"></span>
             </div>
-          </article>
-        ))}
-      </div>
+            <div class="sx-body">
+              <div class="sx-meta">
+                <span class="sx-tool"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.logo.d} /></svg>{s.logo.name}</span>
+                <span class="sx-num">{s.num}</span>
+              </div>
+              <h3 class="sx-name">{s.title}</h3>
+              <p class="sx-short">{s.short}</p>
+              <span class="sx-more">Explore service <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </div>
 </section>
 
 <style>
-  .sv {
-    --sv-edge: rgba(255, 255, 255, 0.08);
-    --sv-brown: #5b3b27;
-    --sv-brown-hi: #8f6444;
-    --sv-brown-lt: #b8946f;
-    --sv-sand: #d9b48c;
-    --sv-text: #ffffff;
-    --sv-body: #c8c1bb;
-    --sv-muted: #8a837e;
-    --sv-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  .sx {
+    --sx-edge: rgba(255, 255, 255, 0.08);
+    --sx-brown: #5b3b27;
+    --sx-brown-hi: #8f6444;
+    --sx-brown-lt: #b8946f;
+    --sx-sand: #d9b48c;
+    --sx-ease: cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     padding: clamp(64px, 10vh, 120px) 0;
-    color: var(--sv-text);
+    color: #fff;
     font-family: "Inter", system-ui, sans-serif;
   }
-  .sv-wrap { width: min(100% - 12%, 1320px); margin: 0 auto; }
+  .sx-wrap { width: min(100% - 12%, 1320px); margin: 0 auto; }
+  .sx-head { display: flex; flex-direction: column; gap: 14px; max-width: 980px; margin-bottom: clamp(32px, 5vh, 52px); }
+  .sx-title { margin: 0; }
+  .sx-title em { font-style: normal; color: var(--sx-brown-hi); }
+  .sx-lead { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+  .sx-hint-tap { display: none; }
+  @media (hover: none) { .sx-hint-hover { display: none; } .sx-hint-tap { display: inline; } }
 
-  .sv-head { display: flex; flex-direction: column; gap: 14px; max-width: 980px; margin-bottom: clamp(32px, 5vh, 52px); }
-  .sv-title { margin: 0; }
-  .sv-title em { font-style: normal; color: var(--sv-brown-hi); }
-  .sv-hint-tap { display: none; }
-  @media (hover: none) { .sv-hint-hover { display: none; } .sv-hint-tap { display: inline; } }
-  .sv-lead { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+  /* three rows with a rhythm: wide + two, two + wide, wide + wide */
+  .sx-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; perspective: 1200px; }
+  .sx-c0, .sx-c5, .sx-c6, .sx-c7 { grid-column: span 2; }
 
-  .sv-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
-
-  /* ---------- the pipeline ---------- */
-  .sv-list { --fill: 0px; list-style: none; margin: 0; padding: 0; position: relative; }
-  .sv-track { position: absolute; left: 9px; top: var(--track-top, 30px); height: var(--track-h, 0px); width: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); }
-  .sv-track-fill { position: absolute; left: 0; top: 0; width: 100%; height: var(--fill); border-radius: 2px; background: linear-gradient(180deg, var(--sv-brown-hi), var(--sv-sand)); transition: height 0.55s var(--sv-ease); }
-  .sv-list li { border-bottom: 1px solid var(--sv-edge); }
-  .sv-list li:first-of-type { border-top: 1px solid var(--sv-edge); }
-  .sv-item {
-    all: unset; box-sizing: border-box; cursor: pointer; position: relative; width: 100%;
-    display: grid; grid-template-columns: 20px 40px minmax(0, 1fr) 28px; align-items: center; column-gap: 14px;
-    padding: 18px 8px 18px 0;
+  /* ---------- card ---------- */
+  .sx-card {
+    --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+    position: relative; display: flex; flex-direction: column; min-width: 0;
+    border-radius: 22px; overflow: hidden; text-decoration: none; color: inherit;
+    background: #121010; border: 1px solid var(--sx-edge);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    transform: rotateX(var(--rx)) rotateY(var(--ry)) translateY(0);
+    transform-style: preserve-3d;
+    transition: transform 0.5s var(--sx-ease), border-color 0.4s ease, box-shadow 0.5s ease;
   }
-  .sv-item:focus-visible { outline: 2px solid var(--sv-sand); outline-offset: 2px; border-radius: 8px; }
-  .sv-node {
-    position: relative; z-index: 1; justify-self: center; width: 10px; height: 10px; border-radius: 50%;
-    background: #0b0a0a; border: 2px solid #3a3330; box-sizing: border-box;
-    transition: border-color 0.35s ease, background 0.35s ease, transform 0.45s var(--sv-ease), box-shadow 0.35s ease;
-  }
-  .sv-item.is-passed .sv-node { border-color: var(--sv-brown-lt); background: #2a1d14; }
-  .sv-item.is-active .sv-node { width: 14px; height: 14px; border-color: var(--sv-sand); background: var(--sv-sand); box-shadow: 0 0 0 5px rgba(217, 180, 140, 0.14); }
-  .sv-num { font: 500 13px/1 "Inter", system-ui, sans-serif; letter-spacing: 0.08em; color: var(--sv-muted); font-variant-numeric: tabular-nums; transition: color 0.3s ease; }
-  .sv-item.is-passed .sv-num { color: var(--sv-brown-lt); }
-  .sv-item.is-active .sv-num { color: var(--sv-sand); }
-  .sv-text { display: grid; min-width: 0; transform: translateX(0); transition: transform 0.5s var(--sv-ease); }
-  .sv-item.is-active .sv-text { transform: translateX(10px); }
-  .sv-name {
-    font-family: "Manrope", system-ui, sans-serif; font-weight: 700;
-    font-size: clamp(18px, 1.7vw, 24px); line-height: 1.2; letter-spacing: -0.02em; color: #7d7773;
-    transition: color 0.3s ease;
-  }
-  .sv-item:hover .sv-name { color: #d8d2cc; }
-  .sv-item.is-active .sv-name { color: var(--sv-text); }
-  /* one line about the deliverable opens under the active name */
-  .sv-sub { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.5s var(--sv-ease), opacity 0.4s ease; }
-  .sv-sub > span { overflow: hidden; font-size: 14px; font-weight: 500; color: var(--sv-sand); }
-  .sv-item.is-active .sv-sub { grid-template-rows: 1fr; opacity: 1; }
-  .sv-item.is-active .sv-sub > span { padding-top: 6px; }
-  .sv-arrow { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: var(--sv-sand); opacity: 0; transform: translateX(-8px); transition: opacity 0.3s ease, transform 0.45s var(--sv-ease); }
-  .sv-item.is-active .sv-arrow { opacity: 1; transform: none; }
+  .sx-card.is-on { border-color: rgba(217, 180, 140, 0.45); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(217, 180, 140, 0.12); }
+  .sx-card.is-hover { transform: rotateX(var(--rx)) rotateY(var(--ry)) translateY(-6px); transition: transform 0.15s linear, border-color 0.4s ease, box-shadow 0.5s ease; }
+  .sx-card:focus-visible { outline: 2px solid var(--sx-sand); outline-offset: 4px; }
 
-  /* ---------- panels: image on top (no text on it), details below ---------- */
-  .sv-stage { display: grid; }
-  .sv-panel {
-    grid-area: 1 / 1; display: flex; flex-direction: column;
-    border-radius: 24px; overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    background: #121010;
-    box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
-    opacity: 0; transition: opacity 0.5s ease;
+  /* image: muted model state underneath, full render revealed on top */
+  .sx-media { position: relative; height: 260px; overflow: hidden; background: #0b0a0a; }
+  .sx-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 1.2s var(--sx-ease); }
+  .sx-img--model { filter: grayscale(1) contrast(1.05) brightness(0.8); }
+  .sx-render { position: absolute; inset: 0; clip-path: inset(0 100% 0 0); transition: clip-path 0.9s var(--sx-ease); }
+  .sx-card.is-on .sx-render { clip-path: inset(0 0 0 0); }
+  .sx-card.is-on .sx-img { transform: scale(1.07); }
+  .sx-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease 0.5s; }
+  .sx-card.is-on .sx-video.is-ready { opacity: 1; }
+  /* the bronze scan line travels with the reveal edge */
+  .sx-scan {
+    position: absolute; top: 0; bottom: 0; left: 0; width: 2px; pointer-events: none;
+    background: linear-gradient(180deg, transparent, var(--sx-sand) 15%, var(--sx-sand) 85%, transparent);
+    box-shadow: 0 0 16px 2px rgba(217, 180, 140, 0.65);
+    opacity: 0; transform: translateX(0); transition: transform 0.9s var(--sx-ease), opacity 0.3s ease 0.6s;
   }
-  .sv-panel[hidden] { display: flex; visibility: hidden; }
-  .sv-panel.is-active { opacity: 1; visibility: visible; z-index: 1; }
+  .sx-card.is-on .sx-scan { transform: translateX(calc(var(--w, 600px) - 2px)); opacity: 0; }
+  .sx-card.is-scanning .sx-scan { opacity: 1; transition: transform 0.9s var(--sx-ease), opacity 0.1s ease; }
+  /* soft light that follows the cursor */
+  .sx-glare { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 240, 220, 0.16), transparent 45%); }
+  .sx-card.is-hover .sx-glare { opacity: 1; }
 
-  .sv-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b0a0a; }
-  .sv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: inset(0 0 0 0); transform: scale(1.04); transition: transform 1.6s var(--sv-ease); }
-  .sv-panel.is-active .sv-media img { transform: scale(1); animation: sv-reveal 0.9s var(--sv-ease) both; }
-  /* bronze line that leads the reveal */
-  .sv-wipe { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--sv-sand) 20%, var(--sv-sand) 80%, transparent); box-shadow: 0 0 18px rgba(217, 180, 140, 0.7); opacity: 0; pointer-events: none; }
-  .sv-panel.is-active .sv-wipe { animation: sv-line 0.9s var(--sv-ease) both; }
-  @keyframes sv-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  @keyframes sv-line { 0% { left: 0; opacity: 1; } 85% { opacity: 1; } 100% { left: calc(100% - 2px); opacity: 0; } }
+  /* text block under the image */
+  .sx-body { position: relative; display: flex; flex-direction: column; gap: 8px; flex: 1; padding: 20px 24px 22px; border-top: 1px solid var(--sx-edge); background: linear-gradient(180deg, #151210, #110f0e); }
+  .sx-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .sx-tool { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--sx-brown-lt); }
+  .sx-tool svg { width: 17px; height: 17px; fill: var(--sx-sand); }
+  .sx-num { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: #6f6965; font-variant-numeric: tabular-nums; transition: color 0.3s ease; }
+  .sx-card.is-on .sx-num { color: var(--sx-sand); }
+  .sx-name { margin: 0; }
+  .sx-short { margin: 0; font-size: 14.5px; line-height: 1.5; color: #b9b2ac; }
+  .sx-more { margin-top: auto; padding-top: 10px; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--sx-sand); }
+  .sx-more svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.35s var(--sx-ease); }
+  .sx-card.is-on .sx-more svg { transform: translateX(4px); }
 
-  .sv-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 28px 28px; border-top: 1px solid rgba(255, 255, 255, 0.07); }
-  .sv-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
-  .sv-tool { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--sv-brown-lt); }
-  .sv-tool svg { width: 18px; height: 18px; fill: var(--sv-sand); }
-  .sv-count { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: var(--sv-muted); font-variant-numeric: tabular-nums; }
-  .sv-panel-title { margin: 0; }
-  .sv-blurb { margin: 0; max-width: 56ch; font-size: 15px; line-height: 1.6; color: var(--sv-body); }
-  .sv-tags { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .sv-tags li { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: #e3d5c6; background: rgba(143, 100, 68, 0.14); border: 1px solid rgba(184, 148, 111, 0.22); }
-  .sv-link {
-    margin-top: 6px; display: inline-flex; align-items: center; gap: 14px; padding: 5px 5px 5px 18px; border-radius: 999px;
-    background: var(--sv-brown); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600;
-    transition: background 0.25s ease;
+  @media (max-width: 1100px) {
+    .sx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sx-c0, .sx-c5, .sx-c6, .sx-c7 { grid-column: span 1; }
   }
-  .sv-link:hover, .sv-link:focus-visible { background: var(--sv-brown-hi); outline: none; }
-  .sv-link-arrow { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); transition: transform 0.35s var(--sv-ease); }
-  .sv-link:hover .sv-link-arrow { transform: translateX(3px); }
-  .sv svg path[d^="M3 8"] { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .sv-arrow svg, .sv-link-arrow svg { width: 15px; height: 15px; }
-
-  @media (max-width: 900px) {
-    .sv-wrap { width: min(100% - 32px, 100%); }
-    .sv-grid { grid-template-columns: 1fr; }
-    .sv-item { padding: 14px 4px 14px 0; grid-template-columns: 20px 30px minmax(0, 1fr) 24px; column-gap: 10px; }
-    .sv-body { padding: 18px 18px 22px; }
-    .sv-lead { font-size: 16px; }
+  @media (max-width: 640px) {
+    .sx-wrap { width: min(100% - 32px, 100%); }
+    .sx-grid { grid-template-columns: 1fr; gap: 16px; }
+    .sx-media { height: 210px; }
+    .sx-lead { font-size: 16px; }
+    .sx-body { padding: 18px 18px 20px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .sv-track-fill, .sv-node, .sv-text, .sv-sub, .sv-panel, .sv-media img, .sv-arrow { transition: none !important; }
-    .sv-panel.is-active .sv-media img, .sv-panel.is-active .sv-wipe { animation: none; }
+    .sx-card, .sx-render, .sx-img, .sx-scan, .sx-video { transition: none !important; }
+    .sx-render { clip-path: none; }
+    .sx-img--model { display: none; }
   }
 </style>
 
 <script>
-  document.querySelectorAll<HTMLElement>(".sv").forEach((root) => {
-    const list = root.querySelector<HTMLElement>(".sv-list");
-    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>(".sv-item"));
-    const panels = Array.from(root.querySelectorAll<HTMLElement>(".sv-panel"));
-    let current = 0;
-    // the bronze line fills from the first stage down to the centre of the active node
-    const fillTo = (i: number) => {
-      if (!list) return;
-      const node = tabs[i].querySelector<HTMLElement>(".sv-node");
-      const track = root.querySelector<HTMLElement>(".sv-track");
-      if (!node || !track) return;
-      const y = node.getBoundingClientRect().top + node.offsetHeight / 2 - track.getBoundingClientRect().top;
-      list.style.setProperty("--fill", `${Math.max(0, y)}px`);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  document.querySelectorAll<HTMLElement>(".sx-card").forEach((card) => {
+    const media = card.querySelector<HTMLElement>(".sx-media");
+    const video = card.querySelector<HTMLVideoElement>(".sx-video");
+    let scanTimer = 0;
+
+    const turnOn = () => {
+      if (card.classList.contains("is-on")) return;
+      if (media) card.style.setProperty("--w", `${media.offsetWidth}px`);
+      card.classList.add("is-scanning");
+      // let the line appear at the left edge, then sweep
+      requestAnimationFrame(() => card.classList.add("is-on"));
+      window.clearTimeout(scanTimer);
+      scanTimer = window.setTimeout(() => card.classList.remove("is-scanning"), 900);
+      if (video && canHover && !reduce) {
+        if (!video.src) {
+          video.src = video.dataset.src || "";
+          video.addEventListener("canplay", () => video.classList.add("is-ready"), { once: true });
+        }
+        video.play().catch(() => {});
+      }
     };
-    const show = (i: number) => {
-      tabs.forEach((t, k) => {
-        t.classList.toggle("is-active", k === i);
-        t.classList.toggle("is-passed", k <= i);
-        t.setAttribute("aria-selected", String(k === i));
-        t.tabIndex = k === i ? 0 : -1;
-      });
-      // the line moves after the row has opened, so it lands on the node
-      window.setTimeout(() => { placeTrack(); fillTo(i); }, 60);
-      window.setTimeout(() => { placeTrack(); fillTo(i); }, 560);
-      if (i === current) return;
-      current = i;
-      panels.forEach((p, k) => {
-        p.classList.toggle("is-active", k === i);
-        if (k === i) p.hidden = false;
-        else window.setTimeout(() => { if (!p.classList.contains("is-active")) p.hidden = true; }, 500);
-      });
+    const turnOff = () => {
+      card.classList.remove("is-on", "is-scanning", "is-hover");
+      card.style.setProperty("--rx", "0deg");
+      card.style.setProperty("--ry", "0deg");
+      if (video) video.pause();
     };
-    tabs.forEach((t, i) => {
-      t.tabIndex = i === 0 ? 0 : -1;
-      t.addEventListener("mouseenter", () => { if (window.matchMedia("(hover: hover)").matches) show(i); });
-      t.addEventListener("focus", () => show(i));
-      t.addEventListener("click", () => {
-        show(i);
-        if (window.matchMedia("(max-width: 900px)").matches) panels[i].scrollIntoView({ behavior: "smooth", block: "center" });
-      });
-      t.addEventListener("keydown", (e) => {
-        const n = e.key === "ArrowDown" ? i + 1 : e.key === "ArrowUp" ? i - 1 : -1;
-        if (n >= 0 && n < tabs.length) { e.preventDefault(); tabs[n].focus(); }
-      });
-    });
-    // the track runs exactly from the first node to the last
-    const placeTrack = () => {
-      const nodes = tabs.map((t) => t.querySelector<HTMLElement>(".sv-node")).filter(Boolean) as HTMLElement[];
-      if (!list || nodes.length < 2) return;
-      const top = list.getBoundingClientRect().top;
-      const c = (n: HTMLElement) => n.getBoundingClientRect().top + n.offsetHeight / 2 - top;
-      list.style.setProperty("--track-top", `${c(nodes[0])}px`);
-      list.style.setProperty("--track-h", `${c(nodes[nodes.length - 1]) - c(nodes[0])}px`);
-    };
-    const sync = () => { placeTrack(); fillTo(current); };
-    window.addEventListener("resize", sync);
-    if (document.fonts?.ready) document.fonts.ready.then(sync); else sync();
-    window.setTimeout(sync, 700);
+
+    if (canHover) {
+      card.addEventListener("pointerenter", () => { card.classList.add("is-hover"); turnOn(); });
+      card.addEventListener("pointerleave", turnOff);
+      if (!reduce) {
+        card.addEventListener("pointermove", (e) => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+          card.style.setProperty("--ry", `${(x - 0.5) * 6}deg`);
+          card.style.setProperty("--rx", `${(0.5 - y) * 6}deg`);
+          card.style.setProperty("--mx", `${x * 100}%`);
+          card.style.setProperty("--my", `${y * 100}%`);
+        });
+      }
+      card.addEventListener("focus", turnOn);
+      card.addEventListener("blur", turnOff);
+    }
   });
+
+  // touch screens: each card renders by itself as it scrolls into view
+  if (!canHover) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const card = en.target as HTMLElement;
+        const media = card.querySelector<HTMLElement>(".sx-media");
+        if (media) card.style.setProperty("--w", `${media.offsetWidth}px`);
+        card.classList.add("is-scanning");
+        requestAnimationFrame(() => card.classList.add("is-on"));
+        window.setTimeout(() => card.classList.remove("is-scanning"), 900);
+        io.unobserve(card);
+      });
+    }, { threshold: 0.55 });
+    document.querySelectorAll(".sx-card").forEach((c) => io.observe(c));
+  }
 </script>
