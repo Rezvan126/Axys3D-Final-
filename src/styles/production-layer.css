@@ -255,3 +255,37 @@
 @media (hover: none) {
   .pl-card:hover, .pl-card:focus-visible { transform: none; }
 }
+/* =========================================================
+   MATCH THE PROOF SECTION ABOVE (Nov 2026)
+   Same edges (6% + 1240px), same heading style, same card corners and borders.
+========================================================= */
+.pl-section { padding: 40px 6% 100px; }
+.pl-top { align-items: flex-end; margin-bottom: 8px; }
+.pl-header { display: flex; flex-direction: column; gap: 14px; max-width: 980px; }
+.pl-title { margin: 0 !important; letter-spacing: -0.02em !important; font-weight: 800 !important; line-height: 1.1; }
+.pl-highlight { background: none; -webkit-text-fill-color: currentColor; color: #8f6444; }
+.pl-lead { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+
+.pl-track { --pl-gap: 20px; gap: var(--pl-gap); }
+.pl-section { --pl-gap: 20px; }
+.pl-card {
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 16px 32px rgba(0, 0, 0, 0.45);
+}
+.pl-card:hover, .pl-card:focus-visible {
+  border-color: rgba(143, 100, 68, 0.45);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.7), 0 0 24px rgba(91, 59, 39, 0.12);
+}
+/* soft shade under the title so it stays readable on bright renders */
+.pl-card::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.72) 100%);
+}
+.pl-card-title { font-family: "Manrope", sans-serif; font-weight: 800; }
+.pl-card:focus-visible { outline: 2px solid #d9b48c; outline-offset: 3px; }
+
+@media (max-width: 640px) {
+  .pl-section { padding: 30px 16px 70px; }
+  .pl-lead { font-size: 16px; }
+}
