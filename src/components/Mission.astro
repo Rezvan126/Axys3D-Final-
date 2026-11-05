@@ -1,19 +1,12 @@
 ---
 import "../styles/Mission.css";
-import { services } from "../data/services";
 import { platforms } from "../data/hire";
+import { tools as toolList } from "../data/tools";
 
 // Booking month: up to the 15th we book the current month, after the 15th the next month.
 // Worked out at build time and again in the visitor's browser, so it is never stale.
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const bookingMonth = (d: Date) => MONTHS[(d.getMonth() + (d.getDate() > 15 ? 1 : 0)) % 12];
-// Recent projects (from the portfolio). Kept anonymous: type and region only.
-const recentWork = [
-  { name: "Hillside residence", what: "Revit model + final render" },
-  { name: "Two-storey ADU & JADU", what: "Permit drawing set" },
-  { name: "California residence", what: "Permit-ready 3D model" },
-  { name: "Medical pavilion", what: "Exterior renders" },
-];
 
 const milestones = [
   { day: 1, text: "Brief checked", icon: "M6 3h9l3 3v15H6z M9 10h6 M9 14h6 M9 18h4" },
@@ -21,18 +14,21 @@ const milestones = [
   { day: 5, text: "In-house QC", icon: "M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4" },
   { day: 7, text: "First render", icon: "M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4" },
 ];
-// Software we deliver in: logos come from the services data (Simple Icons, CC0)
-const toolNames = ["Autodesk Revit", "Autodesk 3ds Max", "Corona Renderer", "Unreal Engine", "Blender", "Adobe After Effects"];
-const toolLabel: Record<string, string> = { "Autodesk Revit": "Revit", "Autodesk 3ds Max": "3ds Max", "Corona Renderer": "Corona", "Unreal Engine": "Unreal Engine", "Blender": "Blender", "Adobe After Effects": "After Effects" };
-const tools = toolNames.map((n) => services.find((s) => s.logo.name === n)?.logo).filter(Boolean) as { name: string; d: string }[];
+// Real work shown as image tiles in the Track record card (images already on the site)
+const workTiles = [
+  { src: "/images/stages/stage-4.jpg", title: "Hillside residence", what: "Final render" },
+  { src: "/images/stages/stage-3.jpg", title: "Hillside residence", what: "BIM model" },
+  { src: "/images/gallery/exterior-1.jpg", title: "Timber house", what: "Exterior render" },
+  { src: "/images/gallery/interior-1.jpg", title: "Lounge", what: "Interior render" },
+];
 ---
 
 <!-- PROOF — five cards, each answers one question a studio asks before hiring us -->
 <section class="mission" id="missionSection" aria-labelledby="pfTitle">
   <div class="mission-inner">
     <header class="pf-head">
-      <span class="pf-eyebrow">Why studios work with us</span>
-      <h2 id="pfTitle" class="pf-h2">Proven on <span>172 projects.</span></h2>
+      <h2 id="pfTitle" class="pf-h2">Before you hire us, <span>here is the proof.</span></h2>
+      <p class="pf-lead">Five quick answers to what studios ask us first.</p>
     </header>
 
     <div class="pf-grid">
@@ -50,17 +46,14 @@ const tools = toolNames.map((n) => services.find((s) => s.logo.name === n)?.logo
             <span class="m-label">Studio partners worldwide</span>
           </div>
         </div>
-        <div class="m-recent">
-          <span class="m-recent-head">Recent work</span>
-          <ul>
-            {recentWork.map((r) => (
-              <li>
-                <span class="m-recent-name">{r.name}</span>
-                <span class="m-recent-what">{r.what}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul class="pf-work" aria-label="Recent work">
+          {workTiles.map((w) => (
+            <li>
+              <img src={w.src} alt={`${w.title}: ${w.what}`} loading="lazy" decoding="async" />
+              <span class="pf-work-cap"><b>{w.title}</b><small>{w.what}</small></span>
+            </li>
+          ))}
+        </ul>
         <a class="pf-link" href="/visuals">See the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
       </article>
 
@@ -130,7 +123,7 @@ const tools = toolNames.map((n) => services.find((s) => s.logo.name === n)?.logo
             <text class="m-sh-txt" x="189" y="127">ELEVATION A</text>
             <text class="m-sh-txt" x="189" y="140">1:100</text>
             <text class="m-sh-txt m-sh-strong" x="213" y="140">A201</text>
-            <text class="m-sh-txt" x="189" y="16">REV C</text>
+            <text class="m-sh-txt" x="189" y="98">REV C</text>
             <path class="m-sh-axis" d="M30 26 V126 M98 26 V126 M166 26 V126" />
             <circle class="m-sh-bubble" cx="30" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="30" y="22">A</text>
             <circle class="m-sh-bubble" cx="98" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="98" y="22">B</text>
@@ -155,10 +148,10 @@ const tools = toolNames.map((n) => services.find((s) => s.logo.name === n)?.logo
         <span class="pf-label">Software</span>
         <h3 class="pf-h3">Delivered in the tools you already use</h3>
         <ul class="pf-logos">
-          {tools.map((t) => (
+          {toolList.map((t) => (
             <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d={t.d} /></svg>
-              <span>{toolLabel[t.name]}</span>
+              {t.d ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d={t.d} /></svg> : <span class="pf-mark" aria-hidden="true">{t.mark}</span>}
+              <span>{t.name}</span>
             </li>
           ))}
         </ul>
@@ -169,15 +162,26 @@ const tools = toolNames.map((n) => services.find((s) => s.logo.name === n)?.logo
       <article class="mission-card pf-card pf-safe" data-reveal>
         <span class="pf-label">Hiring</span>
         <h3 class="pf-h3">Safe, simple payment</h3>
+        <ol class="pf-flow" aria-label="How payment works">
+          <li>
+            <span class="pf-flow-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h18v10H3z M3 10h18 M7 14h3" /></svg></span>
+            <b>You pay</b><small>into Upwork or Fiverr</small>
+          </li>
+          <li>
+            <span class="pf-flow-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4" /></svg></span>
+            <b>Held safely</b><small>by the platform</small>
+          </li>
+          <li>
+            <span class="pf-flow-ico pf-flow-ico--end" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></span>
+            <b>You approve</b><small>then we are paid</small>
+          </li>
+        </ol>
         <div class="pf-platforms">
-          <span class="pf-platform"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.upwork.logo} /></svg>Upwork</span>
-          <span class="pf-platform"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.fiverr.logo} /></svg>Fiverr</span>
+          <span class="pf-platform pf-platform--up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.upwork.logo} /></svg>Upwork</span>
+          <span class="pf-platform pf-platform--fv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.fiverr.logo} /></svg>Fiverr</span>
+          <span class="pf-tag">Written contract</span>
+          <span class="pf-tag">NDA on request</span>
         </div>
-        <ul class="pf-checks">
-          <li>Your payment is held by the platform until you approve the work</li>
-          <li>A written contract on every job</li>
-          <li>NDA on request</li>
-        </ul>
         <a class="pf-link" href="/hire">How hiring works <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
       </article>
 
