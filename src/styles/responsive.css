@@ -270,7 +270,7 @@ h1, h2, h3, h4, p, li, a, span, label, dd, dt {
 @media (max-width: 480px) {
   .cta-card { padding: 24px 20px; }
   .cta-card p { font-size: 15px; margin-bottom: 24px; }
-  .cta-main h2 { letter-spacing: -0.045em !important; }
+  .cta-main h2 { letter-spacing: -0.01em !important; }
 }
 
 

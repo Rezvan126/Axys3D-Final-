@@ -19,7 +19,7 @@
   background: var(--brown);
   color: var(--text-white);
   padding: 80px 0 30px;
-  font-family: "Manrope", sans-serif;
+  font-family: "Barlow", sans-serif;
   border-top: 1px solid var(--border-line);
 }
 
@@ -58,7 +58,7 @@
 
 .footer-logo {
   font-size: 30px;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--text-white);
   text-decoration: none;
   letter-spacing: -0.5px;
@@ -94,7 +94,7 @@
 .footer-heading {
   display: block;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--text-dim);
   margin-bottom: 18px;

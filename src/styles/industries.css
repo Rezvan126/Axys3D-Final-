@@ -26,7 +26,7 @@
 .page-industries {
   background: var(--ind-blue);
   color: var(--ind-white);
-  font-family: 'Manrope', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
 }
 
 /* =========================================================
@@ -180,7 +180,7 @@
 .ind-kicker {
   display: block;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--ind-brown-light);
   margin-bottom: 20px;
@@ -191,7 +191,7 @@
   margin: 0 0 20px;
   font-size: clamp(25px, 6vw, 70px);
   line-height: 1.1 !important;
-  letter-spacing: -0.05em !important;
+  letter-spacing: -0.01em !important;
   transition: opacity 0.2s ease;
 }
 
@@ -254,8 +254,8 @@ html {
 .ind-sec-h2 {
   margin: 0;
   font-size: clamp(26px, 3.4vw, 44px);
-  font-weight: 700;
-  letter-spacing: -0.045em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.2;
   color: var(--ind-white);
 }
@@ -334,7 +334,7 @@ html {
 
 .ind-stat-label {
   font-size: 11.5px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ind-text);
@@ -360,7 +360,7 @@ html {
 .ind-stat-num {
   font-size: clamp(33px, 4.6vw, 55px);
   font-weight: 600;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   color: var(--ind-white);
 }
@@ -368,7 +368,7 @@ html {
 .ind-stat-plus {
   margin: 0.08em 0 0 4px;
   font-size: clamp(20px, 2.2vw, 30px);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
   color: #e5484d;
 }
@@ -489,7 +489,7 @@ html {
 
 .ind-card-num {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.1em;
   color: var(--ind-brown-light);
   margin-bottom: 14px;
@@ -497,7 +497,7 @@ html {
 
 .ind-card-target {
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ind-muted);
@@ -508,8 +508,8 @@ html {
   margin: 0 0 12px;
   max-width: 420px;
   font-size: clamp(26px, 2.8vw, 38px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.2;
 }
 
@@ -607,8 +607,8 @@ html {
 .ind-final-inner h2 {
   margin: 0 0 20px;
   font-size: clamp(38px, 5.5vw, 68px);
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.18;
 }
 
@@ -633,7 +633,7 @@ html {
   background: var(--ind-brown-light);
   text-decoration: none;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
@@ -774,7 +774,7 @@ html {
    AXYS3D DESIGN SYSTEM — Howitworks jaisi styling
    ========================================================= */
 .industries-page,
-.page-industries { font-family: 'Manrope', system-ui, sans-serif !important; }
+.page-industries { font-family: "Barlow", system-ui, sans-serif !important; }
 
 .industries-page h1,
 .page-industries h1,
@@ -784,8 +784,8 @@ html {
 .page-industries [class*="-h1"],
 .industries-page [class*="-h2"],
 .page-industries [class*="-h2"] {
-  font-family: 'Manrope', 'Inter', system-ui, sans-serif !important;
-  font-weight: 800 !important;
+  font-family: "Barlow", "Barlow", system-ui, sans-serif !important;
+  font-weight: 600 !important;
   letter-spacing: -0.02em !important;
   line-height: 1.05 !important;
   font-optical-sizing: auto;
@@ -809,7 +809,7 @@ html {
 .page-industries [class*="kicker"],
 .industries-page [class*="eyebrow"],
 .page-industries [class*="eyebrow"] {
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   font-size: clamp(0.55rem, 0.65vw, 0.72rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;
@@ -872,11 +872,11 @@ html {
    HERO — Services page jaisi styling
    ========================================================= */
 .industries-page .ind-h1 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.5rem, 4.4vw, 4.2rem) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 0.95 !important;
-  letter-spacing: -0.065em !important;
+  letter-spacing: -0.01em !important;
   max-width: 100%;
   margin: 10px 0 0 !important;
   color: #ffffff;
@@ -938,19 +938,19 @@ html {
 .page-industries h2,
 .page-industries h3,
 .page-industries h4 {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.065em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 0.95 !important;
   -webkit-font-smoothing: antialiased;
 }
 
 .industries-page .ind-h1,
 .page-industries .ind-h1 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.5rem, 4.4vw, 4.2rem) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.065em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 0.95 !important;
   color: #ffffff !important;
 }
@@ -971,19 +971,19 @@ html {
 .industries-page .ind-subheading-2,
 .page-industries .ind-subheading,
 .page-industries .ind-subheading-2 {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.055em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 1.05 !important;
   color: #ffffff !important;
 }
 
 .industries-page .ind-sec-h2,
 .page-industries .ind-sec-h2 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2rem, 3.8vw, 3.5rem) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.065em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 0.98 !important;
   color: #ffffff !important;
 }
@@ -1005,9 +1005,9 @@ html {
 .page-industries .ind-card h2,
 .page-industries .ind-card h3,
 .page-industries .ind-card-title {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.055em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 1.05 !important;
   color: #ffffff !important;
 }
@@ -1018,10 +1018,10 @@ html {
 .page-industries .ind-final-inner h2,
 .page-industries .ind-final-cta h2,
 .page-industries .ind-cta h2 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.3rem, 6vw, 4rem) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.065em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 0.95 !important;
   color: #ffffff !important;
 }
@@ -1044,9 +1044,9 @@ html {
 .page-industries .ind-cta a,
 .page-industries .ind-final-button,
 .page-industries .ind-final-btn {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.04em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
 }
 
 @media (max-width: 680px) {
@@ -1082,8 +1082,8 @@ html {
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Manrope (work.css ke mutabiq)
-   Font: Manrope 800, letter-spacing -0.015em.
+   SAB HEADINGS + CTA — Barlow (work.css ke mutabiq)
+   Font: Barlow 800, letter-spacing -0.015em.
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -1106,8 +1106,8 @@ html body h6:not(#a):not(#b) *,
 html body .ind-h1:not(#a):not(#b) *,
 html body .ind-sec-h2:not(#a):not(#b) *,
 html body .ind-card-title:not(#a):not(#b) * {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 800 !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -1131,7 +1131,7 @@ html body .ind-final-button:not(#a):not(#b),
 html body .ind-final-btn:not(#a):not(#b),
 html body .ins-btn-primary:not(#a):not(#b),
 html body .cnt-submit:not(#a):not(#b) {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 

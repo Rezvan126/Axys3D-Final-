@@ -6,7 +6,7 @@
 .page-service-detail {
   background: #000000;
   color: #ffffff;
-  font-family: 'Manrope', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   position: relative;
 }
 
@@ -47,9 +47,9 @@
 .svcd-label {
   display: block;
   margin-bottom: 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);
@@ -58,9 +58,9 @@
 .svcd-kicker {
   display: block;
   margin-bottom: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--brown-light);
@@ -80,10 +80,10 @@
 
 .svcd-h2 {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(24px, 2.7vw, 36px);
-  font-weight: 700;
-  letter-spacing: -0.045em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.1;
   color: #ffffff;
 }
@@ -134,9 +134,9 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   gap: 14px;
   padding: 15px 30px;
   border-radius: 999px;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-decoration: none;
   transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
@@ -171,7 +171,7 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   display: flex;
   gap: 10px;
   margin-bottom: 26px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 12.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -184,11 +184,11 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
 .svcd-h1 {
   margin: 0 0 20px;
   max-width: 16ch;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(32px, 4.4vw, 58px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.04;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.01em;
   color: #ffffff;
 }
 
@@ -252,8 +252,8 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   padding: 0;
   border: 0;
   font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.25;
   color: #ffffff;
 }
@@ -276,9 +276,9 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
 .svcd-grp { margin: 0 0 14px; }
 .svcd-grp h4 {
   margin: 0 0 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #c9a07a;
@@ -296,9 +296,9 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   padding: 6px 0 0;
   background: none;
   border: 0;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   color: #c9a07a;
   cursor: pointer;
 }
@@ -351,11 +351,11 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   text-align: center;
 }
 .svcd-band-grid b {
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(36px, 4.4vw, 58px);
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
   color: #ffffff;
 }
 .svcd-band-grid small { font-size: 0.45em; color: var(--brown-light); margin-left: 2px; }
@@ -440,7 +440,7 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
-.svcd-note h3 { margin: 0 0 14px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--brown-light); }
+.svcd-note h3 { margin: 0 0 14px; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; color: var(--brown-light); }
 .svcd-note ul { margin: 0; padding-left: 18px; }
 .svcd-note li { margin-bottom: 10px; font-size: 14.5px; line-height: 1.65; color: #d6d0cc; }
 .svcd-note li::marker { color: var(--brown-light); }
@@ -454,9 +454,9 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   transition: background 0.35s ease, transform 0.4s ease;
 }
 .svcd-note--light:hover { background: #c4beb9; transform: translateY(-3px); }
-.svcd-note--light h3 { color: #1a1511; font-size: 20px; letter-spacing: -0.03em; }
+.svcd-note--light h3 { color: #1a1511; font-size: 20px; letter-spacing: -0.01em; }
 .svcd-note--light p { color: #3a312a; }
-.svcd-note--light a { font-size: 15px; font-weight: 700; color: #3b2415; text-decoration: underline; text-underline-offset: 4px; }
+.svcd-note--light a { font-size: 15px; font-weight: 600; color: #3b2415; text-decoration: underline; text-underline-offset: 4px; }
 .svcd-note--light a:hover { color: #000000; }
 
 /* ---------- PROJECTS (dark, full width) ---------- */
@@ -516,16 +516,16 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
 
 .svcd-proj-body { display: flex; flex-direction: column; gap: 4px; padding: 16px 10px 10px; }
 .svcd-proj-body em {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 11.5px;
   font-style: normal;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #c9a07a;
 }
-.svcd-proj-body strong { font-size: 18px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.25; color: #ffffff; }
+.svcd-proj-body strong { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; color: #ffffff; }
 .svcd-proj-body small { font-size: 14px; color: #b5b0ad; }
-.svcd-proj-go { margin-top: 8px; font-size: 14px; font-weight: 700; color: #c9a07a; }
+.svcd-proj-go { margin-top: 8px; font-size: 14px; font-weight: 600; color: #c9a07a; }
 .svcd-proj-go i { font-style: normal; transition: transform 0.3s ease; display: inline-block; }
 .svcd-proj:hover .svcd-proj-go i { transform: translate(3px, -3px); }
 
@@ -550,7 +550,7 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   cursor: pointer;
   color: #ffffff;
 }
-.svcd-faq-text { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.35; transition: color 0.25s ease; }
+.svcd-faq-text { font-family: "Barlow", sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; transition: color 0.25s ease; }
 .svcd-faq-q:hover .svcd-faq-text, .svcd-faq-item.is-open .svcd-faq-text { color: var(--brown-light); }
 
 .svcd-faq-plus { position: relative; width: 32px; height: 32px; border-radius: 50%; border: 1px solid #5a5a5e; transition: background 0.3s ease, border-color 0.3s ease; }
@@ -599,10 +599,10 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
 .svcd-final-inner { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 .svcd-final-inner h2 {
   margin: 0 0 16px;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(1.8rem, 3.8vw, 3rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.05;
   color: #ffffff;
 }
@@ -616,9 +616,9 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
   background: var(--deep);
   border: 1px solid var(--deep);
   color: #ffffff;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-decoration: none;
   transition: transform 0.3s ease, background 0.3s ease;
@@ -666,8 +666,8 @@ html:not(.js) .svcd-reveal { opacity: 1; transform: none; }
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Manrope (work.css ke mutabiq)
-   Font: Manrope 800, letter-spacing -0.015em.
+   SAB HEADINGS + CTA — Barlow (work.css ke mutabiq)
+   Font: Barlow 800, letter-spacing -0.015em.
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -690,8 +690,8 @@ html body h6:not(#a):not(#b) *,
 html body .svcd-h1:not(#a):not(#b) *,
 html body .svcd-h2:not(#a):not(#b) *,
 html body .svcd-card-title:not(#a):not(#b) * {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 800 !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -713,7 +713,7 @@ html body [class*="final-btn"]:not(#a):not(#b),
 html body .svcd-final-btn:not(#a):not(#b),
 html body .svcd-btn:not(#a):not(#b),
 html body .svcd-more-btn:not(#a):not(#b) {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 

@@ -17,8 +17,8 @@ Rules for every change to this site. Follow these exactly; ask before deviating.
 
 - **Background:** near-black `#050506`. Hero gradient (keep exactly): brown glow `rgba(143,100,68,.28)` at 73% 50% + brown wash `rgba(91,59,39,.30)` to bottom-right.
 - **Bronze palette:** `#5b3b27` (brown), `#8f6444` (brown-hi / accent words), `#b8946f` (brown-lt / labels), `#d9b48c` / `#e3c8a8` (sand).
-- **Fonts (only two):** Manrope for all headings and big numbers; Inter for everything else. Loaded once in `src/styles/global.css`.
-- **Heading scale (global.css tokens):** H1 40–60px, H2 30–48px, H3 19–22px, H4 16px, all Manrope 800. Pages must not override sizes.
+- **Font (one family, two weights):** Barlow, chosen for the AEC world (DIN / technical-lettering roots, like drawing title blocks). 400 for body text, 600 for headings, numbers, labels and buttons. Build hierarchy from size and weight only. Self-hosted via `@fontsource/barlow` (imported in `src/styles/global.css`, preloaded in `SEO.astro`) so every visitor gets the same files. No other fonts, no other weights.
+- **Heading scale (global.css tokens):** H1 40–60px, H2 30–48px, H3 19–22px, H4 16px, all Barlow 600. Pages must not override sizes.
 - **Header:** single floating glass bar; current page marked by the liquid-glass pill (spring motion, `Navbar.astro`). CTA = gold bevelled rim, pearl face, brown text.
 
 ## Site structure

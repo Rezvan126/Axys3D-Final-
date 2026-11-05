@@ -6,7 +6,7 @@
 .page-industry-single {
   background: #000000;
   color: #ffffff;
-  font-family: 'Manrope', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   position: relative;
 }
 
@@ -54,9 +54,9 @@
 .indd-label {
   display: block;
   margin-bottom: 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted);
@@ -65,9 +65,9 @@
 .indd-kicker {
   display: block;
   margin-bottom: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--brown-light);
@@ -86,10 +86,10 @@
 
 .indd-h2 {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(24px, 2.7vw, 36px);
-  font-weight: 700;
-  letter-spacing: -0.045em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.1;
   color: #ffffff;
 }
@@ -146,9 +146,9 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   gap: 14px;
   padding: 14px 28px;
   border-radius: 999px;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-decoration: none;
   transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
@@ -187,7 +187,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   display: flex;
   gap: 10px;
   margin-bottom: 26px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -200,11 +200,11 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 .indd-h1 {
   margin: 0 0 20px;
   max-width: 16ch;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(32px, 4.4vw, 58px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.04;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.01em;
   color: #ffffff;
 }
 
@@ -246,9 +246,9 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 .indd-tag {
   display: block;
   margin-bottom: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 10.5px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #c9a07a;
@@ -264,7 +264,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   transition: background 0.35s ease, transform 0.5s ease, box-shadow 0.4s ease;
 }
 .indd-card:hover { transform: translateY(-4px); background: #2a1e16; box-shadow: inset 0 0 0 1px rgba(201, 160, 122, 0.5), 0 24px 48px rgba(0, 0, 0, 0.35); }
-.indd-card h3 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.25; color: #ffffff; }
+.indd-card h3 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; color: #ffffff; }
 .indd-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 11px; }
 .indd-list li { display: flex; gap: 10px; font-size: 13px; line-height: 1.55; color: #d6d0cc; }
 .indd-list svg {
@@ -290,7 +290,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   padding: 24px 22px 22px;
   border-radius: 22px;
 }
-.indd-tile b { display: block; font-family: 'Manrope', sans-serif; font-size: clamp(40px, 4vw, 56px); font-weight: 700; line-height: 1; letter-spacing: -0.05em; }
+.indd-tile b { display: block; font-family: "Barlow", sans-serif; font-size: clamp(40px, 4vw, 56px); font-weight: 600; line-height: 1; letter-spacing: -0.01em; }
 .indd-tile p { margin: 10px 0 0; font-size: 13px; line-height: 1.55; }
 .indd-tile--black { background: #151517; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); color: #ffffff; }
 .indd-tile--black .indd-tag { color: var(--brown-light); }
@@ -348,7 +348,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   stroke-linejoin: round; 
 }
 .indd-step-num { 
-  font-family: 'Inter', system-ui, sans-serif; 
+  font-family: "Barlow", system-ui, sans-serif; 
   font-size: 11px; 
   letter-spacing: 0.18em; 
   color: rgba(255, 255, 255, 0.55); 
@@ -356,8 +356,8 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 .indd-step h3 { 
   margin: 0; 
   font-size: 18px; 
-  font-weight: 700; 
-  letter-spacing: -0.03em; 
+  font-weight: 600; 
+  letter-spacing: -0.01em; 
   color: #ffffff; 
 }
 .indd-step p { 
@@ -435,8 +435,8 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 .indd-svc-row-top h3 {
   margin: 0;
   font-size: 21px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: #ffffff;
 }
 
@@ -493,7 +493,7 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   border-radius: 999px;
   background: #1c1c1f;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  font-family: 'Inter', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 11px;
   color: #cfc9c5;
 }
@@ -631,16 +631,16 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 
 .indd-proj-body { display: flex; flex-direction: column; gap: 4px; padding: 14px 8px 8px; }
 .indd-proj-body em {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 10px;
   font-style: normal;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #c9a07a;
 }
-.indd-proj-body strong { font-size: 16px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.25; color: #ffffff; }
+.indd-proj-body strong { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; color: #ffffff; }
 .indd-proj-body small { font-size: 12.5px; color: #b5b0ad; }
-.indd-proj-go { margin-top: 8px; font-size: 12.5px; font-weight: 700; color: #c9a07a; }
+.indd-proj-go { margin-top: 8px; font-size: 12.5px; font-weight: 600; color: #c9a07a; }
 .indd-proj-go i { font-style: normal; transition: transform 0.3s ease; display: inline-block; }
 .indd-proj:hover .indd-proj-go i { transform: translate(3px, -3px); }
 
@@ -669,10 +669,10 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 .indd-final-inner { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 .indd-final-inner h2 {
   margin: 0 0 16px;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(1.8rem, 3.8vw, 3rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.05;
   color: #ffffff;
 }
@@ -686,9 +686,9 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
   background: var(--deep);
   border: 1px solid var(--deep);
   color: #ffffff;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-decoration: none;
   transition: transform 0.3s ease, background 0.3s ease;
@@ -740,8 +740,8 @@ html:not(.js) .indd-reveal { opacity: 1; transform: none; }
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Manrope (work.css ke mutabiq)
-   Font: Manrope 800, letter-spacing -0.015em.
+   SAB HEADINGS + CTA — Barlow (work.css ke mutabiq)
+   Font: Barlow 800, letter-spacing -0.015em.
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -761,8 +761,8 @@ html body h5:not(#a):not(#b) *,
 html body h6:not(#a):not(#b) *,
 html body .indd-h1:not(#a):not(#b) *,
 html body .indd-h2:not(#a):not(#b) * {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 800 !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -784,7 +784,7 @@ html body [class*="final-btn"]:not(#a):not(#b),
 html body .indd-final-btn:not(#a):not(#b),
 html body .indd-btn:not(#a):not(#b),
 html body .indd-svc-row-btn:not(#a):not(#b) {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 

@@ -26,7 +26,7 @@
 .page-work {
   background: var(--wrk-blue);
   color: var(--wrk-white);
-  font-family: 'Manrope', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
 }
 
 /* =========================================================
@@ -191,7 +191,7 @@
 .wrk-kicker {
   display: block;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--wrk-brown-light);
   margin-bottom: 20px;
@@ -200,11 +200,11 @@
 .wrk-h1 {
   max-width: 820px;
   margin: 10px 0 0 !important;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.3rem, 6vw, 4rem) !important;
   line-height: 0.95 !important;
-  letter-spacing: -0.065em !important;
-  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 600 !important;
   transition: opacity 0.2s ease;
 }
 
@@ -274,10 +274,10 @@ html {
 
 .wrk-sec-h2 {
   margin: 0;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.1rem, 4.5vw, 3rem) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.065em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 0.95 !important;
   color: var(--wrk-white);
 }
@@ -314,7 +314,7 @@ html {
   gap: 14px;
   padding-bottom: 8px;
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--wrk-brown-light);
 }
@@ -428,7 +428,7 @@ html {
 
 .wrk-card-num {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.1em;
   color: var(--wrk-brown-light);
   margin-bottom: 14px;
@@ -436,7 +436,7 @@ html {
 
 .wrk-card-target {
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--wrk-muted);
@@ -446,10 +446,10 @@ html {
 .wrk-card-title {
   margin: 0 0 12px;
   max-width: 420px;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(22px, 2.4vw, 34px) !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.065em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 1.05 !important;
 }
 
@@ -595,11 +595,11 @@ html {
 
 /* CTA heading — exact same styling as Services */
 .wrk-final-inner h2 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.3rem, 6vw, 4rem) !important;
   line-height: 0.95 !important;
-  letter-spacing: -0.065em !important;
-  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 600 !important;
   margin: 10px 0 10px !important;
   padding: 0 !important;
 }
@@ -625,9 +625,9 @@ html {
   color: #ffffff;
   background: var(--wrk-brown-light);
   text-decoration: none;
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.065em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   font-size: 13px;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
@@ -835,16 +835,16 @@ html {
 
 .isl-tag-num {
   fill: #8f6444;
-  font-family: 'Inter', ui-monospace, SFMono-Regular, Menlo, sans-serif;
+  font-family: "Barlow", ui-monospace, SFMono-Regular, Menlo, sans-serif;
   font-size: 8px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   opacity: 0.75;
 }
 
 .isl-tag-title {
   fill: #aea7a3;
-  font-family: 'Manrope', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
   font-size: 8.5px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -1043,7 +1043,7 @@ html {
    AXYS3D DESIGN SYSTEM — Headings Styling
    ========================================================= */
 .work-page,
-.page-work { font-family: 'Manrope', system-ui, sans-serif !important; }
+.page-work { font-family: "Barlow", system-ui, sans-serif !important; }
 
 /* Tamam Headings ko same Services style dena */
 .work-page h1,
@@ -1056,9 +1056,9 @@ html {
 .page-work [class*="-h1"],
 .work-page [class*="-h2"],
 .page-work [class*="-h2"] {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.065em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 0.95 !important;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
@@ -1083,7 +1083,7 @@ html {
 .page-work [class*="kicker"],
 .work-page [class*="eyebrow"],
 .page-work [class*="eyebrow"] {
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   font-size: clamp(0.55rem, 0.65vw, 0.72rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;
@@ -1100,9 +1100,9 @@ html {
 
 /* CTA buttons = heading font + tight letter-spacing */
 [class*="final-button"], [class*="final-btn"], .final-cta-button, .wrk-final-button, .ins-btn-primary, .cnt-submit {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.065em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   background: #5b3b27 !important;
   border-color: #5b3b27 !important;
   color: #ffffff !important;
@@ -1151,11 +1151,11 @@ html {
    HERO — Services page jaisi styling (Work)
    ========================================================= */
 .work-page .wrk-h1 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.5rem, 4.4vw, 4.2rem) !important;
-  font-weight: 900 !important;
+  font-weight: 600 !important;
   line-height: 0.95 !important;
-  letter-spacing: -0.065em !important;
+  letter-spacing: -0.01em !important;
   max-width: 100%;
   margin: 10px 0 0 !important;
   color: #ffffff;
@@ -1233,11 +1233,11 @@ html {
 .work-page .wrk-final-inner h2 span,
 .page-work .wrk-final-inner h2,
 .page-work .wrk-final-inner h2 span {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.3rem, 6vw, 4rem) !important;
-  font-weight: 900 !important;
+  font-weight: 600 !important;
   line-height: 0.95 !important;
-  letter-spacing: -0.065em !important;
+  letter-spacing: -0.01em !important;
   margin: 10px 0 0 !important;
   padding: 0 !important;
   margin-bottom: 10px;
@@ -1247,18 +1247,18 @@ html {
 .work-page .wrk-final-button *,
 .page-work .wrk-final-button,
 .page-work .wrk-final-button * {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.065em !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Manrope (sab pages par ek jaisa)
-   Font: Manrope 800, letter-spacing -0.015em.
+   SAB HEADINGS + CTA — Barlow (sab pages par ek jaisa)
+   Font: Barlow 800, letter-spacing -0.015em.
    Page ke h1-h6, section titles, card titles aur CTA (final-cta) sab cover hain.
    Hero title ka size/line-height neeche alag hai, baaki headings apna
    size rakhti hain. Selector jaan-boojh kar mazboot hai kyunke purane
-   "Tamam Headings" rules !important ke saath Manrope laga rahe the.
+   "Tamam Headings" rules !important ke saath Barlow laga rahe the.
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -1280,8 +1280,8 @@ html body .wrk-sec-h2:not(#a):not(#b) *,
 html body .wrk-card-title:not(#a):not(#b) *,
 html body .isl-tag-title:not(#a):not(#b) *,
 html body .wrk-h1:not(#a):not(#b) * {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 800 !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -1305,7 +1305,7 @@ html body .wrk-final-button:not(#a):not(#b),
 html body .wrk-final-btn:not(#a):not(#b),
 html body .ins-btn-primary:not(#a):not(#b),
 html body .cnt-submit:not(#a):not(#b) {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -1315,7 +1315,7 @@ html body .cnt-submit:not(#a):not(#b) {
 .wrk-intro-media .isl-flow { filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.45)); }
 .isl-tag-num { font-size: 10px; letter-spacing: 0.16em; opacity: 0.9; }
 .isl-tag-title { font-size: 11.5px; letter-spacing: 0.06em; fill: #d6d3d0; }
-.isl-tag-title { font-weight: 700; }
+.isl-tag-title { font-weight: 600; }
 .isl-cad-grid { stroke: #8f8b88; }
 
 

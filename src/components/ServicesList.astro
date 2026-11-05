@@ -69,7 +69,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
 
 <style>
   /* edges and heading match the proof section above (6% sides, 1240px wide) */
-  .svl { position: relative; padding: 40px 6% 100px; color: #fff; font-family: "Inter", system-ui, sans-serif; }
+  .svl { position: relative; padding: 40px 6% 100px; color: #fff; font-family: "Barlow", system-ui, sans-serif; }
   .svl-wrap { max-width: 1240px; margin: 0 auto; }
   .svl-head { display: flex; flex-direction: column; gap: 14px; max-width: 980px; margin-bottom: 36px; }
   .svl-title { margin: 0; }
@@ -98,7 +98,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
   .svc-card:hover { border-color: rgba(143, 100, 68, 0.5); }
   .svc-card:focus-visible { box-shadow: 0 0 0 2px #d9b48c; }
 
-  .svc-card-num { font-size: clamp(22px, 2.2vw, 32px); font-weight: 500; letter-spacing: -0.02em; color: #5a5a5a; transition: color 0.35s ease; }
+  .svc-card-num { font-size: clamp(22px, 2.2vw, 32px); font-weight: 400; letter-spacing: -0.02em; color: #5a5a5a; transition: color 0.35s ease; }
   .svc-card:is(:hover, :focus-within) .svc-card-num { color: #b8946f; }
 
   .svc-card-media {
@@ -116,7 +116,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
   html body .svl h3.svc-card-title:not(#_):not(#_):not(#_) {
     margin: 0;
     font-size: clamp(20px, 1.8vw, 26px) !important;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1.15 !important;
     color: #ffffff;
     transition: font-size 0.45s ease;
@@ -130,7 +130,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
   .svc-card-link {
     display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 9px 16px; border-radius: 999px;
     background: #5b3b27; color: #ffffff; text-decoration: none;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
     transition: background 0.3s ease;
   }
   .svc-card-link:hover, .svc-card-link:focus-visible { background: #6b452c; outline: none; }

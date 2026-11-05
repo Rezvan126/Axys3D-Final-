@@ -3,7 +3,7 @@
    Pinned section: the image starts lined up with the other sections,
    expands to the full screen, then sweeps from sketch to render.
 ========================================================= */
-.sg { position: relative; background: #000; color: #fff; font-family: "Inter", system-ui, sans-serif; }
+.sg { position: relative; background: #000; color: #fff; font-family: "Barlow", system-ui, sans-serif; }
 .sg.is-pinned { height: 420vh; }
 .sg-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 

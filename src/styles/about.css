@@ -24,7 +24,7 @@
 .page-about {
   background: var(--abt-blue);
   color: var(--abt-white);
-  font-family: 'Manrope', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
 }
 
 /* HERO background: halka brown + grey gradient (neeche black mein fade, taake section ki line na dikhe) */
@@ -76,9 +76,9 @@
 
 .abt-kicker {
   display: block;
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   font-size: 11px !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   letter-spacing: 0.24em !important;
   text-transform: uppercase !important;
   color: var(--abt-muted) !important;
@@ -87,11 +87,11 @@
 
 .abt-h1 {
   margin: 10px auto 24px !important;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.5rem, 4.8vw, 4.5rem);
   line-height: 1.1 !important;
-  letter-spacing: -0.05em !important;
-  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 600 !important;
   color: #ffffff;
   max-width: 22ch; 
 }
@@ -130,9 +130,9 @@
   background: none;
   border: 0;
   box-shadow: none;
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   font-size: 11px !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   letter-spacing: 0.22em !important;
   text-transform: uppercase !important;
   color: var(--abt-muted) !important;
@@ -147,8 +147,8 @@
 
 .abt-section-title-wrap h2 {
   font-size: clamp(30px, 4.2vw, 54px);
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.1;
   color: #ffffff;
   margin: 0 0 16px;
@@ -200,10 +200,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: #717178;
   transition: color 0.3s ease;
 }
@@ -267,9 +267,9 @@
 
 .abt-bento-card--tall h3 {
   font-size: clamp(21px, 2.2vw, 27px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.25;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.01em;
   color: #ffffff;
   margin: 0 0 26px;
 }
@@ -285,7 +285,7 @@
   border: 1px solid #8f6444;
   color: #ffffff;
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
   transition: all 0.3s ease;
 }
@@ -323,7 +323,7 @@
 .abt-bento-card--handshake h4 {
   margin: 0;
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.3;
   color: #ffffff;
 }
@@ -355,11 +355,11 @@
 }
 
 .abt-bento-stat-item .abt-stat-num {
-  font-family: 'Manrope', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: clamp(28px, 2.8vw, 38px);
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
   color: #ffffff;
   display: flex;
   align-items: baseline;
@@ -415,9 +415,9 @@
 
 .abt-bento-wide-content h3 {
   font-size: clamp(24px, 2.6vw, 34px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.25;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.01em;
   color: #ffffff;
   margin: 0 0 16px;
 }
@@ -455,10 +455,10 @@
 
 .abt-principles-h2 {
   margin: 0 0 18px;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(30px, 3.8vw, 50px);
-  font-weight: 700 !important;
-  letter-spacing: -0.05em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 1.05 !important;
   color: #ffffff;
 }
@@ -501,9 +501,9 @@
 }
 
 .abt-principle-card-grey .abt-card-num {
-  font-family: 'Inter', sans-serif;
+  font-family: "Barlow", sans-serif;
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 600;
   color: #8f6444;
   margin-bottom: 14px;
   line-height: 1;
@@ -511,10 +511,10 @@
 
 .abt-principle-card-grey .abt-card-title {
   margin: 0 0 10px;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: 17px;
-  font-weight: 700 !important;
-  letter-spacing: -0.03em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 1.25;
   color: #ffffff;
 }
@@ -582,7 +582,7 @@
 .abt-team-badge-info h4 {
   margin: 0;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   color: #111111;
   letter-spacing: -0.02em;
 }
@@ -604,7 +604,7 @@
   color: #0a66c2;
   text-decoration: none;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
@@ -668,7 +668,7 @@
   font-size: 14px;
   line-height: 1.68;
   color: #2b2b2e;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.01em;
 }
 
@@ -699,7 +699,7 @@
 .abt-bubble-meta b {
   display: block;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
   line-height: 1.2;
 }
@@ -732,10 +732,10 @@
 }
 
 .abt-final-inner h2 {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: clamp(2.3rem, 5.5vw, 4.2rem) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.05em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   line-height: 1.05 !important;
   margin: 0 0 36px 0 !important;
   padding: 0 !important;
@@ -754,10 +754,10 @@
   background: #5b3b27 !important;
   border: 1px solid #5b3b27;
   text-decoration: none;
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   font-size: 13.5px;
-  font-weight: 700 !important;
-  letter-spacing: -0.03em !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
   margin-top: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
@@ -844,7 +844,7 @@
 }
 
 /* =========================================================
-   SAB HEADINGS + CTA — Manrope
+   SAB HEADINGS + CTA — Barlow
    ========================================================= */
 html body h1:not(#a):not(#b),
 html body h2:not(#a):not(#b),
@@ -866,8 +866,8 @@ html body h5:not(#a):not(#b) *,
 html body h6:not(#a):not(#b) *,
 html body .abt-h1:not(#a):not(#b) *,
 html body .abt-section-title-wrap h2:not(#a):not(#b) * {
-  font-family: 'Manrope', sans-serif !important;
-  font-weight: 800 !important;
+  font-family: "Barlow", sans-serif !important;
+  font-weight: 600 !important;
   letter-spacing: -0.015em !important;
 }
 
@@ -886,7 +886,7 @@ html body [class*="final-button"]:not(#a):not(#b),
 html body [class*="final-btn"]:not(#a):not(#b),
 html body .abt-final-button:not(#a):not(#b),
 html body .abt-bento-pill-btn:not(#a):not(#b) {
-  font-family: 'Manrope', sans-serif !important;
+  font-family: "Barlow", sans-serif !important;
   letter-spacing: -0.015em !important;
 }
 

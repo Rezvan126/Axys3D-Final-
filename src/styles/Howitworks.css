@@ -3,10 +3,10 @@
   --hw-bg: #050505; --hw-card: #0f0f0f; --hw-border: rgba(255,255,255,.08);
   --hw-brown: #795238; --hw-brown-hi: #a8734a; --hw-brown-lt: #d9b08c;
   --hw-muted: #b5b0ad; --hw-cream: #ffffff;
-  --hw-mono: 'Inter', system-ui, sans-serif;
+  --hw-mono: "Barlow", system-ui, sans-serif;
   position: relative; width: 100%; background: black; color: var(--hw-cream);
   padding: clamp(4rem, 10vh, 7rem) 5%; box-sizing: border-box; overflow: hidden;
-  font-family: 'Manrope', system-ui, sans-serif;
+  font-family: "Barlow", system-ui, sans-serif;
 }
 
 /* Left Brown Glow */
@@ -42,11 +42,11 @@
 .hw-section .hw-title {
   margin: 0 0 16px; font-optical-sizing: auto; font-variation-settings: 'opsz' 32; font-synthesis: none;
   text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
- font-family: 'Manrope', sans-serif;
+ font-family: "Barlow", sans-serif;
   font-size: clamp(2.3rem, 6vw, 4rem);
   line-height: 0.95;
-  letter-spacing: -0.055em !important;
-  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 600 !important;
   margin-top: 10px;
 }
 /* Highlight: coffee brown gradient */
@@ -75,7 +75,7 @@
 .hw-brief-label { color: #b5b0ad; }
 .hw-brief-val { color: #fff; font-weight: 600; text-align: right; }
 
-.hw-screen-badge { position: absolute; left: 18px; bottom: 18px; z-index: 5; padding: 8px 16px; border-radius: 999px; background: rgba(8,8,8,.88); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(10px); font-size: 13px; font-weight: 700; animation: hwIn .4s ease both; }
+.hw-screen-badge { position: absolute; left: 18px; bottom: 18px; z-index: 5; padding: 8px 16px; border-radius: 999px; background: rgba(8,8,8,.88); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(10px); font-size: 13px; font-weight: 600; animation: hwIn .4s ease both; }
 .hw-screen-badge[hidden] { display: none; }
 .hw-screen-badge.tone-ok { color: #aea7a3; }
 .hw-screen-badge.tone-rev { color: #d9b08c; border-color: rgba(168,115,74,.45); background: rgba(8,8,8,.88); }
@@ -83,7 +83,7 @@
 /* info */
 .hw-info-pane { display: flex; flex-direction: column; justify-content: center; padding: clamp(24px, 3.2vw, 48px); }
 .hw-info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-family: var(--hw-mono); font-size: clamp(.72rem, .8vw, .82rem); letter-spacing: .14em; }
-.hw-role { display: flex; align-items: center; gap: 9px; text-transform: uppercase; font-weight: 500; }
+.hw-role { display: flex; align-items: center; gap: 9px; text-transform: uppercase; font-weight: 400; }
 .hw-role-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 /* roles: sirf brown + grey shades */
 .hw-role.role-client { color: #d9b08c; } .hw-role.role-lead { color: #a8734a; }
@@ -93,8 +93,8 @@
 .hw-day { color: rgba(255,255,255,.65); }
 
 .hw-step-title {
-  margin: 0 0 12px; font-family: 'Manrope', system-ui, sans-serif; font-optical-sizing: auto; font-variation-settings: 'opsz' 32;
-  font-weight: 800; font-size: clamp(1.4rem, 2.1vw, 2.2rem); line-height: 1.05; letter-spacing: -.05em; color: #fff;
+  margin: 0 0 12px; font-family: "Barlow", system-ui, sans-serif; font-optical-sizing: auto; font-variation-settings: 'opsz' 32;
+  font-weight: 600; font-size: clamp(1.4rem, 2.1vw, 2.2rem); line-height: 1.05; letter-spacing: -.05em; color: #fff;
 }
 .hw-step-desc { margin: 0 0 clamp(22px, 3.5vh, 34px); padding-bottom: 0; font-size: clamp(.9rem, 1vw, 1.02rem); line-height: 1.55; color: var(--hw-muted); min-height: 3em; }
 .hw-in { animation: hwIn .45s cubic-bezier(.22,1,.36,1) both; }
@@ -105,7 +105,7 @@
 .hw-qc-status b { color: #fff; }
 
 .hw-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.hw-btn { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid transparent; font: 600 13.5px 'Manrope', sans-serif; cursor: pointer; transition: all .2s ease; }
+.hw-btn { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid transparent; font: 600 13.5px "Barlow", sans-serif; cursor: pointer; transition: all .2s ease; }
 .hw-btn-secondary { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.88); }
 .hw-btn-secondary:hover { background: rgba(255,255,255,.1); color: #fff; }
 .hw-btn-play { background: linear-gradient(135deg, #a8734a, #795238); color: #fff; }
@@ -120,7 +120,7 @@
 .hw-log-row { display: grid; grid-template-columns: 80px 140px 1fr; align-items: center; padding: 8px 14px; border-radius: 8px; font-size: 13px; color: rgba(255,255,255,.68); transition: background .2s, color .2s; }
 .hw-log-row.is-highlighted { background: rgba(121,82,56,.18); color: #fff; }
 .hw-log-day { font-family: var(--hw-mono); font-size: 12px; color: rgba(255,255,255,.55); }
-.hw-log-role { font-weight: 700; color: rgba(255,255,255,.92); }
+.hw-log-role { font-weight: 600; color: rgba(255,255,255,.92); }
 .hw-log-msg { color: rgba(255,255,255,.8); }
 
 /* timeline */
@@ -179,13 +179,13 @@
 }
 .hw-outcome-num { display: flex; align-items: baseline; gap: 2px; margin-bottom: 8px; }
 .hw-outcome-value {
-  font-family: "Manrope", sans-serif; font-weight: 800;
+  font-family: "Barlow", sans-serif; font-weight: 600;
   font-size: clamp(38px, 3.8vw, 54px); line-height: 1.02; letter-spacing: -0.01em;
   background: linear-gradient(180deg, #ffffff 0%, #aea7a3 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .hw-outcome-suffix {
-  font-family: "Manrope", sans-serif; font-weight: 800; font-size: clamp(16px, 1.6vw, 22px);
+  font-family: "Barlow", sans-serif; font-weight: 600; font-size: clamp(16px, 1.6vw, 22px);
   background: linear-gradient(90deg, #d9b08c, #a8734a);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
@@ -201,7 +201,7 @@
   margin-top: clamp(20px, 3vh, 28px);
   min-height: 50px; padding: 0 24px; border-radius: 999px;
   background: #8f6444; border: 1px solid #8f6444; color: #ffffff !important;
-  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; text-decoration: none;
+  font-family: "Barlow", sans-serif; font-size: 15px; font-weight: 600; text-decoration: none;
   transition: transform .25s ease, background .25s ease, border-color .25s ease;
 }
 .hw-case-link:hover, .hw-case-link:focus-visible { transform: translateY(-2px); background: #6b452c; border-color: #6b452c; outline: none; }

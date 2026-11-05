@@ -8,7 +8,7 @@
   --pl-border-hover: rgba(143, 100, 68, 0.6);
   --pl-brown: #5b3b27;
   --pl-brown-hi: #8f6444;
-  --pl-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --pl-font: "Barlow", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   --pl-gap: 16px;
   --pl-per-view: 3;
@@ -54,7 +54,7 @@
   background: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: "Barlow", system-ui, sans-serif !important;
   font-size: clamp(0.5rem, 0.6vw, 0.68rem) !important;
   font-weight: 400 !important;
   letter-spacing: 0.3em !important;
@@ -65,11 +65,11 @@
 
 /* Title: white -> grey */
 .pl-title {
-  font-family:  'Manrope', sans-serif;
+  font-family:  "Barlow", sans-serif;
   font-size: clamp(2.3rem, 6vw, 4rem);
   line-height: 0.95;
-  letter-spacing: -0.065em !important;
-  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 600 !important;
   margin: 10px 0 0 !important;
   padding: 0 !important;
 }
@@ -197,7 +197,7 @@
   margin: 0;
   font-family: var(--pl-font);
   font-size: clamp(20px, 1.8vw, 24px);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: #ffffff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 16px rgba(0, 0, 0, 0.85);
@@ -262,7 +262,7 @@
 .pl-section { padding: 40px 6% 100px; }
 .pl-top { align-items: flex-end; margin-bottom: 8px; }
 .pl-header { display: flex; flex-direction: column; gap: 14px; max-width: 980px; }
-.pl-title { margin: 0 !important; letter-spacing: -0.02em !important; font-weight: 800 !important; line-height: 1.1; }
+.pl-title { margin: 0 !important; letter-spacing: -0.02em !important; font-weight: 600 !important; line-height: 1.1; }
 .pl-highlight { background: none; -webkit-text-fill-color: currentColor; color: #8f6444; }
 .pl-lead { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
 
@@ -282,7 +282,7 @@
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.72) 100%);
 }
-.pl-card-title { font-family: "Manrope", sans-serif; font-weight: 800; }
+.pl-card-title { font-family: "Barlow", sans-serif; font-weight: 600; }
 .pl-card:focus-visible { outline: 2px solid #d9b48c; outline-offset: 3px; }
 
 @media (max-width: 640px) {
