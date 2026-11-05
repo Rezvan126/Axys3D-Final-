@@ -14,3 +14,7 @@ Source: https://unsplash.com/photos/<id>
 | images/services/animation.jpg | photo-1478720568477-152d9b164e26 |
 | images/services/realtime.jpg | photo-1592478411213-6153e4ebc07d |
 | images/proof/permit-sheet.jpg | photo-1721244653652-268631ec049a |
+| images/industries/architects.jpg | photo-1503387762-592deb58ef4e |
+| images/industries/engineers.jpg | photo-1504307651254-35680f356dfd |
+| images/industries/developers.jpg | photo-1613490493576-7fde63acd811 |
+| images/industries/agencies.jpg | photo-1568992687947-868a62a9f521 |

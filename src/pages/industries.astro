@@ -5,85 +5,67 @@ import Footer from "../components/Footer.astro";
 import "../styles/token.css";
 import "../styles/global.css";
 import "../styles/Navbar.css";
-import "../styles/industries.css";
 import "../styles/footer.css";
-import { getEntry } from "astro:content";
 
-interface IndustrySection {
-  id: string;
-  title: string;
-  targetBuyer: string;
-  description: string;
-  ctaLink: string;
-  ctaLabel: string;
-}
-
-const pageEntry = await getEntry("industriesPage", "index");
-
-if (!pageEntry) {
-  throw new Error("Could not find index.md in src/content/industriesPage/");
-}
-
-const {
-  heroTitle,
-  heroSubtitle,
-  heroDescription,
-  industrySections,
-} = pageEntry.data as {
-  heroTitle: string;
-  heroSubtitle: string;
-  heroDescription: string;
-  industrySections: IndustrySection[];
-};
-
-/* Industry images for section cards */
-const industryImages = [
-  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=85",
-  "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=85",
-];
-
-/* Trusted stats data — keep these in line with the home page figures */
-const icon = (paths: string) =>
-  `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
-
-const stats = [
+// WHO WE WORK FOR: four audiences, each with the problem we solve and what they receive.
+// Detail pages live in src/content/industries/<slug>.md
+const audiences = [
   {
-    label: "Projects delivered",
-    value: 172,
-    plus: false,
-    icon: icon('<path d="M4 20l4-11 7 7-11 4z"/><path d="M14 4v2M19 9h2M17 6l1.5-1.5M9 3.5l.5 1.5M20 14l-1.5-.5"/>'),
+    slug: "architecture-design-practices",
+    name: "Architects & design studios",
+    who: "Architecture and interior practices that need more production hands.",
+    problem: "Deadlines pile up faster than your team can draw.",
+    deliver: ["Revit models and drawing sets in your templates", "Permit and construction drawings kept in step with the design", "Planning and client visuals"],
+    img: "/images/industries/architects.jpg",
   },
   {
-    label: "Studio partners",
-    value: 43,
-    plus: true,
-    icon: icon('<path d="M3 12l4-4 4 1 3-2 5 4-5 6-3-1-2 2-3-1z"/><path d="M8 8l-2 2M11 9l2 2"/>'),
+    slug: "engineering-multidisciplinary",
+    name: "Engineers & MEP consultancies",
+    who: "Structural, MEP and multidisciplinary engineering teams.",
+    problem: "Clashes found on site cost time and money.",
+    deliver: ["Coordinated structural and MEP models", "Clash checks, each issue tracked to the right engineer", "Revit documentation"],
+    img: "/images/industries/engineers.jpg",
   },
   {
-    label: "Days to first render",
-    value: 7,
-    plus: false,
-    icon: icon('<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9h16v2a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0z"/><path d="M5.5 13.5V20h13v-6.5"/><path d="M10 20v-4h4v4"/>'),
+    slug: "developers-asset-teams",
+    name: "Developers & property teams",
+    who: "Developers, real estate and property marketing teams.",
+    problem: "Buyers, investors and councils need to see it before it exists.",
+    deliver: ["Planning and marketing renders", "Walkthrough films", "Interactive Unreal Engine tours"],
+    img: "/images/industries/developers.jpg",
   },
   {
-    label: "Services under one roof",
-    value: 8,
-    plus: false,
-    icon: icon('<circle cx="12" cy="9" r="5.5"/><path d="M9 14l-1.5 7L12 18.5 16.5 21 15 14"/>'),
+    slug: "agencies-production-partners",
+    name: "Agencies & production partners",
+    who: "Design, marketing and visualization agencies.",
+    problem: "More client work than your in house team can render.",
+    deliver: ["Renders and films under your brand", "NDA from day one", "Nothing published without your permission"],
+    img: "/images/industries/agencies.jpg",
   },
 ];
 
-/* Hero title typography split */
-const heroWords = heroSubtitle.trim().split(/\s+/);
-const mutedFrom = Math.ceil(heroWords.length / 2);
+// PROJECT TYPES (sectors) we deliver for
+const sectors = [
+  { name: "Residential", line: "Houses, villas and hillside homes, from permit sets to final renders.", icon: "M3 11l9-7 9 7 M5 10v10h14V10 M10 20v-6h4v6" },
+  { name: "ADU & multifamily", line: "ADUs, JADUs and apartment buildings, drawn permit ready.", icon: "M4 21V7l8-4 8 4v14 M9 21v-4h6v4 M8 9h2 M14 9h2 M8 13h2 M14 13h2" },
+  { name: "Healthcare", line: "Clinics and medical pavilions: models, drawings and exterior renders.", icon: "M4 21V5h16v16 M12 8v6 M9 11h6 M9 21v-3h6v3" },
+  { name: "Commercial & mixed use", line: "Offices, retail and mixed use schemes for planning and marketing.", icon: "M3 21h18 M5 21V9h6v12 M13 21V4h6v17 M7 12h2 M7 16h2 M15 8h2 M15 12h2 M15 16h2" },
+  { name: "Interiors", line: "Living spaces, hospitality and workplace interiors, photoreal.", icon: "M4 18v-5a2 2 0 012-2h12a2 2 0 012 2v5 M2 18h20 M6 11V8a2 2 0 012-2h8a2 2 0 012 2v3 M5 18v2 M19 18v2" },
+  { name: "Landscape & site", line: "Site plans, terrain and landscape visuals around the building.", icon: "M3 20l6-9 4 5 3-4 5 8z M17 7a2 2 0 100-4 2 2 0 000 4z" },
+];
 
-const pad = (n: number) => String(n).padStart(2, "0");
+// WHAT EACH TEAM HIRES US FOR (from each audience page's typical services)
+const cols = ["Architects", "Engineers", "Developers", "Agencies"];
+const matrix: [string, string, boolean[]][] = [
+  ["BIM execution & model production", "bim-production", [true, true, false, false]],
+  ["Revit production & documentation", "revit-production", [true, true, false, false]],
+  ["MEP coordination support", "mep-coordination", [false, true, false, false]],
+  ["3D modeling", "3d-modeling", [true, true, true, true]],
+  ["3ds Max production", "3ds-max-production", [false, false, true, true]],
+  ["Architectural visualization", "architectural-visualization", [true, false, true, true]],
+  ["Animation & motion", "animation-motion", [true, false, true, true]],
+  ["Real time / Unreal Engine", "real-time", [true, false, true, true]],
+];
 ---
 
 <!doctype html>
@@ -91,165 +73,49 @@ const pad = (n: number) => String(n).padStart(2, "0");
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title="Industries & Workflows | Axys3D" description={heroDescription} />
-    <script is:inline>
-      document.documentElement.classList.add("js");
-    </script>
+    <SEO
+      title="Industries we work with | Axys3D"
+      description="BIM, Revit and visualization production for architects, engineers, developers and agencies, across residential, healthcare, commercial and interior projects."
+    />
   </head>
 
   <body class="page-industries">
-    <!-- PAGE BACKGROUND -->
-    <div class="ind-page-bg" aria-hidden="true"></div>
-
     <Navbar variant="solid" />
 
-    <main class="industries-page">
-      <!-- ================= HERO ================= -->
-      <section class="ind-intro">
-        <div class="ind-wrap">
-          <div class="ind-intro-row">
-            <div class="ind-intro-header">
-              <span class="ind-kicker">{heroTitle}</span>
-              <h1 class="ind-h1">
-                <span class="ind-h1-visual" aria-hidden="true">
-                  {heroWords.map((w, i) => (
-                    <Fragment>
-                      <span
-                        class:list={["ind-word", { "ind-word--muted": i >= mutedFrom }]}
-                        style={`--i:${i}`}
-                      >{w}</span>
-                      {i === mutedFrom - 1 && <br />}
-                    </Fragment>
-                  ))}
-                </span>
-                <span class="sr-only">{heroSubtitle}</span>
-              </h1>
-              <p class="ind-lead">{heroDescription}</p>
-            </div>
-
-            <div class="ind-intro-media">
-              <!-- HIGHLIGHTED FLOATING INDUSTRIES NETWORK HUB VISUAL -->
-              <svg
-                class="ind-hero-svg"
-                viewBox="0 0 780 480"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <defs>
-                  <radialGradient id="indHubGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#a07350" stop-opacity="0.50" />
-                    <stop offset="50%" stop-color="#959595" stop-opacity="0.25" />
-                    <stop offset="100%" stop-color="#000000" stop-opacity="0" />
-                  </radialGradient>
-
-                  <linearGradient id="indLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#a07350" stop-opacity="0.95" />
-                    <stop offset="100%" stop-color="#959595" stop-opacity="0.45" />
-                  </linearGradient>
-
-                  <linearGradient id="indCoreGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#2a2a2a" stop-opacity="0.95" />
-                    <stop offset="100%" stop-color="#141414" stop-opacity="0.95" />
-                  </linearGradient>
-                </defs>
-
-                <!-- Vivid Glow & Ambient Orbit Rings -->
-                <circle cx="390" cy="240" r="220" fill="url(#indHubGlow)" />
-                <circle cx="390" cy="240" r="175" fill="none" stroke="rgba(143, 100, 68, 0.25)" stroke-width="1.2" stroke-dasharray="5 6" />
-                <circle cx="390" cy="240" r="120" fill="none" stroke="rgba(149, 149, 149, 0.35)" stroke-width="1.2" />
-
-                <!-- Rotating Vibrant Orbit Ring -->
-                <circle cx="390" cy="240" r="145" fill="none" stroke="url(#indLineGrad)" stroke-width="2" stroke-dasharray="8 12">
-                  <animateTransform attributeName="transform" type="rotate" from="0 390 240" to="360 390 240" dur="25s" repeatCount="indefinite" />
-                </circle>
-
-                <!-- Connecting Network Lines -->
-                <g stroke="rgba(143, 100, 68, 0.48)" stroke-width="1.5">
-                  <line x1="390" y1="240" x2="220" y2="130" stroke-dasharray="4 4" />
-                  <line x1="390" y1="240" x2="560" y2="130" stroke-dasharray="4 4" />
-                  <line x1="390" y1="240" x2="200" y2="340" stroke-dasharray="4 4" />
-                  <line x1="390" y1="240" x2="580" y2="340" stroke-dasharray="4 4" />
-                </g>
-
-                <!-- Active Light Rays -->
-                <line x1="390" y1="240" x2="220" y2="130" stroke="#a07350" stroke-width="2.5" stroke-linecap="round">
-                  <animate attributeName="stroke-dasharray" values="0 220; 220 0" dur="2.8s" repeatCount="indefinite" />
-                </line>
-                <line x1="390" y1="240" x2="560" y2="130" stroke="#959595" stroke-width="2.5" stroke-linecap="round">
-                  <animate attributeName="stroke-dasharray" values="0 220; 220 0" dur="3.2s" repeatCount="indefinite" />
-                </line>
-
-                <!-- CENTRAL HIGHLIGHTED CORE NODE -->
-                <g transform="translate(390, 240)">
-                  <circle cx="0" cy="0" r="54" fill="url(#indCoreGrad)" stroke="#a07350" stroke-width="2.2" style="filter: drop-shadow(0 0 14px rgba(143, 100, 68, 0.45));" />
-                  <circle cx="0" cy="0" r="42" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1" />
-                  
-                  <!-- Core Icon -->
-                  <path d="M-14 -7 L0 -18 L14 -7 L14 14 L0 21 L-14 14 Z" fill="none" stroke="#a07350" stroke-width="2" stroke-linejoin="round" />
-                  <path d="M0 -18 L0 21 M-14 -7 L14 7 M14 -7 L-14 7" fill="none" stroke="rgba(143, 100, 68, 0.65)" stroke-width="1.2" />
-                  
-                  <!-- Center Pulsing Light -->
-                  <circle cx="0" cy="0" r="7" fill="#a07350">
-                    <animate attributeName="r" values="5;9;5" dur="1.8s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.8s" repeatCount="indefinite" />
-                  </circle>
-                </g>
-
-                <!-- SATELLITE INDUSTRY NODES -->
-                <!-- 1. Architecture -->
-                <g transform="translate(220, 130)">
-                  <rect x="-65" y="-18" width="130" height="36" rx="18" fill="#141414" stroke="#a07350" stroke-width="1.6" style="filter: drop-shadow(0 0 10px rgba(143, 100, 68, 0.3));" />
-                  <circle cx="-42" cy="0" r="4.5" fill="#a07350" />
-                  <text x="-30" y="4" fill="#ffffff" font-size="13.5" font-weight="600" font-family="Barlow, sans-serif" letter-spacing="0.02em">Architecture</text>
-                </g>
-
-                <!-- 2. Real Estate -->
-                <g transform="translate(560, 130)">
-                  <rect x="-65" y="-18" width="130" height="36" rx="18" fill="#141414" stroke="#959595" stroke-width="1.6" style="filter: drop-shadow(0 0 10px rgba(149, 149, 149, 0.3));" />
-                  <circle cx="-42" cy="0" r="4.5" fill="#959595" />
-                  <text x="-30" y="4" fill="#ffffff" font-size="13.5" font-weight="600" font-family="Barlow, sans-serif" letter-spacing="0.02em">Real Estate</text>
-                </g>
-
-                <!-- 3. MEP & Consult -->
-                <g transform="translate(200, 340)">
-                  <rect x="-70" y="-18" width="140" height="36" rx="18" fill="#141414" stroke="#959595" stroke-width="1.6" style="filter: drop-shadow(0 0 10px rgba(149, 149, 149, 0.3));" />
-                  <circle cx="-47" cy="0" r="4.5" fill="#959595" />
-                  <text x="-34" y="4" fill="#ffffff" font-size="13.5" font-weight="600" font-family="Barlow, sans-serif" letter-spacing="0.02em">MEP & Consult</text>
-                </g>
-
-                <!-- 4. Commercial -->
-                <g transform="translate(580, 340)">
-                  <rect x="-70" y="-18" width="140" height="36" rx="18" fill="#141414" stroke="#a07350" stroke-width="1.6" style="filter: drop-shadow(0 0 10px rgba(143, 100, 68, 0.3));" />
-                  <circle cx="-47" cy="0" r="4.5" fill="#a07350" />
-                  <text x="-34" y="4" fill="#ffffff" font-size="13.5" font-weight="600" font-family="Barlow, sans-serif" letter-spacing="0.02em">Commercial</text>
-                </g>
-              </svg>
-            </div>
-          </div>
+    <main class="iw">
+      <!-- HERO -->
+      <section class="iw-hero">
+        <div class="iw-wrap">
+          <span class="iw-eyebrow">Industries</span>
+          <h1>Who we work with.</h1>
+          <p class="iw-lead">We produce BIM models, Revit drawing sets and visuals for the building industry: architects, engineers, developers and agencies, on residential, healthcare, commercial and interior projects.</p>
+          <nav class="iw-jump" aria-label="Jump to your team">
+            {audiences.map((a) => <a href={`#${a.slug}`}>{a.name}</a>)}
+          </nav>
         </div>
       </section>
 
-      <!-- ================= TRUSTED ACROSS BORDERS ================= -->
-      <section class="ind-trust">
-        <div class="ind-wrap">
-          <div class="ind-sec-head" data-reveal>
-            <h2 class="ind-sec-h2">The numbers <br /><span>behind the work</span></h2>
-          </div>
-
-          <div class="ind-stats">
-            {stats.map((s, i) => (
-              <article class="ind-stat" data-reveal data-stat style={`--d: ${i * 100}ms`}>
-                <div class="ind-stat-top">
-                  <span class="ind-stat-label">{s.label}</span>
-                  <span class="ind-stat-icon" set:html={s.icon} />
-                </div>
-                <div class="ind-stat-value">
-                  <span
-                    class="ind-stat-num"
-                    data-count={s.value}
-                    data-from={s.from ?? 0}
-                  >{s.value}</span>
-                  {s.plus && <sup class="ind-stat-plus">+</sup>}
+      <!-- WHO WE WORK FOR -->
+      <section class="iw-sec" aria-labelledby="iwWho">
+        <div class="iw-wrap">
+          <header class="iw-head">
+            <h2 id="iwWho">Who we work for, <span>and what you get.</span></h2>
+            <p>Four kinds of teams hire us. Find yours.</p>
+          </header>
+          <div class="iw-aud">
+            {audiences.map((a, i) => (
+              <article class="iw-card" id={a.slug}>
+                <div class="iw-card-media"><img src={a.img} alt="" loading={i < 2 ? "eager" : "lazy"} decoding="async" /></div>
+                <div class="iw-card-body">
+                  <span class="iw-card-num">0{i + 1}</span>
+                  <h3>{a.name}</h3>
+                  <p class="iw-who">{a.who}</p>
+                  <p class="iw-problem"><b>Your problem:</b> {a.problem}</p>
+                  <span class="iw-label">What you get</span>
+                  <ul class="iw-list">
+                    {a.deliver.map((d) => <li>{d}</li>)}
+                  </ul>
+                  <a class="iw-link" href={`/industries/${a.slug}/`}>How we work with {a.name.split(" ")[0].toLowerCase()} <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
                 </div>
               </article>
             ))}
@@ -257,114 +123,174 @@ const pad = (n: number) => String(n).padStart(2, "0");
         </div>
       </section>
 
-      <!-- ================= INDUSTRIES (2 x 2 CARDS) ================= -->
-      <section class="ind-cards-sec" id="industries">
-        <div class="ind-wrap">
-          <div class="ind-sec-head" data-reveal>
-            <span class="ind-kicker">INDUSTRIES</span>
-            <h2 class="ind-sec-h2">Find your team, <br /><span>see what we do for you.</span></h2>
-          </div>
-
-          <div class="ind-cards-grid">
-            {industrySections.map((item, i) => (
-              <a
-                class="ind-card"
-                id={`industry-${item.id}`}
-                href={item.ctaLink}
-                data-reveal
-                style={`--d: ${(i % 2) * 120}ms`}
-                aria-label={`${item.title} — ${item.ctaLabel}`}
-              >
-                <img
-                  src={industryImages[i % industryImages.length]}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  draggable="false"
-                />
-                <div class="ind-card-overlay"></div>
-                <div class="ind-card-shine"></div>
-
-                <div class="ind-card-body">
-                  <span class="ind-card-num">{pad(i + 1)}</span>
-                  <span class="ind-card-target">{item.targetBuyer}</span>
-                  <h3 class="ind-card-title">{item.title}</h3>
-                  <p class="ind-card-desc">{item.description}</p>
-                  <span class="ind-card-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                  </span>
-                </div>
-              </a>
+      <!-- PROJECT TYPES -->
+      <section class="iw-sec" aria-labelledby="iwTypes">
+        <div class="iw-wrap">
+          <header class="iw-head">
+            <h2 id="iwTypes">Project types <span>we work on.</span></h2>
+            <p>From a single house to a medical pavilion.</p>
+          </header>
+          <ul class="iw-sectors">
+            {sectors.map((s) => (
+              <li>
+                <span class="iw-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={s.icon} /></svg></span>
+                <h3>{s.name}</h3>
+                <p>{s.line}</p>
+              </li>
             ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- MATRIX -->
+      <section class="iw-sec" aria-labelledby="iwFor">
+        <div class="iw-wrap">
+          <header class="iw-head">
+            <h2 id="iwFor">What each team <span>hires us for.</span></h2>
+            <p>The services each kind of client uses most.</p>
+          </header>
+          <div class="iw-table-box">
+            <table class="iw-table">
+              <caption class="sr-only">Services used by each type of client</caption>
+              <thead>
+                <tr><th scope="col">Service</th>{cols.map((c) => <th scope="col">{c}</th>)}</tr>
+              </thead>
+              <tbody>
+                {matrix.map(([name, slug, row]) => (
+                  <tr>
+                    <th scope="row"><a href={`/services/${slug}/`}>{name}</a></th>
+                    {row.map((on) => (
+                      <td>{on ? <span class="iw-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" /></svg><span class="sr-only">Yes</span></span> : <span class="iw-no" aria-label="Not usually">·</span>}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      <!-- ================= FINAL CTA ================= -->
-      <section class="ind-final-cta">
-        <div class="ind-wrap">
-          <div class="ind-final-inner" data-reveal>
-            <h2>Not sure where you fit? <br /><span>Tell us about your project.</span></h2>
-            <p>Tell us what you're building, where you are in the workflow, and what needs to move next.</p>
-            <a href="/contact" class="ind-final-button">
-              <span>Discuss a production package</span>
-              <span>↗</span>
-            </a>
-          </div>
+      <!-- CLOSING CTA -->
+      <section class="iw-cta">
+        <div class="iw-wrap iw-cta-in">
+          <h2>Not sure where you fit? <span>Tell us about your project.</span></h2>
+          <p>Tell us what you're building and what you need next. We'll reply with a clear scope.</p>
+          <a href="/contact/" class="iw-cta-btn">Start a project <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
         </div>
       </section>
     </main>
 
     <Footer />
 
-    <script is:inline>
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      // Count-up for stat numbers
-      const countUp = (card) => {
-        const el = card.querySelector("[data-count]");
-        if (!el || reduceMotion) return;
-        const to = Number(el.dataset.count);
-        const from = Number(el.dataset.from || 0);
-        const dur = 1600;
-        const t0 = performance.now();
-        const tick = (now) => {
-          const p = Math.min((now - t0) / dur, 1);
-          const eased = 1 - Math.pow(1 - p, 4);
-          el.textContent = Math.round(from + (to - from) * eased);
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        el.textContent = from;
-        requestAnimationFrame(tick);
-      };
-
-      // Reveal on scroll
-      const revealItems = document.querySelectorAll("[data-reveal]");
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              if (entry.target.hasAttribute("data-stat")) {
-                const d = parseInt(entry.target.style.getPropertyValue("--d")) || 0;
-                setTimeout(() => countUp(entry.target), d + 200);
-              }
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.12 }
-      );
-      revealItems.forEach((item) => revealObserver.observe(item));
-
-      // Spotlight effect on cards
-      document.querySelectorAll(".ind-card").forEach((card) => {
-        card.addEventListener("pointermove", (e) => {
-          const r = card.getBoundingClientRect();
-          card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-          card.style.setProperty("--my", `${e.clientY - r.top}px`);
-        });
-      });
-    </script>
   </body>
 </html>
+
+<style>
+  .iw { color: #fff; font-family: "Barlow", system-ui, sans-serif; background: #050506; }
+  .iw-wrap { width: min(100% - 12%, 1240px); margin: 0 auto; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+  /* hero: plain, same gradient family as the home hero */
+  .iw-hero {
+    padding: 170px 0 80px;
+    background:
+      radial-gradient(circle at 78% 30%, rgba(143, 100, 68, 0.22) 0%, rgba(91, 59, 39, 0.08) 30%, transparent 58%),
+      #050506;
+  }
+  .iw-eyebrow { display: block; margin-bottom: 18px; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #b8946f; }
+  .iw-hero h1 { margin: 0; }
+  .iw-lead { margin: 22px 0 0; max-width: 760px; font-size: 18px; line-height: 1.6; color: #c4bab1; }
+  .iw-jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+  .iw-jump a {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.03);
+    color: #ece6e0; font-size: 14px; font-weight: 600; text-decoration: none; transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .iw-jump a:hover { border-color: rgba(184, 148, 111, 0.6); color: #fff; }
+
+  .iw-sec { padding: 40px 0 90px; }
+  .iw-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; max-width: 900px; }
+  .iw-head h2 { margin: 0; }
+  .iw-head h2 span { color: #8f6444; }
+  .iw-head p { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+
+  /* audience cards: photo on top, text below */
+  .iw-aud { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .iw-card { display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; background: #121010; border: 1px solid rgba(255, 255, 255, 0.09); scroll-margin-top: 110px; transition: border-color 0.3s ease; }
+  .iw-card:hover { border-color: rgba(143, 100, 68, 0.45); }
+  .iw-card-media { aspect-ratio: 16 / 7; overflow: hidden; background: #0b0a0a; }
+  .iw-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+  .iw-card:hover .iw-card-media img { transform: scale(1.04); }
+  .iw-card-body { display: flex; flex-direction: column; gap: 10px; flex: 1; padding: 26px 28px 28px; border-top: 1px solid rgba(255, 255, 255, 0.07); }
+  .iw-card-num { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; color: #b8946f; }
+  .iw-card h3 { margin: 0; }
+  .iw-who { margin: 0; font-size: 15.5px; line-height: 1.55; color: #d6cfc8; }
+  .iw-problem { margin: 0; font-size: 15px; line-height: 1.55; color: #a49e9a; }
+  .iw-problem b { color: #e3c8a8; font-weight: 600; }
+  .iw-label { margin-top: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #b8946f; }
+  .iw-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .iw-list li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.5; color: #e3ddd7; }
+  .iw-list li::before {
+    content: ""; position: absolute; left: 0; top: 2px; width: 17px; height: 17px; border-radius: 50%;
+    background: rgba(143, 100, 68, 0.22) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e3c8a8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 10px no-repeat;
+  }
+  .iw-link {
+    margin-top: auto; padding-top: 14px; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+    font-size: 14.5px; font-weight: 600; color: #d9b48c; text-decoration: none;
+  }
+  .iw-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s ease; }
+  .iw-link:hover { color: #fff; }
+  .iw-link:hover svg { transform: translateX(3px); }
+
+  /* project types */
+  .iw-sectors { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .iw-sectors li { display: flex; flex-direction: column; gap: 10px; padding: 24px; border-radius: 20px; background: #121010; border: 1px solid rgba(255, 255, 255, 0.09); }
+  .iw-ico { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #241a13; border: 1px solid rgba(184, 148, 111, 0.4); }
+  .iw-ico svg { width: 22px; height: 22px; fill: none; stroke: #d9b48c; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .iw-sectors h3 { margin: 4px 0 0; }
+  .iw-sectors p { margin: 0; font-size: 15px; line-height: 1.55; color: #b9b2ac; }
+
+  /* matrix */
+  .iw-table-box { position: relative; max-width: 100%; overflow-x: auto; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.09); background: #121010; }
+  .iw-table { width: 100%; min-width: 640px; border-collapse: collapse; }
+  .iw-table th, .iw-table td { padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.07); text-align: center; font-size: 15px; }
+  .iw-table thead th { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #b8946f; background: #17110d; }
+  .iw-table thead th:first-child, .iw-table tbody th { text-align: left; }
+  .iw-table tbody th { font-weight: 600; }
+  .iw-table tbody th a { color: #fff; text-decoration: none; }
+  .iw-table tbody th a:hover { color: #d9b48c; }
+  .iw-table tbody tr:last-child th, .iw-table tbody tr:last-child td { border-bottom: 0; }
+  .iw-table tbody tr:hover { background: rgba(143, 100, 68, 0.06); }
+  .iw-yes { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #b8946f, #5b3b27); }
+  .iw-yes svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .iw-no { color: #8a837e; font-size: 20px; }
+
+  /* closing call to action */
+  .iw-cta { padding: 60px 0 130px; text-align: center; background: radial-gradient(50% 70% at 50% 60%, rgba(143, 100, 68, 0.16), transparent 70%), #050506; }
+  .iw-cta-in { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .iw-cta h2 { margin: 0; max-width: 820px; }
+  .iw-cta h2 span { display: block; color: #8f6444; }
+  .iw-cta p { margin: 0; max-width: 520px; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+  .iw-cta-btn {
+    margin-top: 8px; display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 26px; border-radius: 999px;
+    background: #5b3b27; border: 1px solid #8f6444; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .iw-cta-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .iw-cta-btn:hover { background: #6b452c; transform: translateY(-1px); }
+
+  @media (max-width: 1000px) {
+    .iw-sectors { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .iw-wrap { width: min(100% - 32px, 100%); }
+    .iw-hero { padding: 130px 0 56px; }
+    .iw-lead { font-size: 16.5px; }
+    .iw-aud, .iw-sectors { grid-template-columns: 1fr; }
+    .iw-card-body { padding: 22px 20px 22px; }
+    .iw-sec { padding: 24px 0 64px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .iw-card-media img, .iw-link svg { transition: none; }
+  }
+</style>

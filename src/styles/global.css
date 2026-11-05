@@ -154,3 +154,4 @@ html body :is(a, button, summary, [tabindex="0"], [role="tab"]):focus-visible {
   outline: 2px solid #d9b48c !important;
   outline-offset: 3px;
 }
+.site-footer { overflow: clip; } /* keep the footer glow inside the page width */
