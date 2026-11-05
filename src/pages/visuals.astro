@@ -217,7 +217,7 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
 
     <Navbar variant="solid" />
 
-    <main class="library-page">
+    <main id="main" tabindex="-1" class="library-page">
       <!-- ================= HERO ================= -->
       <section class="lib-intro">
         <div class="lib-wrap">
@@ -287,7 +287,7 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
             {caseStudies.map((project, index) => (
               <a
                 class="wrk-card"
-                href={`/work/${project.id}`}
+                href={`/work/${project.id}/`}
                 data-reveal
                 style={`--d: ${(index % 2) * 120}ms`}
                 aria-label={`View ${project.title} case study`}
@@ -391,7 +391,7 @@ const mutedFrom = Math.ceil(heroWords.length / 2);
           <div class="lib-final-inner" data-reveal>
             <h2>Need a custom visual set? <br /><span>Let's build it together.</span></h2>
             <p>Tell us what you're working on and we'll scope the right production package.</p>
-            <a href="/contact" class="lib-final-button">
+            <a href="/contact/" class="lib-final-button">
               <span>Discuss a project</span>
               <span>↗</span>
             </a>

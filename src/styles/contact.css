@@ -1196,3 +1196,9 @@ html body .cnt-submit:not(#a):not(#b) {
   html body .cnt-intro-title:not(#a):not(#b) { font-size: clamp(2.2rem, 10.4vw, 3.2rem) !important; line-height: 1.02 !important; }
   html body .cnt-intro-title:not(#a):not(#b) * { font-size: inherit !important; line-height: inherit !important; }
 }
+/* thank-you note that replaces the form after a successful send */
+.cnt-done { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 36px 0 12px; outline: none; }
+.cnt-done-title { margin: 0; font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; line-height: 1.2; color: #fff; }
+.cnt-done-text { margin: 0; max-width: 46ch; font-size: 16px; line-height: 1.6; color: #b4aeaa; }
+.cnt-done-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; background: #5b3b27; color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: background 0.3s ease; }
+.cnt-done-link:hover, .cnt-done-link:focus-visible { background: #6b452c; }

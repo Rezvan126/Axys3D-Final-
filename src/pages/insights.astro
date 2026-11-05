@@ -39,7 +39,7 @@ type Item = { kind: "article" | "case"; href: string; title: string; summary: st
 const items: Item[] = [
   ...articleEntries.map((a, i) => ({
     kind: "article" as const,
-    href: `/insights/${a.id}`,
+    href: `/insights/${a.id}/`,
     title: a.data.title,
     summary: a.data.summary,
     meta: `${a.data.category} · ${a.data.readTime} read`,
@@ -52,7 +52,7 @@ const items: Item[] = [
   })),
   ...caseEntries.map((c, i) => ({
     kind: "case" as const,
-    href: `/work/${c.id}`,
+    href: `/work/${c.id}/`,
     title: c.data.title,
     summary: c.data.summary,
     meta: `${c.data.sector} · ${c.data.projectStage}`,
@@ -100,7 +100,7 @@ const badgeLabel = (it: Item) => (it.kind === "case" ? "Case study" : "Guide");
   <body class="page-insights-list">
     <Navbar variant="solid" />
 
-    <main class="ins">
+    <main id="main" tabindex="-1" class="ins">
       <!-- HERO -->
       <section class="ins-hero">
         <div class="ins-wrap" data-motion-group>

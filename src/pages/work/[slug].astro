@@ -244,11 +244,11 @@ const jsonLd = {
 
     <Navbar variant="solid" />
 
-    <main class="wrk-page">
+    <main id="main" tabindex="-1" class="wrk-page">
       <!-- =========== HERO (text only, left) =========== -->
       <section class="wrk-hero">
         <div class="wrk-wrap">
-          <a class="wrk-back" href="/visuals#case-studies">All case studies</a>
+          <a class="wrk-back" href="/visuals/#case-studies">All case studies</a>
           <span class="wrk-kicker">{badgeText}{badgeText && sector ? " / " : ""}{sector}</span>
 
           <h1 class="wrk-h1">
@@ -580,7 +580,7 @@ const jsonLd = {
                 <span class="wrk-kicker">Keep exploring</span>
                 <h2 class="wrk-h2">More <span>case studies.</span></h2>
               </div>
-              <a class="wrk-all-link" href="/visuals#case-studies">All case studies →</a>
+              <a class="wrk-all-link" href="/visuals/#case-studies">All case studies →</a>
             </div>
 
             <div class="wrk-more">
@@ -588,7 +588,7 @@ const jsonLd = {
                 const d = entry.data as any;
                 const img = d.coverImage || d.image || d.heroImage || d.thumbnail;
                 return (
-                  <a class="wrk-more-card wrk-reveal" href={`/work/${entry.id}`} style={`--d:${i * 0.08}s`}>
+                  <a class="wrk-more-card wrk-reveal" href={`/work/${entry.id}/`} style={`--d:${i * 0.08}s`}>
                     <div class="wrk-more-media">
                       {img
                         ? <img src={img} alt={d.title} loading="lazy" />

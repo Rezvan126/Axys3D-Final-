@@ -216,7 +216,7 @@ const svcCards = typicalServices.slice(0, 3).map((name: string, i: number) => {
     name,
     desc,
     tags,
-    href: m ? `/services/${m.slug}` : "/#services",
+    href: m ? `/services/${m.slug}/` : "/#services",
     image: (m && (m.image || serviceImages[m.slug])) || fallbackImages[(i + imgIndex) % fallbackImages.length],
   };
 });
@@ -248,7 +248,7 @@ const projects = (matched.length ? matched : workAll).slice(0, 6).map((e: any) =
   meta: flat(e.data.client ?? e.data.location)[0] ?? "",
   image: asUrl(pick(e.data, ["poster", "image", "thumbnail", "cover", "coverImage", "heroImage", "hero"])),
   video: asUrl(pick(e.data, ["video", "videoUrl", "videoSrc", "heroVideo", "previewVideo", "cardVideo", "preview"])),
-  href: `/work/${e.id.replace(/^\d+-/, "")}`,
+  href: `/work/${e.id.replace(/^\d+-/, "")}/`,
 }));
 
 // ---------- Icons ----------
@@ -275,7 +275,7 @@ const stepIcons = [
   <body class="page-industry-single">
     <Navbar variant="solid" />
 
-    <main class="indd-page">
+    <main id="main" tabindex="-1" class="indd-page">
 
       <!-- =========== BANNER =========== -->
       <section class="indd-banner">
@@ -436,7 +436,7 @@ const stepIcons = [
                 <span class="indd-label">Projects</span>
                 <h2 class="indd-h2">Work for <span class="indd-hl">{title}</span></h2>
               </div>
-              <a class="indd-link" href="/work">All projects <span>↗</span></a>
+              <a class="indd-link" href="/visuals/">All projects <span>↗</span></a>
             </div>
 
             <div class="indd-projects" data-n={projects.length}>

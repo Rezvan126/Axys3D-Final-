@@ -37,7 +37,7 @@ if (!pageData) {
 
     <Navbar variant="solid" />
 
-    <main class="contact-page">
+    <main id="main" tabindex="-1" class="contact-page">
 
       <section class="cnt-contact-section">
 
@@ -187,7 +187,7 @@ if (!pageData) {
               <form
                 class="cnt-form"
                 id="contact-form"
-                action="http://localhost:8000/contact-handler.php"
+                action="/mail/contact-handler.php"
                 method="POST"
               >
 
@@ -450,7 +450,26 @@ if (!pageData) {
           }
 
           if (result.success) {
-            form.reset();
+            // swap the form for a thank-you note with a next step
+            const name = String(new FormData(form).get("name") || "").trim().split(/\s+/)[0];
+            const done = document.createElement("div");
+            done.className = "cnt-done";
+            done.setAttribute("role", "status");
+            done.tabIndex = -1;
+            const h = document.createElement("p");
+            h.className = "cnt-done-title";
+            h.textContent = name ? `Thanks, ${name}. Your brief is with us.` : "Thanks. Your brief is with us.";
+            const p = document.createElement("p");
+            p.className = "cnt-done-text";
+            p.textContent = "We reply to every enquiry within one working day. While you wait, have a look at our recent work.";
+            const a = document.createElement("a");
+            a.href = "/visuals/";
+            a.className = "cnt-done-link";
+            a.innerHTML = 'See our work <span aria-hidden="true">↗</span>';
+            done.append(h, p, a);
+            form.replaceWith(done);
+            done.focus();
+            return;
           }
         } catch (err) {
           console.error("Contact form submission failed:", err);

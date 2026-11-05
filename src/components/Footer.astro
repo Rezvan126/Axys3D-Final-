@@ -1,5 +1,7 @@
 ---
 import "../styles/footer.css";
+import { social } from "../data/social";
+const socials = social.filter((s) => s.url);
 ---
 
 <footer class="site-footer">
@@ -22,22 +24,23 @@ import "../styles/footer.css";
         <ul class="footer-links">
           <li><a href="/">Home</a></li>
           <li><a href="/industries/">Industries</a></li>
+          <li><a href="/insights/">Insights</a></li>
+          <li><a href="/visuals/">Visuals</a></li>
+          <li><a href="/about/">About</a></li>
           <li><a href="/hire/">Hire us</a></li>
           <li><a href="/contact/">Contact</a></li>
         </ul>
       </div>
 
-      <!-- Social Column -->
-      <div class="footer-col">
-        <span class="footer-heading">SOCIAL</span>
-        <div class="footer-socials">
-          <a href="#" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="#" target="_blank" rel="noopener">Facebook</a>
-          <a href="#" target="_blank" rel="noopener">Instagram</a>
-          <a href="#" target="_blank" rel="noopener">Threads</a>
-          <a href="#" target="_blank" rel="noopener">Reddit</a>
+      <!-- Social Column (links come from src/data/social.ts; empty ones are hidden) -->
+      {socials.length > 0 && (
+        <div class="footer-col">
+          <span class="footer-heading">SOCIAL</span>
+          <div class="footer-socials">
+            {socials.map((s) => <a href={s.url} target="_blank" rel="noopener noreferrer">{s.name}</a>)}
+          </div>
         </div>
-      </div>
+      )}
     </div>
 
     <!-- Bottom Bar -->

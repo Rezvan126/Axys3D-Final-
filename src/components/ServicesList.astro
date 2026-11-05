@@ -52,7 +52,7 @@ const columns = [services.slice(0, 4), services.slice(4)];
                   <div class="svc-card-more-inner">
                     <p class="svc-card-blurb">{s.blurb}</p>
                     <p class="svc-card-tags">{s.includes.map((t) => <span>{t}</span>)}</p>
-                    <a href={`/services/${s.slug}`} class="svc-card-link" aria-label={`Explore ${s.title}`}>
+                    <a href={`/services/${s.slug}/`} class="svc-card-link" aria-label={`Explore ${s.title}`}>
                       <span>Explore service</span>
                       <span aria-hidden="true">↗</span>
                     </a>

@@ -14,7 +14,8 @@
  */
 
 // ---------- Basic setup ----------
-header('Access-Control-Allow-Origin: http://localhost:4321');
+// Same-site form only (the page and this file are both on axys3d.com)
+header('Access-Control-Allow-Origin: https://axys3d.com');
 header('Access-Control-Allow-Methods: POST');
 header('Content-Type: application/json');
 

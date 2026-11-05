@@ -3,19 +3,25 @@ import "../styles/Navbar.css";
 
 const links = [
   { label: "Home", href: "/" },
-  { label: "Industries", href: "/industries" },
-  { label: "Insights", href: "/insights" },
-  { label: "Visuals", href: "/visuals" },
-  { label: "About", href: "/about" },
-  { label: "Hire us", href: "/hire" },
+  { label: "Industries", href: "/industries/" },
+  { label: "Insights", href: "/insights/" },
+  { label: "Visuals", href: "/visuals/" },
+  { label: "About", href: "/about/" },
+  { label: "Hire us", href: "/hire/" },
 ];
 
 // Current page ko highlight karne ke liye
-const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : path.toLowerCase() === href.toLowerCase() ||
-  path.toLowerCase().startsWith(href.toLowerCase() + "/");
+const rawPath = (Astro.url.pathname.replace(/\/+$/, "") || "/").toLowerCase();
+// pages that live under a menu item without their own entry:
+// service pages belong to Home (the services section), case studies to Visuals
+const path = rawPath.startsWith("/services/") ? "/" : rawPath.startsWith("/work/") ? "/visuals" : rawPath;
+const isActive = (href: string) => {
+  const h = href.replace(/\/+$/, "").toLowerCase() || "/";
+  return h === "/" ? path === "/" : path === h || path.startsWith(h + "/");
+};
 ---
+
+<a href="#main" class="skip-link">Skip to content</a>
 
 <!-- =====================================================
      FIXED FLOATING NAVBAR (har page py scroll k sath tiki rehti hai)
@@ -45,7 +51,7 @@ const isActive = (href: string) =>
     <div class="nav-right">
 
       <!-- gold rim + pearl face, brown text -->
-      <a href="/contact" class="topbar-cta">
+      <a href="/contact/" class="topbar-cta">
         <span class="topbar-cta-face">
           <span>Discuss a production package</span>
           <svg class="topbar-cta-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
@@ -93,7 +99,7 @@ const isActive = (href: string) =>
     ))}
   </ul>
 
-  <a href="/contact" class="side-nav-cta">
+  <a href="/contact/" class="side-nav-cta">
     <span>Discuss a production package</span>
     <span>↗</span>
   </a>

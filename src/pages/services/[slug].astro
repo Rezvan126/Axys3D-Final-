@@ -252,7 +252,7 @@ const projects = (matched.length ? matched : workAll).slice(0, 3).map((e: any) =
   meta: flat(e.data.client ?? e.data.location)[0] ?? "",
   image: asUrl(pick(e.data, ["poster", "image", "thumbnail", "cover", "coverImage", "heroImage", "hero"])),
   video: asUrl(pick(e.data, ["video", "videoUrl", "videoSrc", "heroVideo", "previewVideo", "cardVideo", "preview"])),
-  href: `/work/${e.id.replace(/^\d+-/, "")}`,
+  href: `/work/${e.id.replace(/^\d+-/, "")}/`,
 }));
 
 const buyers = bestFitBuyers.slice(0, 4);
@@ -283,7 +283,7 @@ const context = engagementContext.slice(0, 4);
   <body class="page-service-detail">
     <Navbar variant="solid" />
 
-    <main class="svcd-page">
+    <main id="main" tabindex="-1" class="svcd-page">
 
       <!-- =========== BANNER =========== -->
       <section class="svcd-banner">
@@ -428,7 +428,7 @@ const context = engagementContext.slice(0, 4);
                 <span class="svcd-label">Projects</span>
                 <h2 class="svcd-h2">Work that shows <span class="svcd-hl">{title}</span></h2>
               </div>
-              <a class="svcd-link" href="/work">All projects <span>↗</span></a>
+              <a class="svcd-link" href="/visuals/">All projects <span>↗</span></a>
             </div>
 
             <div class="svcd-projects" data-n={projects.length}>
