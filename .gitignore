@@ -78,4 +78,5 @@ vite.config.ts.timestamp-*
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
-!.yarn/versionsaxys3d-backup.bundle
+!.yarn/versions
+axys3d-backup.bundle
