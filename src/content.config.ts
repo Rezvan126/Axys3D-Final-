@@ -67,32 +67,6 @@ const industries = defineCollection({
   }),
 });
 
-// 5. Process Page Collection
-// Variable ka naam processPage hai (Node ke global `process` se bachne ke liye),
-// lekin collection ka naam "process" hi rakha hai, to getCollection("process") waisa hi chalega.
-const processPage = defineCollection({
-  loader: glob({ pattern: "index.md", base: "./src/content/process" }),
-  schema: z.object({
-    heroTitle: z.string(),
-    heroSubtitle: z.string(),
-    heroDescription: z.string(),
-    steps: z.array(
-      z.object({
-        id: z.string(),
-        title: z.string(),
-        description: z.string(),
-      }),
-    ),
-    controlPointsTitle: z.string().optional(),
-    controlPointsSubtitle: z.string().optional(),
-    controlPoints: z.array(z.string()).optional(),
-    ctaTitle: z.string().optional(),
-    ctaSubtitle: z.string().optional(),
-    ctaLabel: z.string().optional(),
-    ctaLink: z.string().optional(),
-    ...seoFields,
-  }),
-});
 
 // 6. Work Page Master Metadata & Filters
 
@@ -245,7 +219,6 @@ export const collections = {
   services,
   industriesPage,
   industries,
-  process: processPage,
   projects,
   insightsPage,
   insights,

@@ -23,9 +23,9 @@ Rules for every change to this site. Follow these exactly; ask before deviating.
 
 ## Site structure
 
-Menu: Home · Industries · Process · Insights · Visuals · About · Hire us.
+Menu: Home · Industries · Insights · Visuals · About · Hire us.
 
-- **Removed:** Services overview page (services live on the home page `#services`; the 8 `/services/<slug>` detail pages remain). Work page (merged into Visuals). Redirects `/work → /visuals`, `/services → /#services` in `astro.config.mjs`.
+- **Removed:** Services overview page (services live on the home page `#services`; the 8 `/services/<slug>` detail pages remain). Work page (merged into Visuals). Process page (removed on request). Redirects `/work → /visuals`, `/services → /#services`, `/process → /` in `astro.config.mjs`.
 - **Page files are lowercase** (`src/pages/about.astro` …) and every internal link is lowercase. Hosting is Linux: case matters.
 - **Insights** = articles + case studies hub with filters; 3 SEO guides in `src/content/insights/`.
 - **Hire us** (`/hire`) = Upwork/Fiverr hiring, rates, payments. Data in `src/data/hire.ts`.

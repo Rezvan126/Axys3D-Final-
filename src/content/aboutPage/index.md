@@ -18,8 +18,8 @@ principles:
   - num: "04"
     title: "NDA and rights by default"
     description: "Identity, media, outcomes and credits stay private until the accountable owner and publication approver record explicit permission."
-deliveryTitle: "Delivery controls"
-deliveryDescription: "Review the production process."
-ctaLabel: "See the six-stage process"
-ctaLink: "/process"
+deliveryTitle: "Ready to start? Send us your brief."
+deliveryDescription: "Share your drawings and deadline. We reply with a clear scope, price and timeline."
+ctaLabel: "Start a project"
+ctaLink: "/contact/"
 ---

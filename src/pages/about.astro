@@ -26,7 +26,9 @@ const splitHalf = (text: string = "") => {
 };
 
 const [whyA, whyB] = splitHalf(pageData.whySubtitle);
-const [delA, delB] = splitHalf(pageData.deliveryTitle);
+// split after the first sentence when there is one ("Ready to start? | Send us your brief.")
+const delParts = pageData.deliveryTitle.match(/^(.+?[?.!])\s+(.+)$/);
+const [delA, delB] = delParts ? [delParts[1], delParts[2]] : splitHalf(pageData.deliveryTitle);
 
 const IMG = {
   tallBento: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
@@ -177,8 +179,8 @@ const quotes = [
                 </div>
                 <h3>Precision-crafted BIM & visual coordination to deliver unmatched architectural clarity.</h3>
               </div>
-              <a href="/process" class="abt-bento-pill-btn">
-                <span>Explore Process</span>
+              <a href="/visuals/" class="abt-bento-pill-btn">
+                <span>See our work</span>
                 <span>→</span>
               </a>
             </div>
@@ -305,8 +307,8 @@ const quotes = [
           <div class="abt-final-inner" data-reveal>
             <h2>{delA} <span>{delB}</span></h2>
             <p>{pageData.deliveryDescription}</p>
-            <a href="/process" class="abt-final-button">
-              <span>{pageData.ctaLabel || "See the six-stage process"}</span>
+            <a href={pageData.ctaLink || "/contact/"} class="abt-final-button">
+              <span>{pageData.ctaLabel || "Start a project"}</span>
               <span>↗</span>
             </a>
           </div>

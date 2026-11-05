@@ -12,5 +12,6 @@ export default defineConfig({
   redirects: {
     "/work": "/visuals",
     "/services": "/#services",
+    "/process": "/",
   },
 });
