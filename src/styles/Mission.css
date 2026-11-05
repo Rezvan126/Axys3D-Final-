@@ -247,3 +247,111 @@
 .m-book-arrow { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: #fff; transition: transform 0.3s ease, background 0.3s ease; }
 .m-book:hover .m-book-arrow { transform: translateX(3px); background: #5b3b27; }
 .m-book-arrow svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* =========================================================
+   PROOF CARDS (Nov 2026): five cards, each answers one buyer question.
+   Row 1: track record (wide) + turnaround. Row 2: quality, software, hiring.
+========================================================= */
+.pf-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+.pf-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--m-brown-lt); }
+.pf-h2 { margin: 0; font-family: "Manrope", sans-serif; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+.pf-h2 span { color: var(--m-brown-hi); }
+
+.pf-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+.pf-track { grid-column: span 7; }
+.pf-speed { grid-column: span 5; }
+.pf-quality, .pf-tools, .pf-safe { grid-column: span 4; }
+
+.pf-card { display: flex; flex-direction: column; gap: 18px; padding: 28px; }
+.pf-label { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--m-brown-lt); }
+.pf-h3 { margin: 0; font-family: "Manrope", sans-serif; font-weight: 800; color: #fff; line-height: 1.25; }
+.pf-note { margin: auto 0 0; font-size: 14px; line-height: 1.55; color: var(--m-muted); }
+.pf-link {
+  margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600; color: var(--m-sand); text-decoration: none;
+  border-bottom: 1px solid rgba(227, 200, 168, 0.3); padding-bottom: 3px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.pf-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s ease; }
+.pf-link:hover { color: #fff; border-color: var(--m-sand); }
+.pf-link:hover svg { transform: translateX(3px); }
+.pf-link:focus-visible { outline: 2px solid var(--m-sand); outline-offset: 3px; border-radius: 2px; }
+
+/* 1. track record */
+.pf-track { background: linear-gradient(180deg, #1a130f 0%, #120e0b 100%); }
+.pf-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.pf-stat { display: flex; flex-direction: column; gap: 4px; }
+.pf-stat + .pf-stat { padding-left: 24px; border-left: 1px solid var(--m-edge); }
+.pf-track .m-recent { margin-top: 0; }
+
+/* 2. turnaround (keeps the milestone timeline styles of .m-days) */
+.pf-speed { justify-content: flex-start; gap: 22px; }
+.pf-speed .m-book { margin-top: auto; }
+
+/* 3. quality */
+.pf-quality { align-items: stretch; gap: 18px; }
+.pf-rating { display: flex; align-items: center; gap: 18px; }
+.pf-quality .m-gauge { width: 96px; height: 96px; flex: none; }
+.pf-quality .m-gauge .m-num { font-size: 28px; }
+.pf-quality .m-gauge .m-num small { font-size: 0.45em; margin-left: 2px; }
+.pf-rating-text { display: flex; flex-direction: column; gap: 6px; }
+.pf-quality .m-sheet { margin-top: 4px; }
+
+/* 4. software */
+.pf-logos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pf-logos li {
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid var(--m-edge);
+  font-size: 14px; font-weight: 600; color: #ece6e0;
+  transition: border-color 0.2s ease;
+}
+.pf-logos li:hover { border-color: rgba(184, 148, 111, 0.4); }
+.pf-logos svg { width: 20px; height: 20px; flex: none; fill: var(--m-sand); }
+
+/* 5. hiring */
+.pf-platforms { display: flex; flex-wrap: wrap; gap: 10px; }
+.pf-platform {
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid var(--m-edge);
+  font-size: 14px; font-weight: 600; color: #ece6e0;
+}
+.pf-platform svg { width: 18px; height: 18px; fill: var(--m-sand); }
+.pf-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.pf-checks li { position: relative; padding-left: 28px; font-size: 14.5px; line-height: 1.5; color: #e3ddd7; }
+.pf-checks li::before {
+  content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(143, 100, 68, 0.22) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e3c8a8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 11px no-repeat;
+}
+
+@media (max-width: 1100px) {
+  .pf-track, .pf-speed { grid-column: span 12; }
+  .pf-quality { grid-column: span 12; }
+  .pf-tools, .pf-safe { grid-column: span 6; }
+}
+@media (max-width: 700px) {
+  .pf-grid { gap: 14px; }
+  .pf-track, .pf-speed, .pf-quality, .pf-tools, .pf-safe { grid-column: span 12; }
+  .pf-card { padding: 22px; }
+  .pf-stats { gap: 14px; }
+  .pf-stat + .pf-stat { padding-left: 14px; }
+  .pf-track .m-num--xl { font-size: 52px; }
+}
+.pf-h3 { text-wrap: balance; }
+.pf-note--top { margin: 0; padding-top: 18px; border-top: 1px solid var(--m-edge); }
+.pf-quality .m-sheet { max-width: 420px; }
+@media (max-width: 1100px) {
+  .pf-track { grid-column: span 7; }
+  .pf-speed { grid-column: span 5; }
+  .pf-quality, .pf-tools, .pf-safe { grid-column: span 4; }
+}
+@media (max-width: 960px) {
+  .pf-track, .pf-speed { grid-column: span 12; }
+  .pf-quality, .pf-tools { grid-column: span 6; }
+  .pf-safe { grid-column: span 12; }
+}
+@media (max-width: 700px) {
+  .pf-track, .pf-speed, .pf-quality, .pf-tools, .pf-safe { grid-column: span 12; }
+}
+.pf-stat { gap: 10px; }
+/* stamp sits on the building, clear of the sheet's level and title text */
+.pf-quality .m-stamp { right: auto; left: 9%; top: 50%; }

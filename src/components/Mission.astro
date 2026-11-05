@@ -1,5 +1,7 @@
 ---
 import "../styles/Mission.css";
+import { services } from "../data/services";
+import { platforms } from "../data/hire";
 
 // Booking month: up to the 15th we book the current month, after the 15th the next month.
 // Worked out at build time and again in the visitor's browser, so it is never stale.
@@ -19,155 +21,165 @@ const milestones = [
   { day: 5, text: "In-house QC", icon: "M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4" },
   { day: 7, text: "First render", icon: "M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4" },
 ];
+// Software we deliver in: logos come from the services data (Simple Icons, CC0)
+const toolNames = ["Autodesk Revit", "Autodesk 3ds Max", "Corona Renderer", "Unreal Engine", "Blender", "Adobe After Effects"];
+const toolLabel: Record<string, string> = { "Autodesk Revit": "Revit", "Autodesk 3ds Max": "3ds Max", "Corona Renderer": "Corona", "Unreal Engine": "Unreal Engine", "Blender": "Blender", "Adobe After Effects": "After Effects" };
+const tools = toolNames.map((n) => services.find((s) => s.logo.name === n)?.logo).filter(Boolean) as { name: string; d: string }[];
 ---
 
-<!-- STATS — each card leads with a visual; text is one short label. -->
-<section class="mission" id="missionSection">
+<!-- PROOF — five cards, each answers one question a studio asks before hiring us -->
+<section class="mission" id="missionSection" aria-labelledby="pfTitle">
   <div class="mission-inner">
-    <div class="mission-grid">
+    <header class="pf-head">
+      <span class="pf-eyebrow">Why studios work with us</span>
+      <h2 id="pfTitle" class="pf-h2">Proven on <span>172 projects.</span></h2>
+    </header>
 
-      <!-- COLUMN 1 -->
-      <div class="mission-col">
-        <!-- Partners: orbit of studio dots around the number -->
-        <div class="mission-card m-partners" data-reveal>
-          <div class="m-orbit" aria-hidden="true">
-            <span class="m-ring m-ring--1"><i></i><i></i></span>
-            <span class="m-ring m-ring--2"><i></i><i></i><i></i></span>
-            <span class="m-ring m-ring--3"><i></i><i></i></span>
+    <div class="pf-grid">
+
+      <!-- 1. Track record -->
+      <article class="mission-card pf-card pf-track" data-reveal>
+        <span class="pf-label">Track record</span>
+        <div class="pf-stats">
+          <div class="pf-stat">
+            <span class="m-num m-num--xl"><span data-count-to="172">172</span></span>
+            <span class="m-label">Projects delivered</span>
           </div>
-          <div class="m-figure">
-            <span class="m-num"><span data-count-to="43">43</span><sup>+</sup></span>
+          <div class="pf-stat">
+            <span class="m-num m-num--xl"><span data-count-to="43">43</span><sup>+</sup></span>
             <span class="m-label">Studio partners worldwide</span>
           </div>
         </div>
-
-        <!-- Turnaround: seven day cells fill up to the first render -->
-        <div class="mission-card m-days" data-reveal>
-          <div class="m-figure m-figure--row">
-            <span class="m-num"><span data-count-to="7">7</span><small>days</small></span>
-            <span class="m-label">Brief to first render</span>
-          </div>
-          <!-- milestone timeline: what happens on the way to the first render -->
-          <div class="m-tl">
-            <span class="m-tl-line" aria-hidden="true"><span class="m-tl-fill"></span></span>
-            <ol class="m-tl-steps">
-              {milestones.map((m, i) => (
-                <li style={`--i:${i}`} class:list={[i === milestones.length - 1 && "is-final"]}>
-                  <span class="m-tl-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={m.icon} /></svg></span>
-                  <span class="m-tl-day">Day {m.day}</span>
-                  <span class="m-tl-text">{m.text}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </div>
-
-      <!-- COLUMN 2: featured — projects delivered -->
-      <div class="mission-card m-projects" data-reveal>
-        <div class="m-projects-body">
-          <span class="m-num m-num--xl"><span data-count-to="172">172</span></span>
-          <span class="m-label">Projects delivered</span>
-          <ul class="m-pills" aria-label="What you get">
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4" /></svg>
-              Renders
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h12v12H3z M15 10l6-3v10l-6-3" /></svg>
-              Walkthroughs
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z" /></svg>
-              Stills
-            </li>
+        <div class="m-recent">
+          <span class="m-recent-head">Recent work</span>
+          <ul>
+            {recentWork.map((r) => (
+              <li>
+                <span class="m-recent-name">{r.name}</span>
+                <span class="m-recent-what">{r.what}</span>
+              </li>
+            ))}
           </ul>
-          <!-- recent work: real projects, described by type only (no client names or addresses) -->
-          <div class="m-recent">
-            <span class="m-recent-head">Recent work</span>
-            <ul>
-              {recentWork.map((r) => (
-                <li>
-                  <span class="m-recent-name">{r.name}</span>
-                  <span class="m-recent-what">{r.what}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <!-- booking: static calendar tile, no animation -->
-          <a class="m-book" href="/contact/">
-            <span class="m-cal" aria-hidden="true">
-              <span class="m-cal-top"></span>
-              <b id="mBookingMonthShort">{bookingMonth(new Date()).slice(0, 3)}</b>
-            </span>
-            <span class="m-book-text">
-              <small>Now booking</small>
-              <strong><span id="mBookingMonth">{bookingMonth(new Date())}</span> projects</strong>
-            </span>
-            <span class="m-book-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
-          </a>
         </div>
-      </div>
+        <a class="pf-link" href="/visuals">See the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
+      </article>
 
-      <!-- COLUMN 3: rating gauge + approval curve -->
-      <div class="mission-card m-rating" data-reveal>
-        <div class="m-gauge" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="mGaugeGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#d9b48c" />
-                <stop offset="100%" stop-color="#6b452c" />
-              </linearGradient>
-            </defs>
-            <circle class="m-gauge-track" cx="60" cy="60" r="50" />
-            <circle class="m-gauge-fill" cx="60" cy="60" r="50" pathLength="100" style="--val:96" />
-          </svg>
-          <div class="m-gauge-center">
-            <span class="m-num"><span data-count-to="4.8" data-decimals="1">4.8</span><small>/5</small></span>
-            <span class="m-stars">★★★★★</span>
-          </div>
+      <!-- 2. Turnaround -->
+      <article class="mission-card pf-card pf-speed m-days" data-reveal>
+        <span class="pf-label">Turnaround</span>
+        <div class="m-figure m-figure--row">
+          <span class="m-num m-num--xl"><span data-count-to="7">7</span><small>days</small></span>
+          <span class="m-label">Brief to first render</span>
         </div>
-        <span class="m-label m-label--center">Average client rating</span>
+        <div class="m-tl">
+          <span class="m-tl-line" aria-hidden="true"><span class="m-tl-fill"></span></span>
+          <ol class="m-tl-steps">
+            {milestones.map((m, i) => (
+              <li style={`--i:${i}`} class:list={[i === milestones.length - 1 && "is-final"]}>
+                <span class="m-tl-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={m.icon} /></svg></span>
+                <span class="m-tl-day">Day {m.day}</span>
+                <span class="m-tl-text">{m.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <p class="pf-note pf-note--top">You review every stage. Nothing moves on until you approve it.</p>
+        <a class="m-book" href="/contact/">
+          <span class="m-cal" aria-hidden="true">
+            <span class="m-cal-top"></span>
+            <b id="mBookingMonthShort">{bookingMonth(new Date()).slice(0, 3)}</b>
+          </span>
+          <span class="m-book-text">
+            <small>Now booking</small>
+            <strong><span id="mBookingMonth">{bookingMonth(new Date())}</span> projects</strong>
+          </span>
+          <span class="m-book-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+        </a>
+      </article>
 
-        <!-- a drawing sheet gets the client's approval stamp -->
-        <div class="m-signoff">
-          <div class="m-sheet" aria-hidden="true">
-            <!-- elevation sheet: frame, grid bubbles, building, levels, dimension, title block -->
-            <svg viewBox="0 0 240 150">
-              <rect class="m-sh-paper" x="0.5" y="0.5" width="239" height="149" rx="6" />
-              <rect class="m-sh-frame" x="6" y="6" width="228" height="138" />
-              <!-- title block -->
-              <path class="m-sh-frame" d="M184 6 V144 M184 104 H234 M184 118 H234 M184 131 H234 M209 118 V144" />
-              <text class="m-sh-txt m-sh-strong" x="189" y="114">AXYS3D</text>
-              <text class="m-sh-txt" x="189" y="127">ELEVATION A</text>
-              <text class="m-sh-txt" x="189" y="140">1:100</text>
-              <text class="m-sh-txt m-sh-strong" x="213" y="140">A-201</text>
-              <text class="m-sh-txt" x="189" y="16">REV C</text>
-              <!-- grid bubbles + axes -->
-              <path class="m-sh-axis" d="M30 26 V126 M98 26 V126 M166 26 V126" />
-              <circle class="m-sh-bubble" cx="30" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="30" y="22">A</text>
-              <circle class="m-sh-bubble" cx="98" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="98" y="22">B</text>
-              <circle class="m-sh-bubble" cx="166" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="166" y="22">C</text>
-              <!-- building (draws in) -->
-              <path class="m-sheet-draw" pathLength="100" d="M24 112 V70 H112 V112 M58 70 V44 H172 V112 H112 M58 44 V70" />
-              <path class="m-sheet-draw" pathLength="100" d="M34 82 H62 V96 H34 Z M76 84 H86 V112 H76 Z M120 52 H134 V64 H120 Z M140 52 H154 V64 H140 Z M160 52 H168 V64 H160 Z M120 82 H166 V104 H120 Z M143 82 V104" />
-              <!-- ground with hatch -->
-              <path class="m-sh-ground" d="M14 112 H180" />
-              <path class="m-sh-hatch" d="M18 116 l4 -4 M28 116 l4 -4 M38 116 l4 -4 M48 116 l4 -4 M58 116 l4 -4 M68 116 l4 -4 M78 116 l4 -4 M88 116 l4 -4 M98 116 l4 -4 M108 116 l4 -4 M118 116 l4 -4 M128 116 l4 -4 M138 116 l4 -4 M148 116 l4 -4 M158 116 l4 -4 M168 116 l4 -4" />
-              <!-- level markers -->
-              <path class="m-sh-dim" d="M172 44 H180 M172 70 H180 M172 112 H180" />
-              <text class="m-sh-txt" x="160" y="41">+6.40</text>
-              <text class="m-sh-txt" x="160" y="67">+3.20</text>
-              <!-- overall dimension -->
-              <path class="m-sh-dim" d="M24 126 H172 M24 122.5 V129.5 M172 122.5 V129.5 M21.5 128.5 L26.5 123.5 M169.5 128.5 L174.5 123.5" />
-              <text class="m-sh-txt m-sh-c" x="98" y="137">14 800</text>
+      <!-- 3. Quality -->
+      <article class="mission-card pf-card pf-quality m-rating" data-reveal>
+        <span class="pf-label">Quality</span>
+        <div class="pf-rating">
+          <div class="m-gauge" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <defs>
+                <linearGradient id="mGaugeGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#d9b48c" />
+                  <stop offset="100%" stop-color="#6b452c" />
+                </linearGradient>
+              </defs>
+              <circle class="m-gauge-track" cx="60" cy="60" r="50" />
+              <circle class="m-gauge-fill" cx="60" cy="60" r="50" pathLength="100" style="--val:96" />
             </svg>
-            <span class="m-stamp">Approved</span>
+            <div class="m-gauge-center">
+              <span class="m-num"><span data-count-to="4.8" data-decimals="1">4.8</span><small>/5</small></span>
+            </div>
           </div>
-          <span class="m-label">Faster client sign-off</span>
+          <div class="pf-rating-text">
+            <span class="m-stars" aria-label="Rated 4.8 out of 5">★★★★★</span>
+            <span class="m-label">Average client rating</span>
+          </div>
         </div>
-      </div>
+        <div class="m-sheet" aria-hidden="true">
+          <svg viewBox="0 0 240 150">
+            <rect class="m-sh-paper" x="0.5" y="0.5" width="239" height="149" rx="6" />
+            <rect class="m-sh-frame" x="6" y="6" width="228" height="138" />
+            <path class="m-sh-frame" d="M184 6 V144 M184 104 H234 M184 118 H234 M184 131 H234 M209 118 V144" />
+            <text class="m-sh-txt m-sh-strong" x="189" y="114">AXYS3D</text>
+            <text class="m-sh-txt" x="189" y="127">ELEVATION A</text>
+            <text class="m-sh-txt" x="189" y="140">1:100</text>
+            <text class="m-sh-txt m-sh-strong" x="213" y="140">A201</text>
+            <text class="m-sh-txt" x="189" y="16">REV C</text>
+            <path class="m-sh-axis" d="M30 26 V126 M98 26 V126 M166 26 V126" />
+            <circle class="m-sh-bubble" cx="30" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="30" y="22">A</text>
+            <circle class="m-sh-bubble" cx="98" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="98" y="22">B</text>
+            <circle class="m-sh-bubble" cx="166" cy="20" r="6" /><text class="m-sh-txt m-sh-c" x="166" y="22">C</text>
+            <path class="m-sheet-draw" pathLength="100" d="M24 112 V70 H112 V112 M58 70 V44 H172 V112 H112 M58 44 V70" />
+            <path class="m-sheet-draw" pathLength="100" d="M34 82 H62 V96 H34 Z M76 84 H86 V112 H76 Z M120 52 H134 V64 H120 Z M140 52 H154 V64 H140 Z M160 52 H168 V64 H160 Z M120 82 H166 V104 H120 Z M143 82 V104" />
+            <path class="m-sh-ground" d="M14 112 H180" />
+            <path class="m-sh-hatch" d="M18 116 l4 -4 M28 116 l4 -4 M38 116 l4 -4 M48 116 l4 -4 M58 116 l4 -4 M68 116 l4 -4 M78 116 l4 -4 M88 116 l4 -4 M98 116 l4 -4 M108 116 l4 -4 M118 116 l4 -4 M128 116 l4 -4 M138 116 l4 -4 M148 116 l4 -4 M158 116 l4 -4 M168 116 l4 -4" />
+            <path class="m-sh-dim" d="M172 44 H180 M172 70 H180 M172 112 H180" />
+            <text class="m-sh-txt" x="160" y="41">+6.40</text>
+            <text class="m-sh-txt" x="160" y="67">+3.20</text>
+            <path class="m-sh-dim" d="M24 126 H172 M24 122.5 V129.5 M172 122.5 V129.5 M21.5 128.5 L26.5 123.5 M169.5 128.5 L174.5 123.5" />
+            <text class="m-sh-txt m-sh-c" x="98" y="137">14 800</text>
+          </svg>
+          <span class="m-stamp">Approved</span>
+        </div>
+        <p class="pf-note">Every model, drawing and render is checked in house before it reaches you.</p>
+      </article>
+
+      <!-- 4. Software -->
+      <article class="mission-card pf-card pf-tools" data-reveal>
+        <span class="pf-label">Software</span>
+        <h3 class="pf-h3">Delivered in the tools you already use</h3>
+        <ul class="pf-logos">
+          {tools.map((t) => (
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d={t.d} /></svg>
+              <span>{toolLabel[t.name]}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="pf-note">Native files, built to your templates and standards.</p>
+      </article>
+
+      <!-- 5. Safe hiring -->
+      <article class="mission-card pf-card pf-safe" data-reveal>
+        <span class="pf-label">Hiring</span>
+        <h3 class="pf-h3">Safe, simple payment</h3>
+        <div class="pf-platforms">
+          <span class="pf-platform"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.upwork.logo} /></svg>Upwork</span>
+          <span class="pf-platform"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.fiverr.logo} /></svg>Fiverr</span>
+        </div>
+        <ul class="pf-checks">
+          <li>Your payment is held by the platform until you approve the work</li>
+          <li>A written contract on every job</li>
+          <li>NDA on request</li>
+        </ul>
+        <a class="pf-link" href="/hire">How hiring works <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
+      </article>
 
     </div>
   </div>
