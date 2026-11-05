@@ -34,16 +34,6 @@ const isActive = (href: string) =>
     <!-- CENTER PILL NAV (desktop) -->
     <nav class="floating-nav" aria-label="Primary">
       <ul id="navList">
-        <!-- glass pill: sits behind the current page, glides to the hovered link -->
-        <span class="nav-glass" id="navGlass" aria-hidden="true"></span>
-        <!-- lens map for the glass: bends what is behind its edges, like real glass -->
-        <svg class="nav-glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
-          <filter id="navLiquid" x="0" y="0" width="1" height="1" filterUnits="objectBoundingBox" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">
-            <feImage x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"
-              href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='60' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='x' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='rgb(255,0,0)'/%3E%3Cstop offset='.22' stop-color='rgb(128,0,0)'/%3E%3Cstop offset='.78' stop-color='rgb(128,0,0)'/%3E%3Cstop offset='1' stop-color='rgb(0,0,0)'/%3E%3C/linearGradient%3E%3ClinearGradient id='y' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='rgb(0,255,0)'/%3E%3Cstop offset='.3' stop-color='rgb(0,128,0)'/%3E%3Cstop offset='.7' stop-color='rgb(0,128,0)'/%3E%3Cstop offset='1' stop-color='rgb(0,0,0)'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='200' height='60' fill='url(%23x)'/%3E%3Crect width='200' height='60' fill='url(%23y)' style='mix-blend-mode:screen'/%3E%3C/svg%3E" />
-            <feDisplacementMap in="SourceGraphic" in2="map" scale="0.09" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </svg>
         {links.map((l) => (
           <li>
             <a href={l.href} class={isActive(l.href) ? "is-active" : ""} aria-current={isActive(l.href) ? "page" : undefined}>{l.label}</a>
@@ -153,66 +143,4 @@ const isActive = (href: string) =>
   window.matchMedia("(min-width: 1301px)").addEventListener("change", (e) => {
     if (e.matches) setOpen(false);
   });
-
-  /* ---------- Liquid glass pill behind the current page ----------
-     Each edge of the pill is its own spring. The leading edge is stiffer than the trailing
-     one, so while it travels the glass stretches like a drop of liquid, thins a little,
-     then settles with a soft wobble. */
-  const list = document.getElementById("navList");
-  const glass = document.getElementById("navGlass");
-  if (list && glass) {
-    const linksEls = Array.from(list.querySelectorAll<HTMLAnchorElement>("a"));
-    const current = linksEls.find((a) => a.classList.contains("is-active")) || null;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const edge = () => ({ x: 0, v: 0, t: 0 });
-    const L = edge(), R = edge();
-    let raf = 0, shown = false;
-
-    const measure = (a: HTMLElement) => {
-      const lr = list.getBoundingClientRect(), ar = a.getBoundingClientRect();
-      return { l: ar.left - lr.left, r: ar.right - lr.left };
-    };
-    const draw = () => {
-      const w = Math.max(8, R.x - L.x);
-      const rest = Math.max(8, R.t - L.t);
-      const stretch = Math.min(0.6, Math.abs(w - rest) / rest);
-      const sy = 1 - stretch * 0.32;                          // thinner while stretched
-      glass.style.width = `${w}px`;
-      glass.style.transform = `translateX(${L.x}px) scaleY(${sy.toFixed(3)})`;
-      glass.style.setProperty("--speed", Math.min(1, (Math.abs(L.v) + Math.abs(R.v)) / 60).toFixed(3));
-    };
-    const step = () => {
-      const movingRight = R.t > R.x || L.t > L.x;
-      const kLead = 0.16, kTrail = 0.075, damp = 0.68;
-      const kL = movingRight ? kTrail : kLead, kR = movingRight ? kLead : kTrail;
-      L.v = (L.v + (L.t - L.x) * kL) * damp; L.x += L.v;
-      R.v = (R.v + (R.t - R.x) * kR) * damp; R.x += R.v;
-      // the drop may wobble, but never leaves the bar
-      const max = list.clientWidth;
-      L.x = Math.max(0, Math.min(L.x, max - 8)); R.x = Math.max(L.x + 8, Math.min(R.x, max));
-      draw();
-      const settled = Math.abs(L.t - L.x) < 0.2 && Math.abs(R.t - R.x) < 0.2 && Math.abs(L.v) < 0.05 && Math.abs(R.v) < 0.05;
-      if (settled) { L.x = L.t; R.x = R.t; L.v = R.v = 0; draw(); raf = 0; glass.classList.remove("is-moving"); return; }
-      raf = requestAnimationFrame(step);
-    };
-    const go = (a: HTMLElement | null, instant = false) => {
-      if (!a) { glass.style.opacity = "0"; shown = false; return; }
-      const m = measure(a);
-      L.t = m.l; R.t = m.r;
-      if (instant || reduce || !shown) { L.x = L.t; R.x = R.t; L.v = R.v = 0; draw(); }
-      glass.style.opacity = "1"; shown = true;
-      if (!instant && !reduce && !raf) { glass.classList.add("is-moving"); raf = requestAnimationFrame(step); }
-    };
-
-    const ready = () => { list.classList.add("has-glass"); go(current, true); };
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(ready); else ready();
-    window.addEventListener("resize", () => go(current, true));
-    linksEls.forEach((a) => {
-      a.addEventListener("mouseenter", () => go(a));
-      a.addEventListener("focus", () => go(a));
-    });
-    list.addEventListener("mouseleave", () => go(current));
-    list.addEventListener("focusout", (e) => { if (!list.contains(e.relatedTarget as Node)) go(current); });
-  }
 </script>
