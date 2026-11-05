@@ -2,69 +2,87 @@
 import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import Howitworks from "../components/Howitworks.astro";
 import "../styles/token.css";
 import "../styles/global.css";
 import "../styles/Navbar.css";
-import "../styles/processPage.css";
 import "../styles/footer.css";
-import Howitworks from "../components/Howitworks.astro";
 import "../styles/Howitworks.css";
-import { getEntry } from "astro:content";
 
-const processEntry = await getEntry("process", "index");
-
-if (!processEntry) {
-  throw new Error("Could not find index.md in src/content/process/");
-}
-
-const {
-  heroTitle,
-  heroSubtitle,
-  heroDescription,
-  steps,
-  controlPointsTitle,
-  controlPointsSubtitle,
-  controlPoints = [],
-  ctaTitle,
-  ctaSubtitle,
-  ctaLabel,
-  ctaLink,
-} = processEntry.data;
-
-const pad = (n: number) => String(n).padStart(2, "0");
-const stepsCount = pad(steps.length);
-
-/* Hero title: pehla aadha white, doosra aadha muted */
-const heroWords = heroSubtitle.trim().split(/\s+/);
-const mutedFrom = Math.ceil(heroWords.length / 2);
-
-/* Hero lines: 2 lines — white part / muted part */
-const indexed = heroWords.map((text, i) => ({ text, i }));
-const heroLines = [
-  { words: indexed.slice(0, mutedFrom), muted: false },
-  { words: indexed.slice(mutedFrom), muted: true },
+// HOW WE WORK: seven steps, each mapped to the industry practice it follows
+// (ISO 19650 information management, RIBA Plan of Work, common BIM/visualization QA).
+const steps = [
+  {
+    title: "Brief and scope",
+    what: "You send drawings, references and your deadline. We confirm exactly what is needed and what is not.",
+    get: "A written scope, price and timeline before any work starts.",
+    practice: "Agreed appointment and scope (RIBA Stage 0 to 1)",
+    icon: "M6 3h9l3 3v15H6z M9 10h6 M9 14h6 M9 18h4",
+  },
+  {
+    title: "Standards and setup",
+    what: "We take your templates, naming rules, level of detail and file formats, and agree who approves what.",
+    get: "A short project setup sheet. For BIM work, an execution plan.",
+    practice: "Information requirements and BIM Execution Plan (ISO 19650)",
+    icon: "M4 6h16 M4 12h16 M4 18h10 M18 16l2 2 3-4",
+  },
+  {
+    title: "Sample first",
+    what: "Before full production we build one representative piece: a sheet, a model area or a draft view.",
+    get: "A sample to approve, so the look and standards are right from day one.",
+    practice: "Mock up and first article approval",
+    icon: "M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4",
+  },
+  {
+    title: "Production",
+    what: "Models, drawings and renders are built from the latest approved design, in agreed packages.",
+    get: "Progress at each milestone, never a surprise at the end.",
+    practice: "Work in progress and shared states in a common data environment (ISO 19650)",
+    icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z M12 12l8-4.5 M12 12v9 M12 12L4 7.5",
+  },
+  {
+    title: "Quality check",
+    what: "Every package is checked in house before you see it: model audit, clash detection, drawing checklist, render review.",
+    get: "Checked files and a short list of open questions.",
+    practice: "Model checking and clash detection (Navisworks), QA checklists",
+    icon: "M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z M9 12l2 2 4-4",
+  },
+  {
+    title: "Your review",
+    what: "You comment, we revise. Every change is logged. Nothing moves on until you approve it.",
+    get: "A revision log and a clear approval at every stage.",
+    practice: "Review and authorise gates, tracked issues (BCF)",
+    icon: "M4 5h16v11H8l-4 4z M8 10h8",
+  },
+  {
+    title: "Delivery and handoff",
+    what: "You receive native, editable files plus the final outputs, organised and named to your standards.",
+    get: "RVT, DWG, IFC, 3ds Max scenes, 4K images and films. The files are yours.",
+    practice: "Published state and archive (ISO 19650)",
+    icon: "M12 4v11 M7 10l5 5 5-5 M4 20h16",
+  },
 ];
 
-/* Text split helper */
-const splitHalf = (text: string = "") => {
-  const w = text.trim().split(/\s+/);
-  const m = Math.ceil(w.length / 2);
-  return [w.slice(0, m).join(" "), w.slice(m).join(" ")];
-};
-
-const [ctrlA, ctrlB] = splitHalf(controlPointsSubtitle);
-const [ctaA, ctaB] = splitHalf(ctaSubtitle);
-
-/* Step icons */
-const svg = (p: string) =>
-  `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
-const stepIcons = [
-  svg('<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/>'),
-  svg('<circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/>'),
-  svg('<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>'),
-  svg('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
-  svg('<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>'),
-  svg('<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>'),
+const practices = [
+  {
+    title: "ISO 19650",
+    text: "The international standard for managing BIM information. We work to your information requirements and execution plan.",
+  },
+  {
+    title: "Levels of detail",
+    text: "Models built to the LOD 100 to 500 level you specify, with the right data attached.",
+    link: { href: "/insights/lod-and-loi-in-production-brief/", label: "LOD guide" },
+  },
+  {
+    title: "Clash detection",
+    text: "Federated models checked in Navisworks, with every clash tracked to the right engineer.",
+    link: { href: "/insights/federated-model-review-environment/", label: "Coordination guide" },
+  },
+  {
+    title: "Revision control",
+    text: "Named revisions, logged comments and a clear approval before anything moves on.",
+    link: { href: "/insights/permit-ready-revit-drawing-sets/", label: "Drawing set guide" },
+  },
 ];
 ---
 
@@ -73,207 +91,177 @@ const stepIcons = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title={`${heroSubtitle} | Axys3D`} description={heroDescription} />
-    <script is:inline>
-      document.documentElement.classList.add("js");
-    </script>
+    <SEO
+      title="How we work | Axys3D"
+      description="Our seven step process for BIM, Revit and visualization production: brief, standards, sample, production, quality check, your review and delivery, following ISO 19650 and industry practice."
+    />
   </head>
 
   <body class="page-process">
-    <!-- PAGE BACKGROUND — soft gradient with a drifting corner glow -->
-    <div class="prc-page-bg" aria-hidden="true"></div>
-
     <Navbar variant="solid" />
 
-    <main class="process-page">
-      <!-- ================= HERO ================= -->
-      <section class="prc-intro">
-        <div class="prc-wrap">
-          <div class="prc-intro-row">
-            <div class="prc-intro-header">
-              <span class="prc-kicker">{heroTitle}</span>
-              <h1 class="prc-h1">
-                <span class="prc-h1-visual" aria-hidden="true">
-                  {heroLines.map((line) => (
-                    <span class="prc-line">
-                      {line.words.map((w) => (
-                        <Fragment>
-                          <span
-                            class:list={["prc-word", { "prc-word--muted": line.muted }]}
-                            style={`--i:${w.i}`}
-                          >{w.text}</span>
-                        </Fragment>
-                      ))}
-                    </span>
-                  ))}
-                </span>
-                <span class="sr-only">{heroSubtitle}</span>
-              </h1>
-              <p class="prc-lead">{heroDescription}</p>
-            </div>
-          </div>
+    <main class="pw">
+      <!-- HERO -->
+      <section class="pw-hero">
+        <div class="pw-wrap">
+          <span class="pw-eyebrow">Process</span>
+          <h1>How we work.</h1>
+          <p class="pw-lead">Seven clear steps, based on how the building industry runs projects: standards agreed first, checks at every stage, and nothing moves on until you approve it.</p>
+          <ul class="pw-facts">
+            <li><b>7 days</b><span>brief to first render</span></li>
+            <li><b>In house QC</b><span>on every package</span></li>
+            <li><b>Your standards</b><span>your templates, your files</span></li>
+          </ul>
         </div>
       </section>
 
-      <!-- ================= WORKFLOW (3 + 3 STEP CARDS) ================= -->
-      <section class="prc-steps-sec" data-steps>
-        <div class="prc-wrap">
-          <div class="prc-sec-head prc-sec-head--row" data-reveal>
-            <div>
-              <span class="prc-kicker">THE WORKFLOW</span>
-              <h2 class="prc-sec-h2">A Structured <br /><span>Delivery Process</span></h2>
-            </div>
-          </div>
-
-          <div class="prc-steps-grid">
-            {steps.map((step, i) => (
-              <article
-                class="prc-step"
-                data-step-card
-                data-reveal
-                style={`--d: ${(i % 3) * 120}ms`}
-              >
-                <div class="prc-step-top">
-                  <span class="prc-step-num">{step.id}</span>
-                  <span class="prc-step-of">{pad(i + 1)} / {stepsCount}</span>
+      <!-- THE STEPS -->
+      <section class="pw-sec" aria-labelledby="pwSteps">
+        <div class="pw-wrap">
+          <header class="pw-head">
+            <h2 id="pwSteps">Seven steps, <span>from brief to files.</span></h2>
+            <p>The same steps on every project, whether it is one render or a full BIM model.</p>
+          </header>
+          <ol class="pw-steps">
+            {steps.map((s, i) => (
+              <li class="pw-step">
+                <div class="pw-step-rail" aria-hidden="true">
+                  <span class="pw-step-ico"><svg viewBox="0 0 24 24"><path d={s.icon} /></svg></span>
                 </div>
-                <span class="prc-step-icon" set:html={stepIcons[i % stepIcons.length]} />
-                <h3 class="prc-step-title">{step.title}</h3>
-                <p class="prc-step-desc">{step.description}</p>
-                <div class="prc-step-bar"><i></i></div>
-
-                {i % 3 !== 2 && i < steps.length - 1 && (
-                  <span class="prc-step-link" aria-hidden="true">
-                    <span class="prc-step-dot">
-                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    </span>
+                <div class="pw-step-card">
+                  <span class="pw-step-num">Step {i + 1}</span>
+                  <h3>{s.title}</h3>
+                  <p class="pw-step-what">{s.what}</p>
+                  <p class="pw-step-get"><b>You get:</b> {s.get}</p>
+                  <span class="pw-step-practice">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" /></svg>
+                    Follows: {s.practice}
                   </span>
-                )}
-              </article>
+                </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      <!-- ================= CONTROL POINTS (ONE ROW) ================= -->
-      {controlPoints.length > 0 && (
-        <section class="prc-controls-sec">
-          <div class="prc-wrap">
-            <div class="prc-sec-head" data-reveal>
-              {controlPointsTitle && <span class="prc-kicker">{controlPointsTitle}</span>}
-              {controlPointsSubtitle && (
-                <h2 class="prc-sec-h2">{ctrlA} <br /><span>{ctrlB}</span></h2>
-              )}
-            </div>
+      <!-- INDUSTRY PRACTICE -->
+      <section class="pw-sec" aria-labelledby="pwPractice">
+        <div class="pw-wrap">
+          <header class="pw-head">
+            <h2 id="pwPractice">Built on <span>industry practice.</span></h2>
+            <p>The standards your own team already works to.</p>
+          </header>
+          <ul class="pw-practices">
+            {practices.map((p) => (
+              <li>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+                {p.link && <a href={p.link.href}>{p.link.label} <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-            <ul class="prc-controls-row" style={`--n: ${controlPoints.length}`}>
-              {controlPoints.map((point, i) => (
-                <li class="prc-control" data-reveal style={`--d: ${i * 90}ms`}>
-                  <span class="prc-check">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-                  </span>
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
-
-      <!-- ================= CASE STUDY: brief to delivery (moved from the home page) ================= -->
+      <!-- REAL PROJECT: brief to delivery -->
       <Howitworks />
 
-      <!-- ================= FINAL CTA ================= -->
-      {ctaSubtitle && (
-        <section class="prc-final-cta">
-          <div class="prc-wrap">
-            <div class="prc-final-inner" data-reveal>
-              {ctaTitle && <span class="prc-kicker">{ctaTitle}</span>}
-              <h2>{ctaA} <br /><span>{ctaB}</span></h2>
-              {ctaLabel && (
-                <a href={ctaLink || "/contact"} class="prc-final-button">
-                  <span>{ctaLabel}</span>
-                  <span>↗</span>
-                </a>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
+      <!-- CLOSING CTA -->
+      <section class="pw-cta">
+        <div class="pw-wrap pw-cta-in">
+          <h2>Ready to start? <span>Send us your brief.</span></h2>
+          <p>Share your drawings and deadline. We reply with a clear scope, price and timeline.</p>
+          <a href="/contact/" class="pw-cta-btn">Start a project <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></a>
+        </div>
+      </section>
     </main>
 
     <Footer />
-
-    <script is:inline>
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      // Reveal on scroll
-      const revealItems = document.querySelectorAll("[data-reveal]");
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.12 }
-      );
-      revealItems.forEach((item) => revealObserver.observe(item));
-
-      // Workflow: sequential cards highlight
-      const section = document.querySelector("[data-steps]");
-      const cards = Array.from(document.querySelectorAll("[data-step-card]"));
-
-      if (section && cards.length && !reduceMotion) {
-        const STEP_MS = 2800;
-        let idx = -1;
-        let timer = null;
-        let hovering = false;
-
-        const paint = (active) => {
-          cards.forEach((c, i) => {
-            c.classList.toggle("is-active", i === active);
-            c.classList.toggle("is-done", active >= 0 && i < active);
-          });
-        };
-
-        const tick = () => {
-          if (hovering) return;
-          idx = idx + 1 >= cards.length ? -1 : idx + 1;
-          paint(idx);
-        };
-
-        const start = () => {
-          if (timer) return;
-          tick();
-          timer = setInterval(tick, STEP_MS);
-        };
-
-        const stop = () => {
-          clearInterval(timer);
-          timer = null;
-        };
-
-        cards.forEach((card, i) => {
-          card.addEventListener("pointerenter", () => {
-            hovering = true;
-            idx = i;
-            paint(i);
-          });
-          card.addEventListener("pointerleave", () => {
-            hovering = false;
-          });
-        });
-
-        new IntersectionObserver(
-          (entries) => {
-            entries[0].isIntersecting ? start() : stop();
-          },
-          { threshold: 0.25 }
-        ).observe(section);
-      }
-    </script>
   </body>
 </html>
+
+<style>
+  .pw { color: #fff; font-family: "Barlow", system-ui, sans-serif; background: #050506; }
+  .pw-wrap { width: min(100% - 12%, 1240px); margin: 0 auto; }
+
+  .pw-hero {
+    padding: 170px 0 70px;
+    background: radial-gradient(circle at 78% 30%, rgba(143, 100, 68, 0.22) 0%, rgba(91, 59, 39, 0.08) 30%, transparent 58%), #050506;
+  }
+  .pw-eyebrow { display: block; margin-bottom: 18px; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #b8946f; }
+  .pw-hero h1 { margin: 0; }
+  .pw-lead { margin: 22px 0 0; max-width: 760px; font-size: 18px; line-height: 1.6; color: #c4bab1; }
+  .pw-facts { list-style: none; margin: 34px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
+  .pw-facts li { display: flex; flex-direction: column; gap: 2px; padding: 14px 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.03); }
+  .pw-facts b { font-size: 18px; font-weight: 600; color: #fff; }
+  .pw-facts span { font-size: 14px; color: #a49e9a; }
+
+  .pw-sec { padding: 40px 0 90px; }
+  .pw-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; max-width: 900px; }
+  .pw-head h2 { margin: 0; }
+  .pw-head h2 span { color: #8f6444; }
+  .pw-head p { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+
+  /* steps: a vertical line of numbered stages, each with its own card */
+  .pw-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; position: relative; }
+  .pw-step { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 20px; position: relative; }
+  .pw-step-rail { position: relative; display: flex; justify-content: center; }
+  .pw-step-rail::before { content: ""; position: absolute; top: 0; bottom: -16px; left: 50%; width: 2px; margin-left: -1px; background: linear-gradient(180deg, #8f6444, rgba(143, 100, 68, 0.25)); }
+  .pw-step:last-child .pw-step-rail::before { bottom: 50%; }
+  .pw-step:first-child .pw-step-rail::before { top: 32px; }
+  .pw-step-ico { position: relative; z-index: 1; display: grid; place-items: center; width: 56px; height: 56px; margin-top: 18px; border-radius: 50%; background: #1c140f; border: 1px solid rgba(184, 148, 111, 0.5); }
+  .pw-step:last-child .pw-step-ico { background: linear-gradient(135deg, #b8946f, #5b3b27); border-color: transparent; }
+  .pw-step-ico svg { width: 24px; height: 24px; fill: none; stroke: #e3c8a8; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .pw-step:last-child .pw-step-ico svg { stroke: #fff; }
+  .pw-step-card { display: flex; flex-direction: column; gap: 10px; padding: 24px 28px; border-radius: 20px; background: #121010; border: 1px solid rgba(255, 255, 255, 0.09); transition: border-color 0.3s ease; }
+  .pw-step-card:hover { border-color: rgba(143, 100, 68, 0.45); }
+  .pw-step-num { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #b8946f; }
+  .pw-step-card h3 { margin: 0; }
+  .pw-step-what { margin: 0; font-size: 16px; line-height: 1.6; color: #d6cfc8; max-width: 760px; }
+  .pw-step-get { margin: 0; font-size: 15px; line-height: 1.55; color: #a49e9a; }
+  .pw-step-get b { color: #e3c8a8; font-weight: 600; }
+  .pw-step-practice { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 7px 12px; border-radius: 999px; border: 1px dashed rgba(184, 148, 111, 0.45); font-size: 13px; color: #d9c4ad; }
+  .pw-step-practice svg { width: 14px; height: 14px; flex: none; fill: none; stroke: #d9b48c; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* industry practice */
+  .pw-practices { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .pw-practices li { display: flex; flex-direction: column; gap: 10px; padding: 24px; border-radius: 20px; background: #121010; border: 1px solid rgba(255, 255, 255, 0.09); }
+  .pw-practices h3 { margin: 0; }
+  .pw-practices p { margin: 0; font-size: 15px; line-height: 1.55; color: #b9b2ac; }
+  .pw-practices a { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14.5px; font-weight: 600; color: #d9b48c; text-decoration: none; }
+  .pw-practices a svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s ease; }
+  .pw-practices a:hover { color: #fff; }
+  .pw-practices a:hover svg { transform: translateX(3px); }
+
+  /* closing call to action */
+  .pw-cta { padding: 90px 0 130px; text-align: center; background: radial-gradient(50% 70% at 50% 60%, rgba(143, 100, 68, 0.16), transparent 70%), #050506; }
+  .pw-cta-in { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .pw-cta h2 { margin: 0; max-width: 820px; }
+  .pw-cta h2 span { display: block; color: #8f6444; }
+  .pw-cta p { margin: 0; max-width: 520px; font-size: 17px; line-height: 1.6; color: #a49e9a; }
+  .pw-cta-btn {
+    margin-top: 8px; display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 26px; border-radius: 999px;
+    background: #5b3b27; border: 1px solid #8f6444; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .pw-cta-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pw-cta-btn:hover { background: #6b452c; transform: translateY(-1px); }
+
+  @media (max-width: 1000px) {
+    .pw-practices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .pw-wrap { width: min(100% - 32px, 100%); }
+    .pw-hero { padding: 130px 0 50px; }
+    .pw-lead { font-size: 16.5px; }
+    .pw-sec { padding: 24px 0 64px; }
+    .pw-step { grid-template-columns: 44px minmax(0, 1fr); gap: 12px; }
+    .pw-step-ico { width: 44px; height: 44px; }
+    .pw-step-ico svg { width: 20px; height: 20px; }
+    .pw-step-card { padding: 20px; }
+    .pw-practices { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pw-step-card, .pw-practices a svg { transition: none; }
+  }
+</style>

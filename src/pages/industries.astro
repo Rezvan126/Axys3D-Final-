@@ -54,18 +54,6 @@ const sectors = [
   { name: "Landscape & site", line: "Site plans, terrain and landscape visuals around the building.", icon: "M3 20l6-9 4 5 3-4 5 8z M17 7a2 2 0 100-4 2 2 0 000 4z" },
 ];
 
-// WHAT EACH TEAM HIRES US FOR (from each audience page's typical services)
-const cols = ["Architects", "Engineers", "Developers", "Agencies"];
-const matrix: [string, string, boolean[]][] = [
-  ["BIM execution & model production", "bim-production", [true, true, false, false]],
-  ["Revit production & documentation", "revit-production", [true, true, false, false]],
-  ["MEP coordination support", "mep-coordination", [false, true, false, false]],
-  ["3D modeling", "3d-modeling", [true, true, true, true]],
-  ["3ds Max production", "3ds-max-production", [false, false, true, true]],
-  ["Architectural visualization", "architectural-visualization", [true, false, true, true]],
-  ["Animation & motion", "animation-motion", [true, false, true, true]],
-  ["Real time / Unreal Engine", "real-time", [true, false, true, true]],
-];
 ---
 
 <!doctype html>
@@ -142,34 +130,6 @@ const matrix: [string, string, boolean[]][] = [
         </div>
       </section>
 
-      <!-- MATRIX -->
-      <section class="iw-sec" aria-labelledby="iwFor">
-        <div class="iw-wrap">
-          <header class="iw-head">
-            <h2 id="iwFor">What each team <span>hires us for.</span></h2>
-            <p>The services each kind of client uses most.</p>
-          </header>
-          <div class="iw-table-box">
-            <table class="iw-table">
-              <caption class="sr-only">Services used by each type of client</caption>
-              <thead>
-                <tr><th scope="col">Service</th>{cols.map((c) => <th scope="col">{c}</th>)}</tr>
-              </thead>
-              <tbody>
-                {matrix.map(([name, slug, row]) => (
-                  <tr>
-                    <th scope="row"><a href={`/services/${slug}/`}>{name}</a></th>
-                    {row.map((on) => (
-                      <td>{on ? <span class="iw-yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" /></svg><span class="sr-only">Yes</span></span> : <span class="iw-no" aria-label="Not usually">·</span>}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
       <!-- CLOSING CTA -->
       <section class="iw-cta">
         <div class="iw-wrap iw-cta-in">
@@ -188,7 +148,6 @@ const matrix: [string, string, boolean[]][] = [
 <style>
   .iw { color: #fff; font-family: "Barlow", system-ui, sans-serif; background: #050506; }
   .iw-wrap { width: min(100% - 12%, 1240px); margin: 0 auto; }
-  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
   /* hero: plain, same gradient family as the home hero */
   .iw-hero {
@@ -249,21 +208,6 @@ const matrix: [string, string, boolean[]][] = [
   .iw-ico svg { width: 22px; height: 22px; fill: none; stroke: #d9b48c; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
   .iw-sectors h3 { margin: 4px 0 0; }
   .iw-sectors p { margin: 0; font-size: 15px; line-height: 1.55; color: #b9b2ac; }
-
-  /* matrix */
-  .iw-table-box { position: relative; max-width: 100%; overflow-x: auto; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.09); background: #121010; }
-  .iw-table { width: 100%; min-width: 640px; border-collapse: collapse; }
-  .iw-table th, .iw-table td { padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.07); text-align: center; font-size: 15px; }
-  .iw-table thead th { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #b8946f; background: #17110d; }
-  .iw-table thead th:first-child, .iw-table tbody th { text-align: left; }
-  .iw-table tbody th { font-weight: 600; }
-  .iw-table tbody th a { color: #fff; text-decoration: none; }
-  .iw-table tbody th a:hover { color: #d9b48c; }
-  .iw-table tbody tr:last-child th, .iw-table tbody tr:last-child td { border-bottom: 0; }
-  .iw-table tbody tr:hover { background: rgba(143, 100, 68, 0.06); }
-  .iw-yes { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #b8946f, #5b3b27); }
-  .iw-yes svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .iw-no { color: #8a837e; font-size: 20px; }
 
   /* closing call to action */
   .iw-cta { padding: 60px 0 130px; text-align: center; background: radial-gradient(50% 70% at 50% 60%, rgba(143, 100, 68, 0.16), transparent 70%), #050506; }

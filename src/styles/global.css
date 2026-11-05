@@ -138,7 +138,7 @@ svg text { font-family: var(--font-text); }
 html body .faq-num-box { color: #b8946f; }
 
 /* minimum text size 12px for labels and captions */
-html body :is(.hx-eyebrow, .m-tl-day, .m-book-text small, .vg-tag, .badge-num, .cta-eyebrow, .menu-toggle-label),
+html body :is(.hx-eyebrow, .m-tl-day, .m-book-text small, .vg-tag, .badge-num, .cta-eyebrow, .menu-toggle-label, .hw-role, .hw-role span, .hw-tag, .hw-case-label, .hw-day, .hw-outcome-tag, .hw-tab-num, .hw-revision-pill),
 html body .pf-work-cap small { font-size: 12px; }
 
 /* tap areas: small text links keep their look but get a 44px invisible hit area */
