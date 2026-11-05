@@ -128,3 +128,29 @@ html body :is(h1, h2, h3, h4) :is(span, em, strong, b, i):not(#_):not(#_):not(#_
 }
 /* labels inside drawings use the body font too */
 svg text { font-family: var(--font-text); }
+
+/* =========================================================
+   QUALITY PASS (UI/UX Pro Max pre-delivery checklist)
+   Readable contrast, no text under 12px, 44px tap areas,
+   visible keyboard focus. Looks the same; reads and taps better.
+========================================================= */
+/* contrast: small bronze numbers lifted to the lighter bronze (4.1:1 -> 6.8:1) */
+html body .faq-num-box { color: #b8946f; }
+
+/* minimum text size 12px for labels and captions */
+html body :is(.hx-eyebrow, .m-tl-day, .m-book-text small, .vg-tag, .badge-num, .cta-eyebrow, .menu-toggle-label),
+html body .pf-work-cap small { font-size: 12px; }
+
+/* tap areas: small text links keep their look but get a 44px invisible hit area */
+html body :is(.pf-link, .footer-logo, .site-footer a) { position: relative; }
+html body :is(.pf-link, .footer-logo, .site-footer a)::before {
+  content: ""; position: absolute; left: -6px; right: -6px; top: 50%; height: 44px; transform: translateY(-50%);
+}
+html body .hx-term { cursor: help; } /* its ::before/::after are the tooltip, so no hit-area layer here */
+html body .site-header .logo { min-height: 44px; }
+
+/* keyboard focus: one clear bronze ring everywhere */
+html body :is(a, button, summary, [tabindex="0"], [role="tab"]):focus-visible {
+  outline: 2px solid #d9b48c !important;
+  outline-offset: 3px;
+}

@@ -42,3 +42,10 @@ Booking month: current month until the 15th, then next month (computed automatic
 3. Text-overlap scan on all pages (ignore hidden/collapsed text).
 4. All on-site links return 200.
 5. Screenshot every section changed, desktop and phone, and actually look at it.
+6. UI/UX Pro Max pre-delivery checklist: text contrast 4.5:1 (3:1 for large text), no text under 12px, 44px tap areas on phones, visible keyboard focus (bronze ring), reduced motion respected.
+
+## Design tools installed in this project
+
+- `.claude/skills/ui-ux-pro-max/`: UI/UX Pro Max design knowledge base (styles, palettes, font pairings, UX rules). Search with `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <ux|style|typography|color|product>`. Treat results as suggestions; this file wins.
+- `.claude/skills/motion/` and `.claude/agents/motion-reviewer.md`: Motion AI Kit (animation best practices). The `motion` library is installed (`import { animate, inView, scroll } from "motion"`).
+- Motion's hosted helper servers (MCP) are not set up: `npx motion-ai` is interactive and must be run in a real terminal.
