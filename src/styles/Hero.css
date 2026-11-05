@@ -269,3 +269,7 @@
 @media (prefers-reduced-motion: reduce) {
   .hx-eyebrow, .hx-line, .hx-lead, .hx-buttons, .hx-stage { animation: none; opacity: 1; transform: none; filter: none; }
 }
+
+/* Hero visual removed for now (owner request, Nov 2026): copy only, one column */
+.hx-inner { grid-template-columns: minmax(0, 1fr); }
+.hx-copy { max-width: 760px; }
