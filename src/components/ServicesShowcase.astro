@@ -1,7 +1,7 @@
 ---
-// SERVICES — split showcase. Left: the 8 services as a numbered list. Right: a large panel
-// for the selected service (project image, tool logo, description, deliverables, link).
-// Hover, focus or tap a service to show it; the panel cross-fades, nothing else moves.
+// SERVICES: a production pipeline. Left: the 8 services as stages on one bronze line; hovering a
+// stage fills the line down to it (each service builds on the one before). Right: the project image
+// (clean, no text on it) wipes in from left to right; the details sit in a separate block below.
 import { services } from "../data/services";
 
 interface Props {
@@ -22,39 +22,43 @@ const media: Record<string, string> = {
 };
 ---
 
-<section class="sv" id="services" aria-label="Our services">
+<section class="sv" id="services" aria-labelledby="svTitle">
   <div class="sv-wrap">
     {showHeader && (
       <header class="sv-head">
-        <span class="sv-eyebrow">What we do</span>
-        <h2 class="sv-title">Eight services. <em>One production team.</em></h2>
+        <h2 class="sv-title" id="svTitle">Eight services. <em>One production team.</em></h2>
+        <p class="sv-lead">One team carries your project from the first model to the final film. <span class="sv-hint-hover">Hover</span><span class="sv-hint-tap">Tap</span> a service to see it.</p>
       </header>
     )}
 
     <div class="sv-grid">
-      <!-- LEFT: list -->
+      <!-- LEFT: the pipeline -->
       <ol class="sv-list" role="tablist" aria-label="Services" aria-orientation="vertical">
+        <span class="sv-track" aria-hidden="true"><span class="sv-track-fill"></span></span>
         {services.map((s, i) => (
           <li>
             <button
-              class:list={["sv-item", i === 0 && "is-active"]}
+              class:list={["sv-item", i === 0 && "is-active is-passed"]}
               type="button"
               role="tab"
               id={`sv-tab-${s.slug}`}
               aria-controls={`sv-panel-${s.slug}`}
               aria-selected={i === 0 ? "true" : "false"}
               data-i={i}
-              style={`--brand:${s.logo.color}`}
             >
+              <span class="sv-node" aria-hidden="true"></span>
               <span class="sv-num">{s.num}</span>
-              <span class="sv-name">{s.title}</span>
+              <span class="sv-text">
+                <span class="sv-name">{s.title}</span>
+                <span class="sv-sub"><span>{s.short}</span></span>
+              </span>
               <span class="sv-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
             </button>
           </li>
         ))}
       </ol>
 
-      <!-- RIGHT: panels (one visible at a time) -->
+      <!-- RIGHT: one panel per service, stacked in the same spot -->
       <div class="sv-stage">
         {services.map((s, i) => (
           <article
@@ -66,16 +70,18 @@ const media: Record<string, string> = {
             hidden={i !== 0}
           >
             <div class="sv-media">
-              <img src={media[s.slug]} alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" />
-              <span class="sv-logo" title={s.logo.name}>
-                <svg viewBox="0 0 24 24" role="img" aria-label={s.logo.name}><path d={s.logo.d} /></svg>
-                <span>{s.logo.name}</span>
-              </span>
-              <span class="sv-count">{s.num} / 0{services.length}</span>
+              <img src={media[s.slug]} alt={`${s.title}: project image`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+              <span class="sv-wipe" aria-hidden="true"></span>
             </div>
             <div class="sv-body">
+              <div class="sv-meta">
+                <span class="sv-tool">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.logo.d} /></svg>
+                  {s.logo.name}
+                </span>
+                <span class="sv-count">{s.num} / 0{services.length}</span>
+              </div>
               <h3 class="sv-panel-title">{s.title}</h3>
-              <p class="sv-short">{s.short}</p>
               <p class="sv-blurb">{s.blurb}</p>
               <ul class="sv-tags">
                 {s.includes.map((t) => <li>{t}</li>)}
@@ -101,7 +107,7 @@ const media: Record<string, string> = {
     --sv-sand: #d9b48c;
     --sv-text: #ffffff;
     --sv-body: #c8c1bb;
-    --sv-muted: #6f6965;
+    --sv-muted: #8a837e;
     --sv-ease: cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     padding: clamp(64px, 10vh, 120px) 0;
@@ -110,36 +116,39 @@ const media: Record<string, string> = {
   }
   .sv-wrap { width: min(100% - 12%, 1320px); margin: 0 auto; }
 
-  .sv-head { margin-bottom: clamp(32px, 5vh, 56px); }
-  .sv-eyebrow {
-    display: block; margin-bottom: 14px;
-    font: 500 12px/1.3 "Inter", system-ui, sans-serif; letter-spacing: 0.28em; text-transform: uppercase; color: var(--sv-brown-lt);
-  }
+  .sv-head { display: flex; flex-direction: column; gap: 14px; max-width: 980px; margin-bottom: clamp(32px, 5vh, 52px); }
   .sv-title { margin: 0; }
   .sv-title em { font-style: normal; color: var(--sv-brown-hi); }
+  .sv-hint-tap { display: none; }
+  @media (hover: none) { .sv-hint-hover { display: none; } .sv-hint-tap { display: inline; } }
+  .sv-lead { margin: 0; font-size: 17px; line-height: 1.6; color: #a49e9a; }
 
-  .sv-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: stretch; }
+  .sv-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
 
-  /* ---------- list ---------- */
-  .sv-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--sv-edge); }
+  /* ---------- the pipeline ---------- */
+  .sv-list { --fill: 0px; list-style: none; margin: 0; padding: 0; position: relative; }
+  .sv-track { position: absolute; left: 9px; top: var(--track-top, 30px); height: var(--track-h, 0px); width: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); }
+  .sv-track-fill { position: absolute; left: 0; top: 0; width: 100%; height: var(--fill); border-radius: 2px; background: linear-gradient(180deg, var(--sv-brown-hi), var(--sv-sand)); transition: height 0.55s var(--sv-ease); }
   .sv-list li { border-bottom: 1px solid var(--sv-edge); }
+  .sv-list li:first-of-type { border-top: 1px solid var(--sv-edge); }
   .sv-item {
     all: unset; box-sizing: border-box; cursor: pointer; position: relative; width: 100%;
-    display: grid; grid-template-columns: 48px minmax(0, 1fr) 28px; align-items: center; gap: 14px;
-    padding: 18px 8px 18px 4px;
-    transition: padding 0.45s var(--sv-ease);
+    display: grid; grid-template-columns: 20px 40px minmax(0, 1fr) 28px; align-items: center; column-gap: 14px;
+    padding: 18px 8px 18px 0;
   }
-  /* bronze bar grows from the left on the active row */
-  .sv-item::before {
-    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
-    background: linear-gradient(90deg, var(--sv-sand), var(--sv-brown-hi) 60%, transparent);
-    transform: scaleX(0); transform-origin: left; transition: transform 0.6s var(--sv-ease);
-  }
-  .sv-item.is-active::before { transform: scaleX(1); }
-  .sv-item:hover, .sv-item.is-active { padding-left: 14px; }
   .sv-item:focus-visible { outline: 2px solid var(--sv-sand); outline-offset: 2px; border-radius: 8px; }
-
+  .sv-node {
+    position: relative; z-index: 1; justify-self: center; width: 10px; height: 10px; border-radius: 50%;
+    background: #0b0a0a; border: 2px solid #3a3330; box-sizing: border-box;
+    transition: border-color 0.35s ease, background 0.35s ease, transform 0.45s var(--sv-ease), box-shadow 0.35s ease;
+  }
+  .sv-item.is-passed .sv-node { border-color: var(--sv-brown-lt); background: #2a1d14; }
+  .sv-item.is-active .sv-node { width: 14px; height: 14px; border-color: var(--sv-sand); background: var(--sv-sand); box-shadow: 0 0 0 5px rgba(217, 180, 140, 0.14); }
   .sv-num { font: 500 13px/1 "Inter", system-ui, sans-serif; letter-spacing: 0.08em; color: var(--sv-muted); font-variant-numeric: tabular-nums; transition: color 0.3s ease; }
+  .sv-item.is-passed .sv-num { color: var(--sv-brown-lt); }
+  .sv-item.is-active .sv-num { color: var(--sv-sand); }
+  .sv-text { display: grid; min-width: 0; transform: translateX(0); transition: transform 0.5s var(--sv-ease); }
+  .sv-item.is-active .sv-text { transform: translateX(10px); }
   .sv-name {
     font-family: "Manrope", system-ui, sans-serif; font-weight: 700;
     font-size: clamp(18px, 1.7vw, 24px); line-height: 1.2; letter-spacing: -0.02em; color: #7d7773;
@@ -147,41 +156,43 @@ const media: Record<string, string> = {
   }
   .sv-item:hover .sv-name { color: #d8d2cc; }
   .sv-item.is-active .sv-name { color: var(--sv-text); }
-  .sv-item.is-active .sv-num { color: var(--sv-sand); }
+  /* one line about the deliverable opens under the active name */
+  .sv-sub { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.5s var(--sv-ease), opacity 0.4s ease; }
+  .sv-sub > span { overflow: hidden; font-size: 14px; font-weight: 500; color: var(--sv-sand); }
+  .sv-item.is-active .sv-sub { grid-template-rows: 1fr; opacity: 1; }
+  .sv-item.is-active .sv-sub > span { padding-top: 6px; }
   .sv-arrow { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: var(--sv-sand); opacity: 0; transform: translateX(-8px); transition: opacity 0.3s ease, transform 0.45s var(--sv-ease); }
   .sv-item.is-active .sv-arrow { opacity: 1; transform: none; }
 
-  /* ---------- stage ---------- */
-  .sv-stage { position: relative; min-height: 560px; }
+  /* ---------- panels: image on top (no text on it), details below ---------- */
+  .sv-stage { display: grid; }
   .sv-panel {
-    position: absolute; inset: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto;
+    grid-area: 1 / 1; display: flex; flex-direction: column;
     border-radius: 24px; overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--brand) 30%, rgba(255, 255, 255, 0.1));
-    background: linear-gradient(180deg, #151210 0%, #0e0c0b 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: #121010;
     box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
-    opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.6s var(--sv-ease);
+    opacity: 0; transition: opacity 0.5s ease;
   }
-  .sv-panel[hidden] { display: grid; visibility: hidden; }
-  .sv-panel.is-active { opacity: 1; transform: none; visibility: visible; }
+  .sv-panel[hidden] { display: flex; visibility: hidden; }
+  .sv-panel.is-active { opacity: 1; visibility: visible; z-index: 1; }
 
-  .sv-media { position: relative; min-height: 0; overflow: hidden; }
-  .sv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 1.4s var(--sv-ease); }
-  .sv-panel.is-active .sv-media img { transform: scale(1); }
-  .sv-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 30%, transparent 60%, #151210 100%); }
-  .sv-logo {
-    position: absolute; z-index: 2; left: 18px; top: 18px; display: inline-flex; align-items: center; gap: 10px;
-    padding: 7px 14px 7px 8px; border-radius: 999px;
-    background: rgba(10, 8, 7, 0.65); border: 1px solid rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    font-size: 12.5px; font-weight: 600; color: #f1e2d1;
-  }
-  .sv-logo svg { width: 26px; height: 26px; padding: 4px; border-radius: 50%; background: color-mix(in srgb, var(--brand) 25%, #15110f); fill: color-mix(in srgb, var(--brand) 75%, #fff); box-sizing: border-box; }
-  .sv-count { position: absolute; z-index: 2; right: 18px; top: 22px; padding: 7px 12px; border-radius: 999px; background: rgba(10, 8, 7, 0.65); border: 1px solid rgba(255, 255, 255, 0.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: #f1e2d1; font-variant-numeric: tabular-nums; }
+  .sv-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b0a0a; }
+  .sv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: inset(0 0 0 0); transform: scale(1.04); transition: transform 1.6s var(--sv-ease); }
+  .sv-panel.is-active .sv-media img { transform: scale(1); animation: sv-reveal 0.9s var(--sv-ease) both; }
+  /* bronze line that leads the reveal */
+  .sv-wipe { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--sv-sand) 20%, var(--sv-sand) 80%, transparent); box-shadow: 0 0 18px rgba(217, 180, 140, 0.7); opacity: 0; pointer-events: none; }
+  .sv-panel.is-active .sv-wipe { animation: sv-line 0.9s var(--sv-ease) both; }
+  @keyframes sv-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes sv-line { 0% { left: 0; opacity: 1; } 85% { opacity: 1; } 100% { left: calc(100% - 2px); opacity: 0; } }
 
-  .sv-body { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 4px 28px 28px; }
+  .sv-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 28px 28px; border-top: 1px solid rgba(255, 255, 255, 0.07); }
+  .sv-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+  .sv-tool { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--sv-brown-lt); }
+  .sv-tool svg { width: 18px; height: 18px; fill: var(--sv-sand); }
+  .sv-count { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: var(--sv-muted); font-variant-numeric: tabular-nums; }
   .sv-panel-title { margin: 0; }
-  .sv-short { margin: 0; font-size: 14px; font-weight: 600; color: var(--sv-sand); }
-  .sv-blurb { margin: 0; max-width: 52ch; font-size: 15px; line-height: 1.6; color: var(--sv-body); }
+  .sv-blurb { margin: 0; max-width: 56ch; font-size: 15px; line-height: 1.6; color: var(--sv-body); }
   .sv-tags { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .sv-tags li { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: #e3d5c6; background: rgba(143, 100, 68, 0.14); border: 1px solid rgba(184, 148, 111, 0.22); }
   .sv-link {
@@ -195,33 +206,46 @@ const media: Record<string, string> = {
   .sv svg path[d^="M3 8"] { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .sv-arrow svg, .sv-link-arrow svg { width: 15px; height: 15px; }
 
-  /* ---------- phones: list on top, panel below ---------- */
   @media (max-width: 900px) {
     .sv-wrap { width: min(100% - 32px, 100%); }
     .sv-grid { grid-template-columns: 1fr; }
-    .sv-stage { min-height: 520px; }
-    .sv-item { padding: 14px 4px; grid-template-columns: 36px minmax(0, 1fr) 24px; }
-    .sv-item:hover, .sv-item.is-active { padding-left: 8px; }
-    .sv-body { padding: 4px 18px 20px; }
+    .sv-item { padding: 14px 4px 14px 0; grid-template-columns: 20px 30px minmax(0, 1fr) 24px; column-gap: 10px; }
+    .sv-body { padding: 18px 18px 22px; }
+    .sv-lead { font-size: 16px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .sv-item, .sv-item::before, .sv-panel, .sv-media img, .sv-arrow { transition: none !important; }
+    .sv-track-fill, .sv-node, .sv-text, .sv-sub, .sv-panel, .sv-media img, .sv-arrow { transition: none !important; }
+    .sv-panel.is-active .sv-media img, .sv-panel.is-active .sv-wipe { animation: none; }
   }
 </style>
 
 <script>
   document.querySelectorAll<HTMLElement>(".sv").forEach((root) => {
+    const list = root.querySelector<HTMLElement>(".sv-list");
     const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>(".sv-item"));
     const panels = Array.from(root.querySelectorAll<HTMLElement>(".sv-panel"));
     let current = 0;
+    // the bronze line fills from the first stage down to the centre of the active node
+    const fillTo = (i: number) => {
+      if (!list) return;
+      const node = tabs[i].querySelector<HTMLElement>(".sv-node");
+      const track = root.querySelector<HTMLElement>(".sv-track");
+      if (!node || !track) return;
+      const y = node.getBoundingClientRect().top + node.offsetHeight / 2 - track.getBoundingClientRect().top;
+      list.style.setProperty("--fill", `${Math.max(0, y)}px`);
+    };
     const show = (i: number) => {
-      if (i === current) return;
-      current = i;
       tabs.forEach((t, k) => {
         t.classList.toggle("is-active", k === i);
+        t.classList.toggle("is-passed", k <= i);
         t.setAttribute("aria-selected", String(k === i));
         t.tabIndex = k === i ? 0 : -1;
       });
+      // the line moves after the row has opened, so it lands on the node
+      window.setTimeout(() => { placeTrack(); fillTo(i); }, 60);
+      window.setTimeout(() => { placeTrack(); fillTo(i); }, 560);
+      if (i === current) return;
+      current = i;
       panels.forEach((p, k) => {
         p.classList.toggle("is-active", k === i);
         if (k === i) p.hidden = false;
@@ -234,7 +258,6 @@ const media: Record<string, string> = {
       t.addEventListener("focus", () => show(i));
       t.addEventListener("click", () => {
         show(i);
-        // phones: the panel sits below the list, so bring it into view
         if (window.matchMedia("(max-width: 900px)").matches) panels[i].scrollIntoView({ behavior: "smooth", block: "center" });
       });
       t.addEventListener("keydown", (e) => {
@@ -242,5 +265,18 @@ const media: Record<string, string> = {
         if (n >= 0 && n < tabs.length) { e.preventDefault(); tabs[n].focus(); }
       });
     });
+    // the track runs exactly from the first node to the last
+    const placeTrack = () => {
+      const nodes = tabs.map((t) => t.querySelector<HTMLElement>(".sv-node")).filter(Boolean) as HTMLElement[];
+      if (!list || nodes.length < 2) return;
+      const top = list.getBoundingClientRect().top;
+      const c = (n: HTMLElement) => n.getBoundingClientRect().top + n.offsetHeight / 2 - top;
+      list.style.setProperty("--track-top", `${c(nodes[0])}px`);
+      list.style.setProperty("--track-h", `${c(nodes[nodes.length - 1]) - c(nodes[0])}px`);
+    };
+    const sync = () => { placeTrack(); fillTo(current); };
+    window.addEventListener("resize", sync);
+    if (document.fonts?.ready) document.fonts.ready.then(sync); else sync();
+    window.setTimeout(sync, 700);
   });
 </script>
