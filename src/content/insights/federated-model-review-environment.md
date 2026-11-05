@@ -9,8 +9,8 @@ seoTitle: "MEP Clash Detection & Federated Model Coordination Guide"
 seoDescription: "How federated BIM models and MEP clash detection prevent site clashes: clash types, coordination rounds, tolerances and how to keep issues moving."
 publishDate: 2026-10-27
 keywords: ["MEP clash detection", "federated model", "BIM coordination", "clash detection", "Navisworks", "BCF"]
-image: "/images/stages/stage-2.jpg"
-imageAlt: "Massing model of a hillside house used for coordination"
+image: "/images/services/mep.jpg"
+imageAlt: "Spiral ventilation ductwork in a ceiling"
 faq:
   - q: "What is a federated model?"
     a: "A federated model combines the separate discipline models (architecture, structure, mechanical, electrical, plumbing) into one view for review. Each discipline still owns and edits its own model."

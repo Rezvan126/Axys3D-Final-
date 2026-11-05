@@ -9,8 +9,8 @@ seoTitle: "Permit-Ready Revit Drawing Sets: Sheet List & Checklist"
 seoDescription: "What a permit-ready Revit drawing set includes, how to organise sheets and views, and a checklist that helps avoid plan-check resubmissions."
 publishDate: 2026-11-02
 keywords: ["permit drawings", "Revit drawing set", "construction documents", "ADU permit drawings", "Revit documentation"]
-image: "/images/stages/stage-4.jpg"
-imageAlt: "Final render of a hillside house with timber deck"
+image: "/images/proof/permit-sheet.jpg"
+imageAlt: "Architectural drawing sheet with elevations, a section and floor plans"
 faq:
   - q: "What does a permit drawing set include?"
     a: "Typically a cover sheet, site plan, floor plans, roof plan, exterior elevations, building sections, details and schedules, plus structural, energy and MEP sheets where the jurisdiction requires them."
