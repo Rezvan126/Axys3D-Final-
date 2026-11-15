@@ -27,11 +27,11 @@ ROOMS = [
      # the open slider to the stair hall (down to the entry, up to the bedrooms) and the open kitchen door
      "aim": {"entry": (127, -14), "bedroom": (141, 2), "kitchen": (237, -8)}},
     {"slug": "kitchen", "name": "Kitchen", "floor": "Second floor", "p": (-1.7, 1.5), "fz": 5.34, "look": 275, "to": ["living"],
-     "aim": {"living": (313, -8)}},                                  # the open door to the dining end
+     "aim": {"living": (320, -8)}},                                  # the open door to the dining end, right of the fridge
     {"slug": "bedroom", "name": "Primary bedroom", "floor": "Third floor", "p": (2.2, -6.7), "fz": 6.66, "look": 60, "ev": 0.4, "to": ["deck", "bathroom", "living"],
      "aim": {"deck": (159, -12), "bathroom": (359, -8), "living": (339, -6)}},   # deck slider, bath door, hall door
     {"slug": "bathroom", "name": "Primary bath", "floor": "Third floor", "p": (3.4, -0.7), "fz": 6.66, "look": 90, "ev": 0.4, "to": ["bedroom"],
-     "aim": {"bedroom": (236, -12)}},                                # the open door back to the bedroom
+     "aim": {"bedroom": (186, -10)}},                                # the open door back to the bedroom
     {"slug": "deck", "name": "Back deck", "floor": "Third floor", "p": (0.0, -9.6), "fz": 6.6, "look": 20, "ev": 0.35, "to": ["bedroom"],
      "aim": {"bedroom": (59, -5)}},                                  # the open bedroom slider
 ]

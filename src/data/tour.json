@@ -57,7 +57,7 @@
    "spots": [
     {
      "to": "living",
-     "yaw": 313,
+     "yaw": 320,
      "pitch": -8
     }
    ]
@@ -95,8 +95,8 @@
    "spots": [
     {
      "to": "bedroom",
-     "yaw": 236,
-     "pitch": -12
+     "yaw": 186,
+     "pitch": -10
     }
    ]
   },

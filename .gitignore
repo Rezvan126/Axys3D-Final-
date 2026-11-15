@@ -87,3 +87,4 @@ assets-src/
 # mail credentials stay out of version history
 public/mail/mail-config.php
 tools/__pycache__/
+releases/
