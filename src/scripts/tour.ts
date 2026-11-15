@@ -1,12 +1,13 @@
 // Virtual tour: 360 degree panoramas rendered from the studio's Revit model, shown on the inside of a sphere.
 // Loaded only after the visitor presses "Start the tour" (see Tour.astro), so the page pays nothing before that.
+// One instance per started tour: several tours can sit on one page and only the started ones load anything.
 //
 // Angles match tools/tour-render.py: yaw 0 is the middle of the panorama, yaw grows to the right, pitch is up.
 import * as THREE from "three";
 
 export interface TourSpot { to: string; yaw: number; pitch: number }
 export interface TourRoom { slug: string; name: string; floor: string; yaw: number; pitch: number; spots: TourSpot[] }
-export interface TourData { title: string; rooms: TourRoom[] }
+export interface TourData { title?: string; rooms: TourRoom[] }
 
 export interface TourOptions {
   root: HTMLElement;          // the element that goes full screen

@@ -78,7 +78,7 @@ New stills and clips of the white infill house from the owner's Blender scene, r
 
 ## Virtual tour (added 16 Nov 2026, second pass the same night)
 
-- **What:** a 360 degree, room to room tour of the split level residence on the Work page (`/visuals/#tour`), straight after the page opening. Six standpoints: Entry, Living and dining, Kitchen, Primary bedroom, Primary bath, Back deck. Component `src/components/Tour.astro`, viewer `src/scripts/tour.ts` (three.js, inside of a sphere, no new dependency), data `src/data/tour.json`, pictures `public/media/tour/`.
+- **What:** a 360 degree, room to room tour of the split level residence on the Work page (`/visuals/#tour`), straight after the page opening. Six standpoints: Entry, Living and dining, Kitchen, Primary bedroom, Primary bath, Back deck. Component `src/components/Tour.astro`, viewer `src/scripts/tour.ts` (three.js, inside of a sphere, no new dependency), data now `src/data/tours/hillside.json`, pictures now `public/media/tours/hillside/` (see "Tour library").
 - **Page weight:** before "Start the tour" only `poster.webp` is fetched. The press loads three.js, the viewer and one panorama (4096 wide, or the 2048 wide `-sm` file on phones, data saver and weak cards). One panorama is kept in memory at a time.
 - **Pipeline:** `bash tools/make-tour.sh render` does everything; without `render` it only grades and exports what is already in `assets-src/amber/tour/`.
   1. `tools/tour-scene.py`: Navisworks FBX to `assets-src/amber/tour-base.blend`. Same tree walk, drop list, name scrubbing and 17 finish classes as `build-model-navis.py`; procedural base materials; undersides of floors and roofs painted as ceilings; 11 opening sized wall plugs (a phasing leftover in the export) left out; 110 small warm ceiling lights placed by ray casting; lawn and street outside. Prints `PRIVACY OK` and `TOUR_SCENE_OK`.
@@ -90,6 +90,25 @@ New stills and clips of the white infill house from the owner's Blender scene, r
 - **Staging, said plainly:** the Revit model has no loose furniture. Everything movable in the pictures (sofa, chairs, dining set, rugs, the dressed bed, night stands, lamps, plants, art, books, vases, towels, mirror, bath mat, soap, fruit bowl, coffee machine, outdoor furniture, planters) is virtual staging from BlenderKit, plus a few plain shapes (coffee table, entry console, deck table, rug slabs). The neighbours, street trees and the view are set dressing. Walls, glazing, stairs, kitchen, joinery, bathroom fixtures and the vanity are the model. The bed in the primary bedroom replaces the model's own bed.
 - **Left out after test renders:** ground floor office, second floor stair hall, third floor landing (closed doors all round), second bathroom (dark, with an odd boxed fixture in the model).
 - **Known limits:** on phones the view turns sideways only unless it is full screen, and iPhone Safari has no full screen for page elements. Checked in the desktop browser at 1440 and at 375 by 812, not on a real phone. `tools/make-preview.py` handling of `public/media/tour` for the shared preview was not checked.
+
+## Tour library (added 16 Nov 2026)
+
+The single tour became a library: `/tours/` lists every finished tour, `/tours/<slug>/` is one page per tour, and the Work page keeps one featured tour inline (`hillside`, or the first ready tour if its pictures are ever missing) with a "See all tours" link. "Tours" sits after "Work" in the header (fits at 1041px, the narrowest width that shows the full bar) and "Virtual tours" in the footer.
+
+**To add a project, drop two things in place and edit nothing else:**
+
+1. Pictures in `public/media/tours/<slug>/`: `<room>.webp` (4096 by 2048) and `<room>-sm.webp` (2048 by 1024) for every room, plus `poster.webp` (1600 wide) and `poster-sm.webp` (800 wide).
+2. Data in `src/data/tours/<slug>.json`: the shape `tools/tour-render.py json` writes (`title`, `note`, `size`, `small`, `rooms` with `slug`, `name`, `floor`, `yaw`, `pitch`, `spots`) plus `slug` (same as the folder, lowercase letters, digits and hyphens), `project` (the public name, never a client, architect or address), `summary` (one line for the card and page opening) and `rooms_count`. Optional: `poster_alt` (what the poster shows) and `order` (lower is listed first; default 100, then by name).
+3. Run `npx astro build`. The page, the card, the sitemap entry and the preview copy appear by themselves.
+
+How it works:
+
+- `src/data/tours.ts` reads every JSON with `import.meta.glob` and lists a tour only when the data is complete and every picture above is on disk. Anything left out is named in the build log as `[tours] left out of the library: ...`, so a half rendered project never shows a broken card or page. Hotspots pointing at a room the tour lacks are dropped. Poster width and height are read from the WebP header.
+- Picture paths are never in the JSON. The component puts the folder in one `data-base` attribute (already rewritten by `tools/make-preview.py`) and the viewer builds file names from it. No change to `make-preview.py` was needed; checked with the preview copy served locally: `/tours/`, a tour page and the Work page all start and load their panorama with status 200.
+- `src/components/Tour.astro` props: `slug` (or `data` plus `base`), `id` (unique per page), `heading`, `level` (1 on a tour page), `lead`, `cta` (amber "Start a project", on by default), `links`, `eager`. Several tours can sit on one page; each loads three.js and its panorama only when its own "Start the tour" is pressed. Before that only the poster loads (the small one on phones), and phones get the `-sm` panoramas.
+- Any button with `data-tour-open="<section id>" data-room="<room slug>"` opens that tour at that room. The tour page room list uses this.
+- `src/components/TourCard.astro` is the library card (poster, rooms and floors, project name, summary).
+- The old `src/data/tour.json` and `public/media/tour/` are gone (moved to `src/data/tours/hillside.json` and `public/media/tours/hillside/`). Run `tools/tour-render.py json` with the new path.
 
 ### BlenderKit assets used in the tour (all free; the Poly Haven ones and three Joris LM prints are CC0, the rest BlenderKit royalty free)
 

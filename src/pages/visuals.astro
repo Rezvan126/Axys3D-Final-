@@ -5,7 +5,11 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import WorkReel from "../components/WorkReel.astro";
 import Tour from "../components/Tour.astro";
+import { getTour, tours } from "../data/tours";
 import "../styles/global.css";
+
+// the featured tour: the hillside house while its pictures are in place, otherwise the first ready tour
+const featured = getTour("hillside") ?? tours[0];
 
 // adu-9 to adu-11 are new camera angles rendered from the same scene (tools/render-portfolio.py)
 const renders = [1, 14, 9, 15, 11, 16, 10, 13].map((n) => `adu-${n}`);
@@ -44,8 +48,17 @@ const stages = [
         </figure>
       </section>
 
-      <!-- virtual tour: 360 degree views from the Revit model. Loads nothing until "Start the tour" is pressed -->
-      <Tour />
+      <!-- one featured tour from the library (/tours/). Loads nothing until "Start the tour" is pressed -->
+      {featured && (
+        <Tour
+          slug={featured.slug}
+          heading="Walk through it. A virtual tour from the Revit model."
+          lead={featured.slug === "hillside"
+            ? "Six 360 degree views of a split level residence, rendered room by room from our own Revit model and virtually staged. Drag to look around, then follow the arrows from room to room."
+            : featured.summary}
+          links={[{ href: "/tours/", label: "See all tours" }, { href: "/services/real-time/", label: "Interactive tours and showrooms" }]}
+        />
+      )}
 
       <!-- one project, start to finish -->
       <section aria-labelledby="vsProject" id="project">
@@ -80,7 +93,7 @@ const stages = [
           <header class="ax-head">
             <h2 class="ax-display" id="vsProject2" data-ax>Split level hillside house. One Revit model, every output.</h2>
             <p class="ax-lead" data-ax>The same model drives the interactive 3D view, the virtual tour, the stills and the film. Change the model once and every output follows.</p>
-            <div class="vs-links" data-ax><a class="ax-link" href="/#explore">Open the 3D model</a><a class="ax-link" href="#tour">Walk through the rooms</a></div>
+            <div class="vs-links" data-ax><a class="ax-link" href="/#explore">Open the 3D model</a>{featured?.slug === "hillside" && <a class="ax-link" href="#tour">Walk through the rooms</a>}</div>
           </header>
           <ul class="pg-gallery">
             {amber.map((r, i) => (

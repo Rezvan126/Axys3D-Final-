@@ -53,7 +53,7 @@ One real project, exported from our own Revit file, taken through six stages by 
 
 ## Site structure
 
-Menu: Services (a list of the eight service pages) · Work (`/visuals/`) · Industries · Insights · About · Hire us · Contact, then the "Start a project" button.
+Menu: Services (a list of the eight service pages) · Work (`/visuals/`) · Tours (`/tours/`) · Industries · Insights · About · Hire us · Contact, then the "Start a project" button.
 
 - Home: hero with a real render, figures, the 3D building, eight services as a list, recent work, how it works, questions, closing action.
 - Work: one project in depth plus films from the portfolio. No client or site details.
@@ -98,7 +98,8 @@ A 360 degree room to room tour on the Work page, rendered from the studio's own 
 - **Nothing loads until "Start the tour" is pressed.** Before that the section is one poster picture. The press fetches three.js, the viewer and the first panorama. Only one panorama is held in memory at a time.
 - **"Start the tour" is the plain white button, not amber.** The amber "Start a project" under the tour stays the one primary action.
 - **Glass:** the room label, the full screen button, the hint and the hotspots sit over the live view, so they use the same glass as the 3D building panels (`rgba(14,16,20,.82)`, 12px blur). The room list is plain text buttons under the view, current room underlined in amber like the header.
-- **Hotspots** are real buttons with the room name and a plain chevron (no circle), 44px high. Their directions come from the real standpoint positions in `src/data/tour.json`; never type angles into the component.
+- **Hotspots** are real buttons with the room name and a plain chevron (no circle), 44px high. Their directions come from the real standpoint positions in `src/data/tours/<slug>.json`; never type angles into the component.
+- **Library (`/tours/`, `/tours/<slug>/`):** cards are the poster, rooms and floors, the project name and one line, with no box around them; a single project sits picture left, words right. A tour page opens with the view itself (H1 is the project name) sized so "Start the tour" shows without scrolling at 1440 by 900 and 375 by 812, then the rooms by floor as hairline rows that open the tour at that room, then other tours, then "Start a project". How to add a project: `HANDOFF.md`, "Tour library".
 - **Phone:** the view is upright (4 by 5), the label and full screen button sit in the top corners, the hint at the bottom edge, the room list under the view. Nothing covers the middle. Sideways drag turns the view; up and down still scrolls the page (full screen frees both directions). Phones, data saver and weak cards get the 2048 pixel pictures.
 - **Keyboard:** arrow keys turn, plus and minus zoom, Tab reaches every hotspot and room button; a hotspot that is out of view turns the view to itself when it takes focus. The wheel zooms only after the view has been clicked or is full screen, so it never traps page scrolling.
 - **Reduced motion:** no opening drift, no inertia, rooms change at once.

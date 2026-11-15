@@ -1,0 +1,112 @@
+---
+// ONE TOUR: the viewer first (so "Start the tour" shows without scrolling, phones included), then the rooms
+// by floor (each opens the tour at that room), other tours, and the closing "Start a project".
+// One page per tour in src/data/tours.ts; a tour whose pictures are not all in place gets no page.
+import SEO from "../../components/SEO.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import Tour from "../../components/Tour.astro";
+import TourCard from "../../components/TourCard.astro";
+import { tours, plural, type Tour as TourT } from "../../data/tours";
+import "../../styles/global.css";
+
+export function getStaticPaths() {
+  return tours.map((tour) => ({ params: { slug: tour.slug }, props: { tour } }));
+}
+
+const { tour } = Astro.props as { tour: TourT };
+const others = tours.filter((t) => t.slug !== tour.slug);
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+// rooms grouped by floor, in the order the tour reaches them
+const groups = (tour.floors.length ? tour.floors : [""]).map((f) => ({
+  floor: f || "Rooms",
+  rooms: tour.rooms.filter((r) => (r.floor ?? "") === f),
+}));
+const count = `${cap(plural(tour.rooms.length, "room"))}${tour.floors.length > 1 ? ` on ${plural(tour.floors.length, "floor")}` : ""}.`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title={`${tour.project}: Virtual Tour | Axys3D`} description={`${tour.summary} A 360 degree tour by Axys3D.`} image={`${tour.base}poster.webp`} />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg tp">
+      <Tour slug={tour.slug} id="tour" level={1} heading={tour.project} lead={tour.summary} eager links={[{ href: "/tours/", label: "See all tours" }]} />
+
+      <!-- what is inside: every room by floor; a tap opens the tour there -->
+      <section class="ax-section tp-rooms" aria-labelledby="tpRooms">
+        <div class="ax-wrap">
+          <header class="ax-head pg-head2">
+            <h2 id="tpRooms" data-ax>{count}</h2>
+            <p class="ax-lead" data-ax>{tour.note ? `${tour.note} ` : ""}Pick a room to open the tour there.</p>
+          </header>
+          <div class:list={["tp-floors", `tp-floors--${Math.min(groups.length, 3)}`]}>
+            {groups.map((g, i) => (
+              <div class="tp-floor" data-ax style={`--ax-d:${(i % 3) * 0.06}s`}>
+                <h3>{g.floor}</h3>
+                <ul>
+                  {g.rooms.map((r) => (
+                    <li><button type="button" data-tour-open="tour" data-room={r.slug}><span>{r.name}</span><i aria-hidden="true"></i></button></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {others.length > 0 && (
+        <section class="ax-section tp-more" aria-labelledby="tpMore">
+          <div class="ax-wrap">
+            <header class="ax-head">
+              <h2 id="tpMore" data-ax>More tours.</h2>
+            </header>
+            <ul class="tl-grid">
+              {others.slice(0, 2).map((t, i) => (
+                <li data-ax style={`--ax-d:${i * 0.06}s`}><TourCard tour={t} level={3} /></li>
+              ))}
+            </ul>
+            {others.length > 2 && <div class="pg-next" data-ax><a href="/tours/" class="ax-link">See all tours</a></div>}
+          </div>
+        </section>
+      )}
+
+      <section class="pg-cta ax-dark" aria-labelledby="tpClose">
+        <div class="ax-wrap">
+          <h2 class="ax-display" id="tpClose" data-ax>Want your project to walk like this?</h2>
+          <p class="ax-lead" data-ax>Send us your model or drawings and tell us which rooms matter. We reply with a clear scope, price and timeline.</p>
+          <div class="pg-actions" data-ax><a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a></div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .tp-floors { display: grid; gap: clamp(28px, 3vw, 48px) clamp(24px, 3vw, 48px); }
+  .tp-floors--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tp-floors--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tp-floor h3 { margin: 0 0 10px; }
+  .tp-floor ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ax-line-strong); }
+  .tp-floor li { border-bottom: 1px solid var(--ax-line); }
+  .tp-floor button { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 56px; padding: 0; background: none; border: 0; text-align: left; font: 600 17px/1.25 var(--ax-font); color: var(--ax-text); cursor: pointer; }
+  .tp-floor button i { flex: none; width: 16px; height: 16px; background: currentColor; color: var(--ax-text-3); -webkit-mask: var(--ax-arrow) center / 16px no-repeat; mask: var(--ax-arrow) center / 16px no-repeat; transition: transform 0.3s var(--ax-ease), color 0.2s ease; }
+  .tp-floor button:hover i { transform: translateX(4px); color: var(--ax-accent); }
+  .tp-floor button:hover span { text-decoration: underline; text-decoration-color: var(--ax-accent); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+  .tp-more { padding-top: 0; }
+  .tp-more .tl-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(40px, 5vw, 72px) clamp(16px, 2.4vw, 32px); }
+  @media (max-width: 900px) { .tp-floors--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) { .tp-more .tl-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .tp-floors--2, .tp-floors--3 { grid-template-columns: 1fr; }
+    .tp-floor button { font-size: 16.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tp-floor button i { transition: none; } }
+</style>
