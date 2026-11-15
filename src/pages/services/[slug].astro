@@ -1,0 +1,539 @@
+---
+// src/pages/services/[slug].astro
+// Presentable service page: banner, overview cards, stats band, why/fit, projects, FAQs.
+// Content wahi use hota hai jo service ke frontmatter + markdown mein pehle se hai (nayi details nahi bharni).
+
+import SEO from "../../components/SEO.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import Sheets from "../../components/Sheets.astro";
+import ClashReport from "../../components/ClashReport.astro";
+import "../../styles/global.css";
+import { getCollection } from "astro:content";
+import { services as serviceList } from "../../data/services";
+import { steps } from "../../data/site";
+
+export async function getStaticPaths() {
+  const services = await getCollection("services");
+  return services.map((service) => {
+    const slug = service.id.replace(/^\d+-/, "");
+    return { params: { slug }, props: { service } };
+  });
+}
+
+const { service } = Astro.props;
+const p = service.data as any;
+const {
+  title,
+  description = "",
+  bestFitBuyers = [],
+  projectStages = [],
+  engagementContext = [],
+} = service.data as any;
+
+const slug = service.id.replace(/^\d+-/, "");
+// proof that belongs to this service: real permit sheets, a real clash report
+const showSheets = /revit|bim/i.test(slug);
+const showClash = /mep|bim/i.test(slug);
+
+
+// --- markdown body -> modules (cards ke liye) ---
+const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const inline = (s: string) =>
+  escapeHtml(s)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+
+type Block = { t: "p" | "h3"; html: string } | { t: "ul"; items: string[] };
+type Module = { title: string; blocks: Block[] };
+
+function parseBody(md: string) {
+  const intro: Block[] = [];
+  const mods: Module[] = [];
+  let cur: Module | null = null;
+  let para: string[] = [];
+  let list: string[] | null = null;
+  const target = () => (cur ? cur.blocks : intro);
+  const flushPara = () => { if (para.length) { target().push({ t: "p", html: inline(para.join(" ")) }); para = []; } };
+  const flushList = () => { if (list) { target().push({ t: "ul", items: list }); list = null; } };
+
+  for (const raw of md.replace(/\r/g, "").split("\n")) {
+    const line = raw.trim();
+    let m: RegExpMatchArray | null;
+    if ((m = line.match(/^##\s+(.*)$/))) {
+      flushPara(); flushList();
+      cur = { title: m[1].replace(/[*_`]/g, ""), blocks: [] };
+      mods.push(cur);
+    } else if ((m = line.match(/^#{3,6}\s+(.*)$/))) {
+      flushPara(); flushList();
+      target().push({ t: "h3", html: inline(m[1]) });
+    } else if ((m = line.match(/^(?:[-*+]|\d+\.)\s+(.*)$/))) {
+      flushPara();
+      if (!list) list = [];
+      list.push(inline(m[1]));
+    } else if (line === "") {
+      flushPara(); flushList();
+    } else if (list && /^\s/.test(raw)) {
+      list[list.length - 1] += " " + inline(line);
+    } else if (/^#\s/.test(line) || /^(---|\*\*\*|___)$/.test(line)) {
+      // ignore h1 and rules
+    } else {
+      flushList();
+      para.push(line);
+    }
+  }
+  flushPara(); flushList();
+  return { intro, mods };
+}
+
+const rawBody: string = ((service as any).body as string) ?? "";
+const tooComplex = /^\s*(```|\||>|!\[|import\s|export\s|<[A-Za-z])/m.test(rawBody);
+const parsed = rawBody && !tooComplex ? parseBody(rawBody) : { intro: [] as Block[], mods: [] as Module[] };
+
+// ---------- FAQs ----------
+// 1) frontmatter:  faqs: [{ question: "...", answer: "..." }]
+// 2) otherwise a markdown section called FAQ / Frequently asked questions / Common questions
+const stripTags = (s: string) => s.replace(/<[^>]+>/g, "").trim();
+const isFaqTitle = (t: string) => /faq|frequently asked|common questions/i.test(t);
+const faqModule = parsed.mods.find((m: Module) => isFaqTitle(m.title));
+
+const faqFromModule = (m: Module): Array<{ q: string; a: string }> => {
+  const out: Array<{ q: string; a: string }> = [];
+  let cur: { q: string; a: string[] } | null = null;
+  const push = () => { if (cur && cur.a.length) out.push({ q: cur.q, a: cur.a.join("</p><p>") }); cur = null; };
+  for (const b of m.blocks) {
+    if (b.t === "h3") { push(); cur = { q: stripTags(b.html), a: [] }; }
+    else if (b.t === "p") {
+      const mm = b.html.match(/^<strong>(.+?)<\/strong>\s*[—–:\-]?\s*(.*)$/);
+      if (!cur && mm) { push(); out.push({ q: stripTags(mm[1]), a: mm[2] }); }
+      else if (cur) cur.a.push(b.html);
+    } else if (b.t === "ul") {
+      push();
+      for (const it of b.items) {
+        const s = it.match(/^<strong>(.+?)<\/strong>\s*[—–:\-]?\s*(.*)$/);
+        if (s && s[2]) out.push({ q: stripTags(s[1]), a: s[2] });
+        else {
+          const k = it.indexOf("?");
+          if (k > 0 && k < it.length - 1) out.push({ q: stripTags(it.slice(0, k + 1)), a: it.slice(k + 1).trim() });
+        }
+      }
+    }
+  }
+  push();
+  return out.filter((f) => f.q && f.a);
+};
+
+const dataFaqs: Array<{ q: string; a: string }> = (Array.isArray(p.faqs) ? p.faqs : Array.isArray(p.faq) ? p.faq : [])
+  .map((f: any) => ({ q: String(f.question ?? f.q ?? ""), a: escapeHtml(String(f.answer ?? f.a ?? "")) }))
+  .filter((f: { q: string; a: string }) => f.q && f.a);
+
+const faqs = dataFaqs.length > 0 ? dataFaqs : faqModule ? faqFromModule(faqModule) : [];
+
+
+// ---------- Overview cards: markdown modules (FAQ ke siwa) ----------
+const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "").trim();
+const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
+
+type Group = { label: string; blocks: Block[] };
+const groupsOf = (m: Module) => {
+  const intro: string[] = [];
+  const groups: Group[] = [];
+  let cur: Group | null = null;
+  for (const b of m.blocks) {
+    if (b.t === "h3") { cur = { label: b.html, blocks: [] }; groups.push(cur); }
+    else if (!cur) { if (b.t === "p") intro.push(b.html); else { cur = { label: "", blocks: [b] }; groups.push(cur); } }
+    else cur.blocks.push(b);
+  }
+  return { intro, groups };
+};
+
+const cardMods = parsed.mods
+  .filter((m: Module) => m !== faqModule || faqs.length === 0)
+  .slice(0, 6)
+  .map((m: Module) => {
+    const { intro, groups } = groupsOf(m);
+    const firstList = m.blocks.find((b) => b.t === "ul") as { t: "ul"; items: string[] } | undefined;
+    const preview = intro.length
+      ? clip(stripHtml(intro[0]), 160)
+      : firstList
+        ? clip(firstList.items.slice(0, 2).map(stripHtml).join(" · "), 160)
+        : "";
+    return { title: m.title, preview, intro, groups };
+  });
+
+// markdown nahi hai to stages se cards banao
+const stageCards = cardMods.length === 0
+  ? projectStages.slice(0, 6).map((s: string, i: number) => ({ title: s, preview: "", intro: [] as string[], groups: [] as Group[] }))
+  : [];
+const cards = cardMods.length ? cardMods : stageCards;
+
+// ---------- What a client wants to see first, lifted out of the detail ----------
+const allGroups: Group[] = parsed.mods.flatMap((m: Module) => groupsOf(m).groups);
+const listOf = (re: RegExp): string[] => {
+  const g = allGroups.find((x) => re.test(stripHtml(x.label)));
+  const ul = g?.blocks.find((x) => x.t === "ul") as { t: "ul"; items: string[] } | undefined;
+  return ul ? ul.items : [];
+};
+const sendItems = listOf(/required inputs/i);
+const getItems = listOf(/^deliverables/i);
+const checkItems = listOf(/acceptance criteria/i);
+
+// ---------- This service in the shared list (plain wording, picture, the name the contact form knows) ----------
+const svc = serviceList.find((x) => x.slug === slug);
+const and = (t: string) => t.replace(" & ", " and ");
+const bannerImage = svc?.image ?? "/media/adu-1.webp";
+const sm = (src: string) => src.replace(".webp", "-sm.webp");
+const fitImages: Record<string, string> = {
+  "bim-production": "/media/svc-model.webp",
+  "revit-production": "/media/svc-elevation.webp",
+  "mep-coordination": "/media/svc-bim.webp",
+  "3d-modeling": "/media/adu-9.webp",
+  "3ds-max-production": "/media/kitchen.webp",
+  "architectural-visualization": "/media/adu-3.webp",
+  "animation-motion": "/media/residence.webp",
+  "real-time": "/media/office.webp",
+};
+const fitImage = fitImages[slug] ?? "/media/adu-9.webp";
+
+// ---------- Other services: the ones this page's own content names as related come first, as pictures ----------
+const relatedSlugs = listOf(/related services/i).map((h) => h.match(/\/services\/([^/"]+)\//)?.[1]).filter(Boolean);
+const others = serviceList.filter((x) => x.slug !== slug);
+const related = [...others.filter((x) => relatedSlugs.includes(x.slug)), ...others.filter((x) => !relatedSlugs.includes(x.slug))].slice(0, 3);
+const rest = others.filter((x) => !related.includes(x));
+
+const buyers = bestFitBuyers.slice(0, 4);
+const context = engagementContext.slice(0, 4);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO
+      title={`${title} | Axys3D`}
+      description={description}
+      image={bannerImage}
+      jsonLd={{ "@context": "https://schema.org", "@type": "Service", name: title, description, provider: { "@type": "Organization", name: "Axys3D" } }}
+    />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg sv">
+      <!-- what: the service in plain words, the action, and a real picture of it with what is included -->
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 class="ax-display ax-h1--sm" data-ax>{title}</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">{svc?.blurb ?? description}</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold" data-service={svc?.title ?? title}>Start a project</a>
+              <a href="/#explore" class="ax-link">See a project in 3D</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+        </div>
+        <figure class="ax-wrap pg-panel ax-dark" data-ax>
+          <img src={bannerImage} srcset={`${sm(bannerImage)} 800w, ${bannerImage} 1600w`} sizes="(max-width: 1400px) 94vw, 1280px" width="1600" height="1000" alt={`${title}: an example from an Axys3D project`} fetchpriority="high" decoding="async" />
+          {svc && (
+            <ul class="pg-strip sv-inc" style="--n:3" aria-label="Included in this service">
+              {svc.includes.map((x) => <li><strong>{and(x)}</strong></li>)}
+            </ul>
+          )}
+        </figure>
+      </section>
+
+      <!-- the exchange: what you send, what comes back, how it is checked. Out of the accordion, in plain sight. -->
+      {getItems.length > 0 && (
+        <section class="ax-section" aria-labelledby="svIo">
+          <div class="ax-wrap">
+            <header class="ax-head pg-head2">
+              <h2 class="ax-display" id="svIo" data-ax>What you send.<br />What you get back.</h2>
+              <p class="ax-lead" data-ax>Send what you have. We tell you if anything is missing before we quote.</p>
+            </header>
+            <div class="sv-io">
+              {sendItems.length > 0 && (
+                <details class="sv-io-side sv-fold" open data-ax>
+                  <summary><h3>You send</h3><i class="ax-chev" aria-hidden="true"></i></summary>
+                  <ul>{sendItems.map((it) => <li set:html={it}></li>)}</ul>
+                </details>
+              )}
+              <div class="sv-io-main ax-dark" data-ax style="--ax-d:.07s">
+                <h3>You get back</h3>
+                <ul class="pg-ticks">{getItems.map((it) => <li set:html={it}></li>)}</ul>
+                <a href="/contact/" class="ax-btn ax-btn--gold sv-io-cta">Start a project</a>
+              </div>
+              {checkItems.length > 0 && (
+                <details class="sv-io-side sv-fold" open data-ax style="--ax-d:.14s">
+                  <summary><h3>How it is checked</h3><i class="ax-chev" aria-hidden="true"></i></summary>
+                  <ul>{checkItems.map((it) => <li set:html={it}></li>)}</ul>
+                </details>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {showSheets && <Sheets />}
+      {showClash && <ClashReport />}
+
+      <!-- fit: is this for a team like yours, and at which point in the project -->
+      <section class="ax-dark sv-fit" aria-labelledby="svFit">
+        <div class="sv-fit-pic">
+          <img src={sm(fitImage)} srcset={`${sm(fitImage)} 800w, ${fitImage} 1600w`} sizes="(max-width: 900px) 100vw, 46vw" width="800" height="500" alt="" loading="lazy" decoding="async" />
+        </div>
+        <div class="sv-fit-in">
+          <h2 class="ax-display" id="svFit" data-ax>Is this for you?</h2>
+          {buyers.length > 0 && (
+            <div data-ax>
+              <h3>Who it is for</h3>
+              <ul class="sv-pills">{buyers.map((b: string) => <li>{b}</li>)}</ul>
+            </div>
+          )}
+          <div class="sv-fit-two" data-ax>
+            {projectStages.length > 0 && (
+              <details class="sv-fold" open>
+                <summary><h3>When it helps</h3><i class="ax-chev" aria-hidden="true"></i></summary>
+                <ul class="pg-ticks">{projectStages.map((b: string) => <li>{b}</li>)}</ul>
+              </details>
+            )}
+            {context.length > 0 && (
+              <details class="sv-fold" open>
+                <summary><h3>How we work together</h3><i class="ax-chev" aria-hidden="true"></i></summary>
+                <ul class="pg-ticks">{context.map((b: string) => <li>{b}</li>)}</ul>
+              </details>
+            )}
+          </div>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <p class="pg-assure">You approve the scope and price before any work starts.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- how: the same four steps on every job -->
+      <section class="ax-section" aria-labelledby="svHow">
+        <div class="ax-wrap">
+          <header class="ax-head">
+            <h2 class="ax-display" id="svHow" data-ax>Clear brief.<br />Checked work.<br />Clean handoff.</h2>
+          </header>
+          <ol class="pg-steps">
+            {steps.map((s, i) => (
+              <li data-ax style={`--ax-d:${i * 0.07}s`}><span class="n" aria-hidden="true">{i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+            ))}
+          </ol>
+          <div class="pg-next" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <p>We work through Upwork and Fiverr, so the platform holds your payment until you approve the work. <a href="/hire/">How hiring works</a></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- the detail, for people who want it -->
+      {cards.length > 0 && (
+        <section class="ax-section sv-scope" style="padding-top:0" aria-labelledby="svScope">
+          <div class="ax-wrap ax-split">
+            <header>
+              <h2 class="ax-display" id="svScope" data-ax>The detail, when you need it.</h2>
+              <p class="ax-lead" data-ax>Standards, formats, review points and who stays responsible.</p>
+            </header>
+            <div class="ax-acc" data-ax>
+              {cards.map((c: any) => (
+                <details>
+                  <summary><span>{c.title.replace(/^\d+\s*\/\s*/, "")}</span><i aria-hidden="true"></i></summary>
+                  <div class="ax-acc-body">
+                    {c.intro.map((t: string) => <p set:html={t}></p>)}
+                    {c.groups.map((g: any) => (
+                      <Fragment>
+                        {g.label && <h3 set:html={g.label.replace(/^\d+\s*[—–-]\s*/, "")}></h3>}
+                        {g.blocks.map((blk: any) =>
+                          blk.t === "ul" ? <ul>{blk.items.map((it: string) => <li set:html={it}></li>)}</ul> : blk.t === "p" ? <p set:html={blk.html}></p> : null
+                        )}
+                      </Fragment>
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {faqs.length > 0 && (
+        <section class="ax-section sv-scope" style="padding-top:0" aria-labelledby="svFaq">
+          <div class="ax-wrap ax-split">
+            <header>
+              <h2 class="ax-display" id="svFaq" data-ax>Asked before we quote.</h2>
+            </header>
+            <div class="ax-acc" data-ax>
+              {faqs.map((f) => (
+                <details>
+                  <summary><span>{f.q}</span><i aria-hidden="true"></i></summary>
+                  <div class="ax-acc-body"><p set:html={f.a}></p></div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- the other services: the closest ones as pictures, the rest one tap away -->
+      <section class="ax-section" style="padding-top:0" aria-labelledby="svMore">
+        <div class="ax-wrap">
+          <header class="ax-head">
+            <h2 class="ax-display sv-more-h" id="svMore" data-ax>Works well with this.</h2>
+          </header>
+          <ul class="pg-pics">
+            {related.map((r, i) => (
+              <li data-ax style={`--ax-d:${i * 0.06}s`}>
+                <a href={`/services/${r.slug}/`}>
+                  <img src={sm(r.image)} srcset={`${sm(r.image)} 800w, ${r.image} 1600w`} sizes="(max-width: 560px) 94vw, (max-width: 1000px) 47vw, 420px" width="800" height="500" alt="" loading="lazy" decoding="async" />
+                  <span class="pg-pics-go" aria-hidden="true"><svg viewBox="0 0 16 16" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8M6 4h6v6" /></svg></span>
+                  <span class="pg-pics-t"><strong>{and(r.title)}</strong><span>{r.short}</span></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ul class="sv-all" data-ax aria-label="More services">
+            {rest.map((r) => <li><a href={`/services/${r.slug}/`}>{and(r.title)}</a></li>)}
+          </ul>
+        </div>
+      </section>
+
+      <!-- the ask -->
+      <section class="ax-dark pg-close" aria-labelledby="svClose">
+        <div class="pg-close-in">
+          <h2 class="ax-display" id="svClose" data-ax>Send us your drawings.</h2>
+          <p class="ax-lead" data-ax>A sketch, a PDF set or a Revit model is enough to start. We reply within one working day with a clear scope, price and timeline.</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+          </div>
+          <p class="pg-assure" data-ax>No commitment. We sign your NDA before you share files.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/adu-6-sm.webp" srcset="/media/adu-6-sm.webp 800w, /media/adu-6.webp 1536w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  /* what is included: three plain names on the foot of the opening picture */
+  .sv-inc li { display: flex; align-items: center; gap: 12px; }
+  .sv-inc li::before { content: ""; flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--ax-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230b0c0f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 8.2l2.4 2.4 4.6-5'/%3E%3C/svg%3E") center / 15px no-repeat; }
+  .sv-inc strong { margin: 0; }
+
+  /* send, get back, checked: the black tile in the middle is what you are buying */
+  .sv-io { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 48px); align-items: stretch; }
+  .sv-io h3 { margin: 0 0 clamp(16px, 1.8vw, 24px); font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; }
+  .sv-io-side { padding-block: clamp(22px, 2.8vw, 40px); }
+  .sv-io-side ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .sv-io-side li { position: relative; padding-left: 22px; font-size: 16.5px; line-height: 1.45; color: var(--ax-text-2); }
+  .sv-io-side li::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 8px; height: 8px; border-radius: 50%; background: var(--ax-text); }
+  .sv-io-main { display: flex; flex-direction: column; align-items: flex-start; padding: clamp(22px, 2.8vw, 40px); border-radius: var(--ax-r-card); }
+  .sv-io-main h3 { color: var(--ax-accent); }
+  .sv-io-cta { margin-top: auto; }
+  .sv-io-main .pg-ticks { margin-bottom: clamp(22px, 2.6vw, 36px); }
+  /* lists that fold away on phones. On wider screens they are always open and the heading is not a control. */
+  .sv-fold > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; list-style: none; }
+  .sv-fold > summary::-webkit-details-marker { display: none; }
+  .sv-fold > summary .ax-chev { display: none; }
+  @media (min-width: 641px) { .sv-fold > summary { pointer-events: none; } }
+  .sv-io-main .pg-ticks { gap: 16px; }
+  .sv-io-main .pg-ticks li { font-size: clamp(18px, 1.5vw, 21px); font-weight: 600; }
+
+  /* is this for you: picture on the left of the black panel */
+  .sv-fit { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); align-items: stretch; }
+  .sv-fit-pic { position: relative; min-height: clamp(280px, 36vw, 620px); overflow: hidden; }
+  .sv-fit-pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .sv-fit-in { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: clamp(22px, 2.6vw, 36px); padding: clamp(40px, 6vw, 96px) max(var(--ax-gutter), (100vw - var(--ax-wrap)) / 2) clamp(40px, 6vw, 96px) clamp(22px, 4.4vw, 72px); }
+  .sv-fit-in h2 { font-size: clamp(44px, 5.6vw, 88px); }
+  .sv-fit-in h3 { margin: 0 0 14px; color: var(--ax-text-3); font-size: clamp(20px, 1.6vw, 24px); letter-spacing: 0.04em; }
+  .sv-fit-two { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px clamp(20px, 3vw, 44px); }
+  .sv-fit .pg-ticks li { font-size: 16.5px; }
+  .sv-pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .sv-pills li { display: inline-flex; align-items: center; min-height: 36px; padding: 6px 12px; border-radius: var(--ax-r-chip); background: var(--ax-surface-2); font-size: 15.5px; font-weight: 600; line-height: 1.3; color: var(--ax-text); }
+
+  /* links inside the detail are easy to hit */
+  .sv .ax-acc-body li a, .sv .ax-acc-body p strong a { display: inline-flex; align-items: center; min-height: 44px; }
+
+  .sv-more-h { font-size: clamp(40px, 5vw, 80px); }
+  .sv-all { list-style: none; margin: clamp(14px, 1.6vw, 22px) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .sv-all a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: var(--ax-r-btn-sm); background: var(--ax-surface); box-shadow: var(--ax-shadow); font-size: 15.5px; font-weight: 600; color: var(--ax-text); text-decoration: none; transition: background-color 0.25s ease, color 0.25s ease; }
+  .sv-all a:hover { background: var(--ax-ink); color: #fff; }
+
+  @media (max-width: 1000px) {
+    .sv-io { grid-template-columns: 1fr 1fr; }
+    .sv-io-main { grid-column: 1 / -1; grid-row: 1; }
+    .sv-io-side { padding-block: 0; }
+  }
+  @media (max-width: 900px) {
+    .sv-fit { grid-template-columns: 1fr; }
+    .sv-fit-pic { min-height: 0; aspect-ratio: 16 / 9; }
+    .sv-fit-in { padding: clamp(28px, 6vw, 48px) var(--ax-gutter) clamp(36px, 7vw, 56px); }
+  }
+  @media (max-width: 640px) {
+    .sv-io, .sv-fit-two { grid-template-columns: 1fr; }
+    .sv-io { gap: 0; }
+    /* what you get back comes first, with the button; the other two lists fold away */
+    .sv-io-main { grid-column: auto; grid-row: auto; order: -1; margin-bottom: 12px; }
+    .sv-io-cta { width: 100%; }
+    .sv-fold > summary { min-height: 56px; cursor: pointer; border-top: 1px solid var(--ax-line-strong); }
+    .sv-fold > summary .ax-chev { display: block; }
+    .sv-fold[open] > summary .ax-chev { transform: rotate(180deg); }
+    .sv-fold > summary h3 { margin: 0; font-size: 24px; }
+    .sv-fold > ul { padding-bottom: 18px; }
+    .sv-io .sv-fold:last-child { border-bottom: 1px solid var(--ax-line-strong); }
+    .sv-fit-two { gap: 0; }
+    .sv-fit-in h2 { font-size: 30px; }
+    .sv-more-h { font-size: 30px; }
+    .sv-inc { grid-template-columns: 1fr !important; }
+    .sv-inc > * { box-shadow: none !important; padding-block: 8px; }
+    .sv-inc > :first-child { padding-top: 20px; }
+    .sv-inc > :last-child { padding-bottom: 22px; }
+  }
+</style>
+
+<script>
+  // carry the service to the contact form so the visitor does not have to pick it again
+  const svc = document.querySelector<HTMLElement>("[data-service]")?.dataset.service;
+  if (svc) document.querySelectorAll<HTMLAnchorElement>('a[href="/contact/"], a[href$="contact/index.html"]').forEach((a) => a.addEventListener("click", () => { try { sessionStorage.setItem("ax-service", svc); } catch {} }));
+
+  // phones: the long lists start closed and open on a tap; wider screens always show them
+  const folds = Array.from(document.querySelectorAll<HTMLDetailsElement>(".sv-fold"));
+  const narrow = window.matchMedia("(max-width: 640px)");
+  const setFolds = () => folds.forEach((d) => { d.open = !narrow.matches; d.querySelector("summary")!.tabIndex = narrow.matches ? 0 : -1; });
+  if (folds.length) { setFolds(); narrow.addEventListener("change", setFolds); }
+
+  // steps: the tile you have scrolled to turns black. Scroll position where the page gets scroll events,
+  // and an IntersectionObserver as well, because some viewers scroll the page from outside.
+  const cards = Array.from(document.querySelectorAll<HTMLElement>(".pg-steps li"));
+  if (cards.length) {
+    let tick = false;
+    const pick = () => {
+      tick = false;
+      const vh = window.innerHeight, first = cards[0].getBoundingClientRect(), last = cards[cards.length - 1].getBoundingClientRect();
+      let on = 0;
+      if (Math.abs(first.top - last.top) < 30) {
+        const p = (vh * 0.92 - first.top) / (vh * 0.75);
+        on = Math.max(0, Math.min(cards.length - 1, Math.floor(p * cards.length)));
+      } else {
+        let best = Infinity;
+        cards.forEach((c, i) => { const r = c.getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - vh * 0.5); if (d < best) { best = d; on = i; } });
+      }
+      cards.forEach((c, i) => c.classList.toggle("is-on", i === on));
+    };
+    const ask = () => { if (!tick) { tick = true; requestAnimationFrame(pick); } };
+    window.addEventListener("scroll", ask, { passive: true, capture: true });
+    window.addEventListener("resize", ask);
+    const io = new IntersectionObserver(ask, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+    cards.forEach((c) => io.observe(c));
+    pick();
+  }
+</script>

@@ -1,0 +1,165 @@
+---
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import { audiences } from "../data/site";
+import { services } from "../data/services";
+
+// Who we work for: four kinds of team, the problem we solve and what they receive.
+// Detail pages live in src/content/industries/<slug>.md
+const svcBySlug = Object.fromEntries(services.map((x) => [x.slug, x.title.replace(" & ", " and ")]));
+// The kinds of project, each with a picture from our own portfolio. Only what the site can show:
+// add a kind here when there is real work in public/media to stand behind it.
+const sectors = [
+  { name: "Residential", line: "Houses and ADUs, from the permit set to the final render.", img: "adu-1", w: 1536, h: 1024, alt: "Exterior render of a two storey residential unit by Axys3D" },
+  { name: "Interiors", line: "Kitchens, bathrooms and living spaces, rendered photoreal.", img: "bathroom", w: 1600, h: 900, alt: "Bathroom interior visualization by Axys3D" },
+  { name: "Commercial interiors", line: "Offices and meeting rooms, for fit out and marketing.", img: "office", w: 1600, h: 900, alt: "Office interior visualization by Axys3D" },
+  { name: "Landscape", line: "Gardens, planting and the setting around the building.", img: "landscape", w: 1600, h: 900, alt: "Garden and landscape visualization by Axys3D" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title="Industries We Work With | Axys3D" description="BIM, Revit and visualization production for architects, engineers, developers and agencies, across residential, interior, workplace and landscape projects." />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg ix">
+      <!-- the visitor says who they are first; everything below is sorted by that answer -->
+      <section class="pg-top ix-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 data-ax>Find your team.<br />See what you get.</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">We produce BIM models, Revit drawing sets and visuals for the building industry. Four kinds of team hire us. Pick yours to see the problem we solve and what you receive.</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+          <nav class="ix-jump" aria-label="I work as" data-ax>
+            <span id="ixAsk">I work as</span>
+            <ul aria-labelledby="ixAsk">
+              {audiences.map((a) => <li><a href={`#${a.slug}`}>{a.tab}</a></li>)}
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <section class="ix-list" aria-label="Who we work for">
+        <div class="ax-wrap">
+          {audiences.map((a, i) => (
+            <article class:list={["pg-duo", i % 2 === 1 && "pg-duo--flip"]} id={a.slug} data-ax>
+              <a class="pg-duo-pic" href={`/industries/${a.slug}/`} tabindex="-1" aria-hidden="true">
+                <img src={`/media/${a.img}-sm.webp`} srcset={`/media/${a.img}-sm.webp 800w, /media/${a.img}.webp 1600w`} sizes="(max-width: 900px) 94vw, 640px" width="800" height={a.img.startsWith("svc") ? 500 : 450} alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+              </a>
+              <div class="pg-duo-body">
+                <p class="ix-name">{a.name}</p>
+                <h2>{a.problem}</h2>
+                <ul class="pg-ticks" aria-label="What you get">{a.deliver.map((d) => <li>{d}</li>)}</ul>
+                <ul class="ix-svc" aria-label="Services most teams like yours use">
+                  {a.services.map((sl) => <li><a href={`/services/${sl}/`}>{svcBySlug[sl]}</a></li>)}
+                </ul>
+                <div class="pg-act">
+                  <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+                  <a class="ax-link" href={`/industries/${a.slug}/`}>How we work with {a.who}</a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- range: the kinds of project we can show, each with its own picture -->
+      <section class="ax-section" aria-labelledby="ixTypes">
+        <div class="ax-wrap">
+          <header class="ax-head pg-head2">
+            <h2 id="ixTypes" data-ax>Homes, interiors, workplaces and gardens.</h2>
+            <p class="ax-lead" data-ax>The same team and the same checks, whatever the project is.</p>
+          </header>
+          <ul class="ix-kinds">
+            {sectors.map((s, i) => (
+              <li data-ax style={`--ax-d:${(i % 2) * 0.06}s`}>
+                <figure>
+                  <img src={`/media/${s.img}-sm.webp`} srcset={`/media/${s.img}-sm.webp 800w, /media/${s.img}.webp ${s.w}w`} sizes="(max-width: 560px) 46vw, (max-width: 900px) 47vw, (max-width: 1400px) 54vw, 740px" width={s.w} height={s.h} alt={s.alt} loading="lazy" decoding="async" />
+                  <figcaption><h3>{s.name}</h3><p>{s.line}</p></figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+          <div class="pg-next" data-ax>
+            <a href="/visuals/" class="ax-link">See the work</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- the ask -->
+      <section class="ax-dark pg-close" aria-labelledby="ixClose">
+        <div class="pg-close-in">
+          <h2 id="ixClose" data-ax>Not sure where you fit? Tell us about your project.</h2>
+          <p class="ax-lead" data-ax>Tell us what you are building and what you need next. We reply with a clear scope.</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+          </div>
+          <p class="pg-assure" data-ax>We reply within one working day. You approve the scope and price first.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/environment-sm.webp" srcset="/media/environment-sm.webp 800w, /media/environment.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="Exterior environment visualization by Axys3D" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .ix-top { padding-bottom: clamp(28px, 4vw, 56px); }
+  .ix-jump { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: clamp(28px, 4vw, 56px); }
+  .ix-jump > span { font-size: 15px; font-weight: 600; color: var(--ax-text-2); }
+  .ix-jump ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 clamp(18px, 2.2vw, 34px); border-bottom: 1px solid var(--ax-line-strong); }
+  .ix-jump a { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; margin-bottom: -1px; border-bottom: 2px solid transparent; font: 600 16.5px/1 var(--ax-font); color: var(--ax-text-2); transition: color 0.2s ease, border-color 0.2s ease; }
+  .ix-jump a:hover { color: var(--ax-text); border-bottom-color: var(--ax-accent); }
+
+  .ix-list .ax-wrap { display: grid; gap: clamp(10px, 1.4vw, 20px); }
+  .ix-list .pg-duo { scroll-margin-top: 100px; }
+  .ix-list .pg-duo-pic img { transition: transform 1.2s var(--ax-ease); }
+  .ix-list .pg-duo-pic:hover img { transform: scale(1.04); }
+  .ix-name { margin: 0 0 12px; font-size: 15px; font-weight: 600; color: var(--ax-text-3); }
+  .ix-list h2 { font-size: clamp(32px, 3.6vw, 56px); line-height: 0.94; text-wrap: balance; }
+  .ix-list .pg-ticks { margin-top: clamp(18px, 2vw, 28px); gap: 10px; }
+  .ix-svc { list-style: none; margin: clamp(16px, 1.8vw, 24px) 0 clamp(20px, 2.4vw, 32px); padding: 0; display: flex; flex-wrap: wrap; gap: 0 22px; }
+  .ix-svc a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: var(--ax-text-2); text-decoration: underline; text-decoration-color: var(--ax-line-strong); text-decoration-thickness: 1px; text-underline-offset: 5px; transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+  .ix-svc a:hover { color: var(--ax-text); text-decoration-color: var(--ax-accent); }
+  .ix #ixTypes { font-size: clamp(40px, 5vw, 80px); }
+  /* four kinds of project: a wide picture and a narrower one on each row, the name and one line under each */
+  .ix-kinds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(22px, 2.6vw, 40px) clamp(8px, 1vw, 14px); }
+  .ix-kinds li { min-width: 0; grid-column: span 5; }
+  .ix-kinds li:nth-child(4n + 1), .ix-kinds li:nth-child(4n) { grid-column: span 7; }
+  .ix-kinds figure { margin: 0; }
+  .ix-kinds img { display: block; width: 100%; height: clamp(240px, 30vw, 420px); object-fit: cover; border-radius: var(--ax-r-media); background: var(--ax-surface-2); }
+  .ix-kinds figcaption { padding-top: clamp(12px, 1.4vw, 18px); }
+  .ix-kinds h3 { margin: 0 0 6px; font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; line-height: 0.96; }
+  .ix-kinds p { margin: 0; max-width: 30em; font-size: 16.5px; line-height: 1.5; color: var(--ax-text-2); }
+  @media (max-width: 900px) {
+    .ix-kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ix-kinds li, .ix-kinds li:nth-child(4n + 1), .ix-kinds li:nth-child(4n) { grid-column: auto; }
+    .ix-kinds img { height: auto; aspect-ratio: 4 / 3; }
+  }
+  @media (max-width: 600px) { .ix #ixTypes { font-size: 30px; } .ix-list h2 { font-size: 28px; } }
+  @media (max-width: 560px) {
+    .ix-kinds { gap: 20px 10px; }
+    .ix-kinds h3 { font-size: 22px; }
+    .ix-kinds p { font-size: 14.5px; line-height: 1.45; }
+    .ix-jump ul { width: 100%; justify-content: space-between; gap: 0 8px; }
+    .ix-jump a { font-size: 15px; }
+    /* each team's page lists its services, so the cards here stay short */
+    .ix-svc { display: none; }
+    .ix-list .pg-ticks { margin-bottom: 20px; }
+    .ix-list .pg-ticks li { font-size: 16px; }
+  }
+</style>

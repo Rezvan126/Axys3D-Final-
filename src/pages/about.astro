@@ -1,0 +1,155 @@
+---
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import WorkReel from "../components/WorkReel.astro";
+import "../styles/global.css";
+import { getCollection } from "astro:content";
+import { figures } from "../data/site";
+import { tools } from "../data/tools";
+
+const pageData = (await getCollection("aboutPage"))[0]?.data;
+if (!pageData) throw new Error("Could not find index.md in src/content/aboutPage/");
+
+// the four working principles from src/content/aboutPage, said the way a client would ask about them
+const principles = [
+  { title: "We read your documents", text: "We work from your BIM execution plan, information requirements, Revit standards, view briefs and approved revisions. You do not have to simplify the brief for us." },
+  { title: "One team, one handoff", text: "BIM, drawings, coordination support and visuals are planned as related packages, with named owners, checks and handoffs." },
+  { title: "You stay in charge", text: "Design, engineering, compliance, statutory issue and professional sign off stay with you and the professionals you appoint." },
+  { title: "Private by default", text: "We sign your NDA first. Your name, images and results stay private until you give written permission to publish." },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title="About Axys3D | AEC Production Partner" description={pageData.heroDescription} />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg ab">
+      <!-- what we are, in the client's terms; the picture carries the four figures as proof -->
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 class="ax-display ax-h1--sm" data-ax>Extra hands that work to your standards.</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">Axys3D is a production studio for the building industry. Send us drawings, sketches or models. Get back coordinated BIM models, permit ready drawing sets and finished visuals.</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <a href="/visuals/" class="ax-link">See our work</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+        </div>
+        <figure class="ax-wrap pg-panel ax-dark" data-ax>
+          <img src="/media/lounge.webp" srcset="/media/lounge-sm.webp 800w, /media/lounge.webp 1600w" sizes="(max-width: 1400px) 94vw, 1280px" width="1920" height="1080" alt="Lounge and home office interior visualization by Axys3D" fetchpriority="high" decoding="async" />
+          <dl class="pg-strip ab-figs" aria-label="Axys3D in numbers">
+            {figures.map((f) => (
+              <div><dd>{f.value}<small>{f.unit}</small></dd><dt>{f.label}</dt></div>
+            ))}
+          </dl>
+        </figure>
+      </section>
+
+      <!-- trust: how we behave inside your project. Plain statements beside real work, no boxes. -->
+      <section class="ax-section" aria-labelledby="abWhy">
+        <div class="ax-wrap">
+          <header class="ax-head pg-head2">
+            <h2 class="ax-display" id="abWhy" data-ax>You design.<br />We produce.<br />You sign.</h2>
+            <p class="ax-lead" data-ax>Extra capacity only helps when the information stays under control. Every job starts with scope, inputs, who is responsible and how the work is handed back.</p>
+          </header>
+          <div class="ab-why">
+            <figure data-ax>
+              <img src="/media/residence-sm.webp" srcset="/media/residence-sm.webp 800w, /media/residence.webp 1600w" sizes="(max-width: 900px) 94vw, 520px" width="800" height="450" alt="Residence interior rendered by Axys3D" loading="lazy" decoding="async" />
+            </figure>
+            <ul class="pg-points" data-ax>
+              {principles.map((p) => <li><h3>{p.title}</h3><p>{p.text}</p></li>)}
+            </ul>
+          </div>
+          <div class="pg-next" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <p>You approve the scope and price before any work starts. <a href="/hire/">How hiring works</a></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- proof: films from the portfolio -->
+      <WorkReel limit={3} />
+
+      <!-- fit: do you use my software? -->
+      <section class="ax-section" aria-labelledby="abTools">
+        <div class="ax-wrap ab-tools">
+          <header>
+            <h2 class="ax-display" id="abTools" data-ax>Delivered in the tools you already use.</h2>
+            <p class="ax-lead" data-ax>You get native files back, so your team can open, edit and reuse them.</p>
+          </header>
+          <ul class="ab-chips" data-ax>
+            {tools.map((t) => (
+              <li>
+                {t.d ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d={t.d} fill="currentColor" /></svg> : <i aria-hidden="true">{t.mark}</i>}
+                {t.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- the ask -->
+      <section class="ax-dark pg-close" aria-labelledby="abClose">
+        <div class="pg-close-in">
+          <h2 class="ax-display" id="abClose" data-ax>Send us your drawings.</h2>
+          <p class="ax-lead" data-ax>{pageData.deliveryDescription}</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="/hire/" class="ax-link">How hiring works</a>
+          </div>
+          <p class="pg-assure" data-ax>We reply within one working day. You approve the scope and price first.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/landscape-sm.webp" srcset="/media/landscape-sm.webp 800w, /media/landscape.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="Garden and landscape visualization by Axys3D" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  /* the four figures sit on the black foot of the opening picture */
+  .ab-figs > div { display: flex; flex-direction: column; gap: 10px; }
+  .ab-figs dd { margin: 0; font-family: var(--ax-display); font-size: clamp(48px, 5.6vw, 88px); font-weight: 800; line-height: 0.84; color: #fff; font-variant-numeric: tabular-nums; }
+  .ab-figs dd small { margin-left: 5px; font-size: 0.34em; font-weight: 700; text-transform: uppercase; color: var(--ax-accent); }
+  .ab-figs dt { font-size: 15px; font-weight: 600; line-height: 1.3; color: var(--ax-text-2); }
+
+  .ab-why { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 4.4vw, 72px); align-items: center; }
+  .ab-why figure { margin: 0; border-radius: var(--ax-r-media); overflow: hidden; background: var(--ax-surface-2); }
+  .ab-why figure img { display: block; width: 100%; height: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .ab-why h3 { font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; }
+
+  .ab-tools { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 88px); align-items: center; }
+  .ab-tools h2 { font-size: clamp(40px, 5vw, 80px); }
+  .ab-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .ab-chips li { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px 0 12px; border-radius: var(--ax-r-chip); background: var(--ax-surface); box-shadow: var(--ax-shadow); font-size: 16px; font-weight: 600; color: var(--ax-text); }
+  .ab-chips svg { flex: none; color: var(--ax-text); }
+  .ab-chips i { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; background: var(--ax-text); color: #fff; font: 700 12px/1 var(--ax-font); font-style: normal; }
+  @media (max-width: 900px) {
+    .ab-why, .ab-tools { grid-template-columns: 1fr; }
+    .ab-why figure img { aspect-ratio: 16 / 9; }
+  }
+  @media (max-width: 640px) {
+    .ab .pg-panel > img { aspect-ratio: 16 / 9; }
+    .ab-figs > div { gap: 6px; }
+    .ab-figs dd { font-size: 44px; }
+    .ab-figs dt { font-size: 14px; }
+    /* the opening picture and the films carry the work on a phone, so this section is words only */
+    .ab-why figure { display: none; }
+    .ab-why h3 { font-size: 24px; }
+    .ab .pg-points { gap: 20px; }
+    .ab .pg-points p { font-size: 16px; }
+    .ab-tools h2 { font-size: 30px; }
+    .ab-chips li { font-size: 15px; padding: 0 12px 0 10px; }
+  }
+</style>

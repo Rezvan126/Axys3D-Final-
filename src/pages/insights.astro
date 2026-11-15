@@ -1,0 +1,99 @@
+---
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import { getCollection } from "astro:content";
+
+const articles = (await getCollection("insights")).sort((a, b) => (b.data.publishDate?.getTime() ?? 0) - (a.data.publishDate?.getTime() ?? 0));
+const fmt = (d?: Date) => (d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "");
+const siteUrl = Astro.site ?? new URL("https://axys3d.com");
+const ld = {
+  "@context": "https://schema.org", "@type": "CollectionPage", name: "Axys3D Insights",
+  mainEntity: { "@type": "ItemList", itemListElement: articles.map((a, i) => ({ "@type": "ListItem", position: i + 1, url: new URL(`/insights/${a.id}/`, siteUrl).href, name: a.data.title })) },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title="Insights: BIM, Revit and Architectural Visualization Guides | Axys3D" description="Practical guides on BIM levels of development, Revit permit drawing sets and MEP clash coordination." jsonLd={ld} />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg iq">
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 data-ax>Guides for your next handoff.</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">Practical guides on BIM, Revit documentation and model coordination, written by the team that does the work.</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- the newest guide large, the rest beside each other: pictures from our own models, not a list of articles -->
+      <section aria-label="All guides" class="iq-all">
+        <ul class="ax-wrap pg-pics iq-list" style="--n:2">
+          {articles.map((a, i) => {
+            const img = a.data.image ?? "/media/svc-bim.webp";
+            return (
+              <li data-ax style={`--ax-d:${(i % 2) * 0.06}s`}>
+                <a href={`/insights/${a.id}/`}>
+                  <img src={i === 0 ? img : img.replace(".webp", "-sm.webp")} srcset={`${img.replace(".webp", "-sm.webp")} 800w, ${img} 1600w`} sizes={i === 0 ? "(max-width: 1400px) 94vw, 1280px" : "(max-width: 560px) 94vw, 640px"} width="1600" height="1000" alt={a.data.imageAlt ?? ""} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+                  <span class="pg-pics-go" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8M6 4h6v6" /></svg></span>
+                  <span class="pg-pics-t">
+                    <span class="iq-meta">{a.data.category} · {a.data.readTime} read{a.data.publishDate && ` · ${fmt(a.data.publishDate)}`}</span>
+                    <strong>{a.data.title}</strong>
+                    <span class="iq-sum">{a.data.summary}</span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      <section class="ax-dark pg-close" aria-labelledby="iqClose">
+        <div class="pg-close-in">
+          <h2 id="iqClose" data-ax>Rather hand it to us? Send your brief.</h2>
+          <p class="ax-lead" data-ax>Share your drawings and deadline. We reply with a clear scope, price and timeline.</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="/hire/" class="ax-link">How hiring works</a>
+          </div>
+          <p class="pg-assure" data-ax>We reply within one working day. You approve the scope and price first.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/residence-sm.webp" srcset="/media/residence-sm.webp 800w, /media/residence.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="Residence interior visualization by Axys3D" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .iq-all { padding: clamp(28px, 4vw, 56px) 0 var(--ax-section); }
+  .iq-list.ax-wrap { margin-inline: auto; }
+  .iq-list a { height: clamp(300px, 30vw, 420px); }
+  .iq-list li:first-child { grid-column: 1 / -1; }
+  .iq-list li:first-child a { height: clamp(340px, 42vw, 560px); }
+  .iq-list a::after { background: linear-gradient(180deg, rgba(11, 12, 15, 0.3) 0%, rgba(11, 12, 15, 0.1) 26%, rgba(11, 12, 15, 0.94) 82%); }
+  .iq-meta { font-size: 14.5px !important; font-weight: 600; color: var(--ax-accent) !important; }
+  .iq-list .pg-pics-t { gap: 10px; max-width: 46em; }
+  .iq-list li:first-child strong { font-size: clamp(30px, 4vw, 64px); }
+  .iq-sum { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+  @media (max-width: 1000px) { .iq-list li:last-child:nth-child(odd) { grid-column: auto; } }
+  @media (max-width: 560px) {
+    .iq-list a, .iq-list li:first-child a { height: auto; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .iq-list .pg-pics-t { position: static; padding: 150px 16px 18px; }
+    .iq-list a::after { background: linear-gradient(180deg, rgba(11, 12, 15, 0.3) 0%, rgba(11, 12, 15, 0.6) 30%, rgba(11, 12, 15, 0.96) 58%); }
+  }
+</style>

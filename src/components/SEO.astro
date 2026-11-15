@@ -1,0 +1,54 @@
+---
+// The headline and reading fonts is fetched first so text never flashes in a fallback font
+import textFont from "@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url";
+import displayFont from "@fontsource-variable/big-shoulders/files/big-shoulders-latin-wght-normal.woff2?url";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  jsonLd?: Record<string, any> | Record<string, any>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "",
+  image = "/og-default.jpg",
+  type = "website",
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://axys3d.com");
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL(image, site).href;
+
+const clean = description.replace(/\s+/g, " ").trim();
+const desc = clean.length > 160 ? clean.slice(0, 157).trimEnd() + "..." : clean;
+const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<title>{title}</title>
+{desc && <meta name="description" content={desc} />}
+<link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={textFont} as="font" type="font/woff2" crossorigin />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="theme-color" content="#f3f0ea" />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content="Axys3D" />
+<meta property="og:title" content={title} />
+{desc && <meta property="og:description" content={desc} />}
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+{desc && <meta name="twitter:description" content={desc} />}
+<meta name="twitter:image" content={ogImage} />
+
+{ld.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}

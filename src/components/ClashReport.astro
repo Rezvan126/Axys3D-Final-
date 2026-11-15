@@ -1,0 +1,118 @@
+---
+// A real clash test: structure against mechanical, electrical and plumbing, run on the same house
+// model the site lets you turn. Numbers and rows come straight from tools/clash-test.py (clash.json).
+import report from "../data/clash.json";
+const rows = report.rows as Array<{ id: string; a: { cat: string; type: string }; b: { disc: string; cat: string; type: string }; depth_mm: number; at: number[] }>;
+const plain = (t: string) => t.replace(/^Basic Wall /, "").replace(/ Parametric( Exist)? Wall Vent/, "").replace(/\s{2,}/g, " ");
+const facts = [
+  { n: report.tested.structure, l: "structural elements" },
+  { n: report.tested.services, l: "service elements" },
+  { n: report.clashes, l: `clashes over ${report.tolerance_mm} mm` },
+  { n: report.touches_ignored, l: "touches filtered out" },
+];
+---
+
+<section class="ax-dark cl" aria-labelledby="clHead">
+  <div class="ax-wrap">
+    <header class="cl-head">
+      <h2 class="ax-display" id="clHead" data-ax>A clash report you can act on.</h2>
+      <p class="ax-lead" data-ax>This is a real test, run on a house we modeled: structure against mechanical, electrical and plumbing. Every clash comes back with the two elements, where it is, how deep it goes and a picture.</p>
+    </header>
+
+    <ul class="cl-facts" data-ax>
+      {facts.map((f) => <li><b>{f.n}</b><span>{f.l}</span></li>)}
+    </ul>
+
+    <div class="cl-views">
+      <figure class="cl-main" data-ax>
+        <img src="/media/clash/overview.webp" srcset="/media/clash/overview-sm.webp 800w, /media/clash/overview.webp 1400w" sizes="(max-width: 900px) 100vw, 62vw" width="1400" height="900" alt="Whole model with structure solid, services in colour and a red marker on every clash" loading="lazy" decoding="async" />
+        <figcaption>Whole model. Red markers are the clashes.</figcaption>
+      </figure>
+      <figure data-ax style="--ax-d:.07s">
+        <img src="/media/clash/view-1-sm.webp" width="800" height="514" alt="Wall vent in green passing through a concrete stem wall in red" loading="lazy" decoding="async" />
+        <figcaption>{rows[2]?.id}. Vent through the stem wall, no opening modeled.</figcaption>
+      </figure>
+      <figure data-ax style="--ax-d:.14s">
+        <img src="/media/clash/view-2-sm.webp" width="800" height="514" alt="Second wall vent in green passing through the stem wall in red" loading="lazy" decoding="async" />
+        <figcaption>{rows[4]?.id}. Same wall, next vent along.</figcaption>
+      </figure>
+    </div>
+
+    <div class="cl-table" id="clTable" data-ax role="region" aria-label="Clash list" tabindex="0">
+      <table>
+        <thead><tr><th>No.</th><th>Structure</th><th>Service</th><th>Overlap</th><th>Height above lowest point</th></tr></thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr class:list={[i >= 4 && "cl-extra"]}>
+              <td><b>{r.id}</b></td>
+              <td><span>{r.a.cat}</span>{plain(r.a.type)}</td>
+              <td><span>{r.b.cat}</span>{plain(r.b.type)}</td>
+              <td>{r.depth_mm} mm</td>
+              <td>{r.at[2].toFixed(2)} m</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    {rows.length > 4 && (
+      <button type="button" class="ax-btn ax-btn--glass ax-btn--sm cl-toggle" aria-expanded="false" aria-controls="clTable" data-more={`Show all ${rows.length}`} data-less="Show first 4">Show all {rows.length}</button>
+    )}
+    <p class="cl-foot" data-ax>On your project the same list goes back to each trade with an owner and a due date, and is run again after every model update until it is empty.</p>
+  </div>
+</section>
+
+<style>
+  .cl { padding-block: var(--ax-section); }
+  .cl-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 64px); align-items: end; margin-bottom: clamp(28px, 3.6vw, 56px); }
+  .cl-head h2, .cl-head p { margin: 0; }
+  .cl-facts { list-style: none; margin: 0 0 clamp(24px, 3vw, 44px); padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; border-radius: var(--ax-r-md); overflow: hidden; background: var(--ax-line); }
+  .cl-facts li { display: grid; gap: 4px; padding: clamp(16px, 2vw, 28px); background: var(--ax-surface); }
+  .cl-facts b { font-family: var(--ax-display); font-size: clamp(40px, 4.6vw, 72px); font-weight: 800; line-height: 0.95; }
+  .cl-facts li:nth-child(3) b { color: #ff6a55; }
+  .cl-facts span { font-size: 15px; color: var(--ax-text-2); }
+  .cl-views { display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(0, 1fr); grid-template-rows: 1fr 1fr; gap: clamp(10px, 1.2vw, 18px); }
+  .cl-views figure { position: relative; margin: 0; overflow: hidden; border-radius: var(--ax-r-md); background: #23272f; }
+  .cl-main { grid-row: 1 / span 2; }
+  .cl-views img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .cl-views figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 16px 12px; font-size: 14px; font-weight: 600; color: #fff; background: linear-gradient(180deg, rgba(11, 12, 15, 0), rgba(11, 12, 15, 0.82)); }
+  .cl-table { margin-top: clamp(20px, 2.4vw, 36px); overflow-x: auto; border-radius: var(--ax-r-md); background: var(--ax-surface); }
+  .cl-table table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 15px; }
+  .cl-table th { padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ax-text-3); white-space: nowrap; }
+  .cl-table td { padding: 13px 18px; border-top: 1px solid var(--ax-line); vertical-align: top; color: var(--ax-text); }
+  .cl-table td span { display: block; font-size: 13px; color: var(--ax-text-3); }
+  .cl-table td b { font-family: var(--ax-display); font-size: 20px; color: #ff6a55; }
+  .cl-table td:nth-child(4), .cl-table td:nth-child(5) { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .cl-foot { margin: clamp(20px, 2.4vw, 32px) 0 0; max-width: 64ch; color: var(--ax-text-2); font-size: clamp(16px, 1.3vw, 19px); }
+
+  @media (max-width: 900px) {
+    .cl-head { grid-template-columns: 1fr; }
+    .cl-facts { grid-template-columns: 1fr 1fr; }
+    .cl-views { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .cl-main { grid-row: auto; grid-column: 1 / -1; }
+    .cl-views figcaption { font-size: 13px; padding: 22px 12px 10px; }
+  }
+  .cl-toggle { display: none; }
+  /* phones: the first four rows, the rest behind one button */
+  @media (max-width: 760px) {
+    .cl-head { margin-bottom: 20px; }
+    .cl-facts { margin-bottom: 16px; }
+    .cl-facts li { padding: 12px 14px; }
+    .cl-facts b { font-size: 32px; }
+    .cl-table:not(.is-all) .cl-extra { display: none; }
+    .cl-table td { padding: 10px 14px; }
+    .cl-table th { padding: 12px 14px; }
+    .cl-toggle { display: inline-flex; width: 100%; margin-top: 10px; }
+  }
+</style>
+
+<script>
+  const table = document.getElementById("clTable");
+  const btn = document.querySelector<HTMLButtonElement>(".cl-toggle");
+  if (table && btn) {
+    btn.addEventListener("click", () => {
+      const all = table.classList.toggle("is-all");
+      btn.setAttribute("aria-expanded", String(all));
+      btn.textContent = (all ? btn.dataset.less : btn.dataset.more) ?? "";
+    });
+  }
+</script>

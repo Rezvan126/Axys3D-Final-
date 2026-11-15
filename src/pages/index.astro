@@ -1,0 +1,464 @@
+---
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Explorer from "../components/Explorer.astro";
+import WorkReel from "../components/WorkReel.astro";
+import Logo3D from "../components/Logo3D.astro";
+import "../styles/global.css";
+import { services } from "../data/services";
+import { figures, steps, faqs, audiences } from "../data/site";
+const svcBySlug = Object.fromEntries(services.map((x) => [x.slug, x.title.replace(" & ", " and ")]));
+
+const siteUrl = Astro.site ?? new URL("https://axys3d.com");
+const ld = [
+  { "@context": "https://schema.org", "@type": "Organization", name: "Axys3D", url: siteUrl.href, email: "info@axys3d.com" },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "Axys3D", url: siteUrl.href },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO
+      title="Axys3D | BIM, Revit and Architectural Visualization Production"
+      description="One production team from first sketch to final render: BIM models, permit ready Revit drawing sets, MEP coordination and photoreal visuals, built to your standards."
+      jsonLd={ld}
+      image="/media/adu-1.webp"
+    />
+    <link rel="preload" as="image" href="/media/hero-film.webp" imagesrcset="/media/hero-film-sm.webp 900w, /media/hero-film.webp 1720w" imagesizes="100vw" media="(min-width: 901px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/media/hero-film-tall.webp" media="(max-width: 900px)" fetchpriority="high" />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="hm">
+      <!-- HERO: the studio's own film fills the screen, the headline sits on it -->
+      <section class="hm-hero ax-dark" aria-labelledby="hmTitle">
+        <picture class="hm-hero-pic">
+          <source media="(max-width: 900px)" srcset="/media/hero-film-tall.webp" width="540" height="720" />
+          <img src="/media/hero-film.webp" srcset="/media/hero-film-sm.webp 900w, /media/hero-film.webp 1720w" sizes="100vw" width="1720" height="720" alt="Two storey residence at golden hour, modeled and rendered by Axys3D" fetchpriority="high" decoding="async" />
+        </picture>
+        <video class="hm-hero-film" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-src="/media/hero-film.mp4" data-src-tall="/media/hero-film-tall.mp4"></video>
+        <div class="hm-hero-in ax-wrap">
+          <h1 class="hm-title hm-in" id="hmTitle" style="--i:0">From first sketch<br />to final render<i aria-hidden="true"></i></h1>
+          <div class="hm-below hm-in" style="--i:1">
+            <p class="ax-lead">Send us your drawings. Get back BIM models, permit ready Revit sets and photoreal visuals, built to your standards and checked before they reach you.</p>
+            <div class="hm-actions">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <a href="#explore" class="ax-btn ax-btn--glass">Explore a project in 3D</a>
+              <p class="hm-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+          <dl class="hm-figs hm-in" style="--i:2" aria-label="Axys3D in numbers">
+            {figures.map((f) => (
+              <div><dd>{f.value}<small>{f.unit}</small></dd><dt>{f.label}</dt></div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <!-- BUILT FOR YOU: the visitor says who they are and sees their own problem, what they get and where to click -->
+      <section class="ax-section hm-who" id="for-you" aria-labelledby="whoTitle">
+        <div class="ax-wrap">
+          <header class="ax-head hm-who-head">
+            <h2 class="ax-display" id="whoTitle" data-ax>Built around<br />how you work.</h2>
+            <div data-ax>
+              <p class="hm-who-ask" id="whoAsk">I work as</p>
+              <div class="hm-who-tabs" role="tablist" aria-labelledby="whoAsk">
+                {audiences.map((a, i) => (
+                  <button type="button" role="tab" id={`who-tab-${i}`} aria-controls={`who-panel-${i}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-who={a.who}>{a.tab}</button>
+                ))}
+              </div>
+            </div>
+          </header>
+          <div class="hm-who-panels" data-ax>
+            {audiences.map((a, i) => (
+              <article class="hm-who-panel" role="tabpanel" id={`who-panel-${i}`} aria-labelledby={`who-tab-${i}`} hidden={i !== 0}>
+                <div class="hm-who-pic">
+                  <img src={`/media/${a.img}-sm.webp`} srcset={`/media/${a.img}-sm.webp 800w, /media/${a.img}.webp 1600w`} sizes="(max-width: 900px) 94vw, 600px" width="800" height="500" alt="" loading="lazy" decoding="async" />
+                </div>
+                <div class="hm-who-body">
+                  <p class="hm-who-name">{a.name}</p>
+                  <h3>{a.problem}</h3>
+                  <ul class="hm-who-get" aria-label="What you get">
+                    {a.deliver.map((d) => <li>{d}</li>)}
+                  </ul>
+                  <ul class="hm-who-svc" aria-label="Services most teams like yours use">
+                    {a.services.map((sl) => <li><a href={`/services/${sl}/`}>{svcBySlug[sl]}</a></li>)}
+                  </ul>
+                  <div class="hm-actions">
+                    <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+                    <a href={`/industries/${a.slug}/`} class="ax-link">How we work with {a.who}</a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES: eight pictures, not a list -->
+      <section class="ax-section hm-svc" style="padding-top:0" id="services" aria-labelledby="svcTitle">
+        <div class="ax-wrap">
+          <header class="ax-head hm-svc-head">
+            <h2 class="ax-display" id="svcTitle" data-ax>Hand off one stage.<br />Or all eight.</h2>
+            <p class="ax-lead" data-ax>Take only what your project needs. The same people carry it from model to drawing set to final image.</p>
+          </header>
+        </div>
+        <ol class="hm-bento">
+          {services.map((s, i) => (
+            <li data-ax style={`--ax-d:${(i % 4) * 0.05}s`}>
+              <a href={`/services/${s.slug}/`}>
+                <img src={s.image.replace(".webp", "-sm.webp")} srcset={`${s.image.replace(".webp", "-sm.webp")} 800w, ${s.image} 1600w`} sizes={i === 0 ? "(max-width: 760px) 56px, 640px" : "(max-width: 760px) 56px, 420px"} width="800" height="500" alt="" loading="lazy" decoding="async" />
+                <span class="hm-bento-n">{s.num}</span>
+                <span class="hm-bento-go" aria-hidden="true"><svg viewBox="0 0 16 16" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+                <span class="hm-bento-t">
+                  <strong>{s.title.replace(" & ", " and ")}</strong>
+                  <span>{s.short}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <Explorer />
+
+      <!-- HOW IT WORKS -->
+      <section class="ax-section" id="how" aria-labelledby="howTitle">
+        <div class="ax-wrap">
+          <header class="ax-head">
+            <h2 class="ax-display" id="howTitle" data-ax>Clear brief.<br />Checked work.<br />Clean handoff.</h2>
+          </header>
+          <ol class="hm-steps">
+            {steps.map((s, i) => (
+              <li data-ax style={`--ax-d:${i * 0.07}s`}>
+                <span class="n" aria-hidden="true">{i + 1}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))}
+          </ol>
+          <div class="hm-next" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <p>We work through Upwork and Fiverr, so the platform holds your payment until you approve the work. <a href="/hire/">How hiring works</a></p>
+          </div>
+        </div>
+      </section>
+
+      <WorkReel />
+
+      <!-- QUESTIONS -->
+      <section class="ax-section" aria-labelledby="faqTitle">
+        <div class="ax-wrap ax-split">
+          <header>
+            <h2 class="ax-display" id="faqTitle" data-ax>Before you send a brief.</h2>
+            <p class="ax-lead" data-ax>Short answers to what studios ask us first.</p>
+          </header>
+          <div class="ax-acc" data-ax>
+            {faqs.map((f) => (
+              <details>
+                <summary><span>{f.q}</span><i aria-hidden="true"></i></summary>
+                <div class="ax-acc-body"><p>{f.a}</p></div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- CLOSING: the logo in 3D, and one action -->
+      <section class="hm-cta ax-dark">
+        <div class="ax-wrap hm-cta-grid">
+          <div>
+            <h2 class="ax-display" data-ax>Send us your drawings.</h2>
+            <p class="ax-lead" data-ax>A sketch, a PDF set or a Revit model is enough to start. We reply within one working day with a clear scope, price and timeline.</p>
+            <div class="hm-actions" data-ax>
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+            </div>
+            <p class="hm-assure hm-assure--left" data-ax>No commitment. You approve the scope and price before any work starts.</p>
+          </div>
+          <Logo3D />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .hm { font-family: var(--ax-font); color: var(--ax-text); background: var(--ax-bg); }
+
+  /* ---------- hero ---------- */
+  .hm-hero { position: relative; display: flex; align-items: flex-end; min-height: min(100svh, 1040px); isolation: isolate; }
+  .hm-hero-pic, .hm-hero-film { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; }
+  .hm-hero-pic img, .hm-hero-film { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
+  .hm-hero-pic img { animation: hm-settle 2.4s var(--ax-ease) both; }
+  @keyframes hm-settle { from { transform: scale(1.06); } }
+  .hm-hero-film { z-index: -1; opacity: 0; transition: opacity 1.4s ease; }
+  .hm-hero-film.is-on { opacity: 1; }
+  /* shade so the words read on any frame of the film */
+  .hm-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(11, 12, 15, 0.5) 0%, rgba(11, 12, 15, 0) 26%, rgba(11, 12, 15, 0.22) 46%, rgba(11, 12, 15, 0.88) 100%), linear-gradient(90deg, rgba(11, 12, 15, 0.62) 0%, rgba(11, 12, 15, 0.2) 45%, rgba(11, 12, 15, 0) 72%); }
+  .hm-hero-in { padding: 120px 0 clamp(18px, 2.4vw, 34px); display: flex; flex-direction: column; align-items: flex-start; }
+  .hm-title { font-size: clamp(54px, 9.4vw, 168px); line-height: 0.84; margin: 0; color: #fff; text-shadow: 0 2px 40px rgba(0, 0, 0, 0.35); }
+  .hm-title i { display: inline-block; width: 0.17em; height: 0.17em; margin-left: 0.06em; border-radius: 50%; background: var(--ax-accent); }
+  .hm-below { width: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 20px clamp(32px, 6vw, 96px); align-items: end; margin-top: clamp(18px, 2.4vw, 34px); }
+  .hm-below .ax-lead { margin: 0; color: rgba(255, 255, 255, 0.88); }
+  .hm-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .hm-below .hm-actions { justify-content: flex-end; }
+  /* the four figures: one plain row along the foot of the film, split by hairlines */
+  .hm-figs { width: 100%; margin: clamp(20px, 3vw, 44px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgba(255, 255, 255, 0.24); }
+  .hm-figs > div { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; padding: clamp(14px, 1.7vw, 24px) clamp(12px, 2vw, 30px) 0; }
+  .hm-figs > div:first-child { padding-left: 0; }
+  .hm-figs > div + div { border-left: 1px solid rgba(255, 255, 255, 0.24); }
+  .hm-figs dd { margin: 0; font-family: var(--ax-display); font-size: clamp(40px, 4.6vw, 72px); font-weight: 800; line-height: 0.86; color: #fff; font-variant-numeric: tabular-nums; }
+  .hm-figs dd small { margin-left: 4px; font-size: max(12px, 0.36em); font-weight: 700; text-transform: uppercase; color: var(--ax-accent); }
+  .hm-figs dt { font-size: 14.5px; font-weight: 600; line-height: 1.25; color: rgba(255, 255, 255, 0.78); }
+  .hm-in { opacity: 0; transform: translateY(18px); animation: hm-in 1s var(--ax-ease) forwards; animation-delay: calc(0.15s + var(--i) * 0.11s); }
+  @keyframes hm-in { to { opacity: 1; transform: none; } }
+
+  /* ---------- built for you ---------- */
+  .hm-who-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 20px clamp(32px, 6vw, 96px); }
+  .hm-who-ask { margin: 0 0 10px; font-size: 15px; font-weight: 600; color: var(--ax-text-2); }
+  /* plain text tabs: the chosen one is underlined in amber */
+  .hm-who-tabs { display: flex; gap: clamp(18px, 2.2vw, 34px); border-bottom: 1px solid var(--ax-line-strong); }
+  .hm-who-tabs button { min-height: 48px; margin-bottom: -1px; padding: 0; border-bottom: 2px solid transparent; font: 600 16.5px/1 var(--ax-font); color: var(--ax-text-3); transition: color 0.2s ease, border-color 0.2s ease; }
+  .hm-who-tabs button:hover { color: var(--ax-text); }
+  .hm-who-tabs button[aria-selected="true"] { color: var(--ax-text); border-bottom-color: var(--ax-accent); }
+  .hm-who-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-radius: var(--ax-r-card); overflow: hidden; background: var(--ax-surface); box-shadow: var(--ax-shadow); }
+  .hm-who-panel[hidden] { display: none; }
+  .hm-who-panel:not([hidden]) .hm-who-body > * { animation: hm-who-in 0.6s var(--ax-ease) both; }
+  .hm-who-panel:not([hidden]) .hm-who-body > :nth-child(2) { animation-delay: 0.04s; } .hm-who-panel:not([hidden]) .hm-who-body > :nth-child(3) { animation-delay: 0.08s; }
+  .hm-who-panel:not([hidden]) .hm-who-body > :nth-child(4) { animation-delay: 0.12s; } .hm-who-panel:not([hidden]) .hm-who-body > :nth-child(5) { animation-delay: 0.16s; }
+  .hm-who-panel:not([hidden]) .hm-who-pic img { animation: hm-who-pic 0.9s var(--ax-ease) both; }
+  @keyframes hm-who-in { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes hm-who-pic { from { opacity: 0; transform: scale(1.05); } }
+  .hm-who-pic { position: relative; min-height: clamp(280px, 34vw, 500px); background: #0b0c0f; overflow: hidden; }
+  .hm-who-pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hm-who-body { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; padding: clamp(22px, 3.6vw, 56px); }
+  .hm-who-name { margin: 0 0 12px; font-size: 15px; font-weight: 600; color: var(--ax-text-3); }
+  .hm-who-body h3 { font-size: clamp(30px, 3.4vw, 54px); font-weight: 800; line-height: 0.94; text-wrap: balance; }
+  .hm-who-get { list-style: none; margin: clamp(18px, 2vw, 28px) 0 0; padding: 0; display: grid; gap: 10px; }
+  .hm-who-get li { position: relative; padding-left: 30px; font-size: 17px; font-weight: 500; line-height: 1.4; color: var(--ax-text); }
+  .hm-who-get li::before { content: ""; position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--ax-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230b0c0f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 8.2l2.4 2.4 4.6-5'/%3E%3C/svg%3E") center / 14px no-repeat; }
+  .hm-who-svc { list-style: none; margin: clamp(16px, 1.8vw, 24px) 0 clamp(20px, 2.4vw, 32px); padding: 0; display: flex; flex-wrap: wrap; gap: 0 22px; }
+  /* the services a team like this uses: plain text links, not chips */
+  .hm-who-svc a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: var(--ax-text-2); text-decoration: underline; text-decoration-color: var(--ax-line-strong); text-decoration-thickness: 1px; text-underline-offset: 5px; transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+  .hm-who-svc a:hover { color: var(--ax-text); text-decoration-color: var(--ax-accent); }
+  .hm-who-body .hm-actions { gap: 10px 24px; }
+  @media (max-width: 900px) {
+    .hm-who-head { grid-template-columns: 1fr; align-items: start; }
+    .hm-who-panel { grid-template-columns: 1fr; }
+    .hm-who-pic { min-height: 0; aspect-ratio: 16 / 9; }
+  }
+  @media (max-width: 600px) {
+    .hm-who .ax-head { margin-bottom: 20px; }
+    .hm-who-ask { margin-bottom: 0; }
+    .hm-who-tabs { justify-content: space-between; gap: 8px; }
+    .hm-who-tabs button { font-size: 15px; }
+    .hm-who-pic { aspect-ratio: auto; height: 160px; }
+    .hm-who-body { padding: 18px 18px 20px; }
+    /* one action on phones; the services list sits directly below this section */
+    .hm-who-name, .hm-who-body .ax-link, .hm-who-svc { display: none; }
+    .hm-who-body .hm-actions { margin-top: 18px; }
+    .hm-next p { display: none; }
+    .hm-who-body h3 { font-size: 26px; }
+    .hm-who-get { margin-top: 14px; gap: 8px; }
+    .hm-who-get li { font-size: 16px; }
+    .hm-who-svc { margin: 8px 0 12px; }
+  }
+
+  /* ---------- services: picture cards ---------- */
+  .hm-svc-head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); align-items: end; gap: 18px clamp(32px, 6vw, 96px); }
+  .hm-svc-head .ax-lead { margin: 0; justify-self: end; }
+  .hm-bento { list-style: none; margin: 0 auto; padding: 0; width: min(100% - var(--ax-gutter) * 2, var(--ax-wrap)); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(190px, 21vw, 290px); gap: clamp(8px, 1vw, 14px); }
+  .hm-bento li { grid-column: span 3; min-width: 0; }
+  .hm-bento li:nth-child(1) { grid-column: span 6; grid-row: span 2; }
+  .hm-bento li:nth-child(n + 6) { grid-column: span 4; }
+  .hm-bento a { position: relative; display: block; height: 100%; border-radius: var(--ax-r-lg); overflow: hidden; isolation: isolate; background: #17191e; color: #fff; text-decoration: none; }
+  .hm-bento img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ax-ease), filter 0.6s ease; }
+  .hm-bento a::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11, 12, 15, 0.34) 0%, rgba(11, 12, 15, 0) 34%, rgba(11, 12, 15, 0.86) 100%); transition: opacity 0.5s ease; }
+  .hm-bento a:hover img { transform: scale(1.06); }
+  .hm-bento-n { position: absolute; left: clamp(14px, 1.5vw, 22px); top: clamp(12px, 1.4vw, 20px); font-family: var(--ax-display); font-size: 22px; font-weight: 700; line-height: 1; color: rgba(255, 255, 255, 0.9); }
+  .hm-bento-go { position: absolute; right: clamp(12px, 1.4vw, 20px); top: clamp(10px, 1.2vw, 18px); display: grid; place-items: center; width: 24px; height: 24px; color: #fff; transition: transform 0.4s var(--ax-ease); }
+  .hm-bento a:hover .hm-bento-go { transform: translateX(4px); }
+  .hm-bento-t { position: absolute; left: clamp(14px, 1.5vw, 22px); right: clamp(14px, 1.5vw, 22px); bottom: clamp(14px, 1.5vw, 22px); display: flex; flex-direction: column; gap: 6px; }
+  .hm-bento-t strong { font-family: var(--ax-display); font-size: clamp(24px, 2.2vw, 34px); font-weight: 800; line-height: 0.94; text-transform: uppercase; text-wrap: balance; }
+  .hm-bento li:nth-child(1) .hm-bento-t strong { font-size: clamp(30px, 3.6vw, 58px); }
+  .hm-bento-t span { font-size: 14.5px; line-height: 1.35; color: rgba(255, 255, 255, 0.82); }
+
+  /* ---------- how it works: four steps joined by one line ---------- */
+  .hm-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 1vw, 14px); counter-reset: none; }
+  .hm-steps li { position: relative; display: flex; flex-direction: column; gap: 10px; min-height: clamp(260px, 26vw, 360px); padding: clamp(20px, 2.2vw, 30px); border-radius: var(--ax-r-lg); background: var(--ax-surface); box-shadow: var(--ax-shadow); overflow: hidden;
+    transition: background-color 0.55s var(--ax-ease), color 0.55s var(--ax-ease), transform 0.55s var(--ax-ease); }
+  .hm-steps .n { margin-bottom: auto; font-family: var(--ax-display); font-size: clamp(96px, 11vw, 176px); font-weight: 800; line-height: 0.76; color: #b3b7c1; transition: color 0.55s var(--ax-ease); }
+  .hm-steps p { transition: color 0.55s var(--ax-ease); }
+  /* the step you have scrolled to turns black; it follows the scroll, up or down */
+  .ax-js .hm-steps li[data-ax] { transition: opacity 0.8s var(--ax-ease), transform 0.8s var(--ax-ease), background-color 0.55s var(--ax-ease), color 0.55s var(--ax-ease); }
+  .hm-steps li.is-on { background: var(--ax-ink); color: #f5f6f8; }
+  .hm-steps li.is-on .n { color: var(--ax-accent); }
+  .hm-steps li.is-on p { color: #b6bac4; }
+  /* without scripting the last step carries the emphasis */
+  html:not(.ax-js) .hm-steps li:last-child { background: var(--ax-ink); color: #f5f6f8; }
+  .hm-steps h3 { margin: 0; }
+  .hm-steps p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ax-text-2); }
+
+  .hm-assure { flex-basis: 100%; margin: 4px 0 0; font-size: 14.5px; font-weight: 500; line-height: 1.4; color: rgba(255, 255, 255, 0.8); text-align: right; }
+  .hm-assure--left { margin-top: 16px; text-align: left; color: var(--ax-text-3); }
+  .hm-next { margin-top: clamp(20px, 2.6vw, 36px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .hm-next p { flex: 1 1 320px; margin: 0; max-width: 40em; font-size: 16px; line-height: 1.55; color: var(--ax-text-2); }
+  .hm-next a:not(.ax-btn) { color: var(--ax-text); font-weight: 600; text-decoration: underline; text-decoration-color: var(--ax-accent); text-decoration-thickness: 2px; text-underline-offset: 4px; white-space: nowrap; }
+
+  .hm-cta { padding: clamp(84px, 11vw, 168px) 0; }
+  .hm-cta-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .hm-cta .hm-actions { margin-top: clamp(26px, 3vw, 40px); gap: 12px 26px; }
+
+  @media (max-width: 1000px) {
+    .hm-bento { grid-auto-rows: clamp(200px, 30vw, 300px); }
+    .hm-bento li, .hm-bento li:nth-child(n + 6) { grid-column: span 6; }
+    .hm-bento li:nth-child(1) { grid-column: span 12; grid-row: span 1; }
+    .hm-bento li:nth-child(8) { grid-column: span 12; }
+    .hm-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hm-steps li { min-height: 240px; }
+  }
+  @media (max-width: 900px) {
+    .hm-hero-pic img, .hm-hero-film { object-position: 50% 50%; filter: brightness(0.82) saturate(1.05); }
+    .hm-hero::before { background: linear-gradient(180deg, rgba(11, 12, 15, 0.55) 0%, rgba(11, 12, 15, 0.12) 16%, rgba(11, 12, 15, 0.62) 36%, rgba(11, 12, 15, 0.94) 70%); }
+    .hm-title, .hm-below .ax-lead { text-shadow: 0 1px 18px rgba(0, 0, 0, 0.55); }
+    .hm-below, .hm-svc-head { grid-template-columns: 1fr; }
+    .hm-below .hm-actions { justify-content: flex-start; }
+    .hm-assure { text-align: left; }
+    .hm-svc-head .ax-lead { justify-self: start; }
+    .hm-cta-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .hm-hero { min-height: min(100svh, 900px); }
+    .hm-figs > div { flex-direction: column; gap: 5px; padding: 12px 8px 0; }
+    .hm-figs dd { font-size: 30px; }
+    .hm-figs dt { font-size: 12px; line-height: 1.25; }
+    /* services become a plain list: small picture, name, arrow */
+    .hm-bento { display: block; }
+    .hm-bento li { border-bottom: 1px solid var(--ax-line-strong); }
+    .hm-bento li:first-child { border-top: 1px solid var(--ax-line-strong); }
+    .hm-bento a { display: grid; grid-template-columns: 56px minmax(0, 1fr) 24px; align-items: center; gap: 14px; height: 72px; border-radius: 0; background: none; color: var(--ax-text); overflow: visible; isolation: auto; }
+    .hm-bento a::after, .hm-bento-n, .hm-bento-t span { display: none; }
+    .hm-bento img { position: static; z-index: auto; grid-column: 1; grid-row: 1; width: 56px; height: 56px; border-radius: var(--ax-r-media); background: var(--ax-surface-2); }
+    .hm-bento-t { position: static; grid-column: 2; grid-row: 1; }
+    .hm-bento-t strong, .hm-bento li:nth-child(1) .hm-bento-t strong { font-family: var(--ax-font); font-size: 17px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; text-transform: none; }
+    .hm-bento-go { position: static; grid-column: 3; grid-row: 1; color: var(--ax-text); }
+    .ax-js .hm-bento [data-ax] { opacity: 1; transform: none; }
+    .hm-cta { padding: 56px 0; }
+    .hm-cta .l3 { display: none; }
+    .hm-cta .hm-actions { margin-top: 22px; gap: 4px 26px; }
+    .hm-assure--left { margin-top: 8px; }
+  }
+  @media (max-width: 600px) {
+    .hm-hero-in { padding-top: 84px; }
+    .hm-title { font-size: 40px; line-height: 0.92; }
+    .hm-svc-head { margin-bottom: 24px; }
+  }
+  @media (max-width: 560px) {
+    .hm-actions .ax-btn { width: 100%; }
+    /* the steps become a compact numbered list */
+    .hm-steps { grid-template-columns: 1fr; gap: 0; border-bottom: 1px solid var(--ax-line-strong); }
+    .hm-steps li, .hm-steps li.is-on, html:not(.ax-js) .hm-steps li:last-child { min-height: 0; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 10px; padding: 14px 0; border-radius: 0; border-top: 1px solid var(--ax-line-strong); background: none; box-shadow: none; color: var(--ax-text); overflow: visible; }
+    .hm-steps .n { grid-row: span 2; margin: 0; font-size: 30px; line-height: 1; color: var(--ax-text-3); }
+    .hm-steps li.is-on .n { color: var(--ax-text); }
+    .hm-steps p, .hm-steps li.is-on p { font-size: 15.5px; line-height: 1.45; color: var(--ax-text-2); }
+  }
+  @media (prefers-reduced-motion: reduce) { .hm-in, .hm-hero-pic img { animation: none; opacity: 1; transform: none; } }
+</style>
+
+<script>
+  // the hero film: a short seamless loop behind the headline on every screen. It starts once the page has
+  // loaded, phones get a smaller upright cut, and it pauses whenever it is off screen.
+  const film = document.querySelector<HTMLVideoElement>(".hm-hero-film");
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches || (navigator as any).connection?.saveData === true;
+  if (film && !calm) {
+    const start = () => {
+      film.src = window.matchMedia("(max-width: 900px)").matches ? film.dataset.srcTall! : film.dataset.src!;
+      film.addEventListener("playing", () => film.classList.add("is-on"), { once: true });
+      film.play().catch(() => {});
+    };
+    if (document.readyState === "complete") start(); else window.addEventListener("load", start, { once: true });
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting) film.pause(); else if (film.src) film.play().catch(() => {}); }).observe(film);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) film.pause(); else if (film.src) film.play().catch(() => {}); });
+  }
+  // service pictures: start fetching once the page has settled, so the cards are never blank on first scroll
+  const warm = () => document.querySelectorAll<HTMLImageElement>(".hm-bento img").forEach((i) => { i.loading = "eager"; });
+  if (document.readyState === "complete") setTimeout(warm, 1200); else window.addEventListener("load", () => setTimeout(warm, 1200), { once: true });
+  // "built for you": pick who you are; the choice is remembered for the next visit
+  const whoTabs = Array.from(document.querySelectorAll<HTMLButtonElement>(".hm-who-tabs [role=tab]"));
+  const pickWho = (i: number, focus = false) => {
+    whoTabs.forEach((t, k) => {
+      const on = k === i;
+      t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1;
+      const p = document.getElementById(t.getAttribute("aria-controls")!); if (p) p.hidden = !on;
+    });
+    if (focus) whoTabs[i].focus();
+    try { localStorage.setItem("ax-who", whoTabs[i].dataset.who!); } catch {}
+  };
+  whoTabs.forEach((t, i) => {
+    t.addEventListener("click", () => pickWho(i));
+    t.addEventListener("keydown", (e) => {
+      const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (d) { e.preventDefault(); pickWho((i + d + whoTabs.length) % whoTabs.length, true); }
+    });
+  });
+  try { const saved = whoTabs.findIndex((t) => t.dataset.who === localStorage.getItem("ax-who")); if (saved > 0) pickWho(saved); } catch {}
+  // steps: the card you have scrolled to turns black.
+  // Two ways of knowing where the visitor is, because some viewers (an app preview, an embedded frame) scroll
+  // the page from outside and never tell it: scroll position when the page gets scroll events, and
+  // "how much of each card is on screen" (IntersectionObserver), which works everywhere, as the fallback.
+  const stepList = document.querySelector<HTMLElement>(".hm-steps");
+  const stepCards = Array.from(document.querySelectorAll<HTMLElement>(".hm-steps li"));
+  if (stepList && stepCards.length) {
+    const setStep = (on: number) => stepCards.forEach((c, i) => c.classList.toggle("is-on", i === on));
+    const inRow = () => Math.abs(stepCards[0].offsetTop - stepCards[stepCards.length - 1].offsetTop) < 8;
+    let scrolled = false, stepTick = false;
+    const byScroll = () => {
+      stepTick = false;
+      const vh = window.innerHeight;
+      let on = 0, best = Infinity;
+      const rows = new Map<number, HTMLElement[]>();
+      stepCards.forEach((c) => { const k = Math.round(c.offsetTop / 8); rows.set(k, [...(rows.get(k) ?? []), c]); });
+      stepCards.forEach((c, i) => {
+        const row = rows.get(Math.round(c.offsetTop / 8))!;
+        const r = c.getBoundingClientRect();
+        const point = r.top + r.height * ((row.indexOf(c) + 0.5) / row.length);
+        const d = Math.abs(point - vh * 0.5);
+        if (d < best) { best = d; on = i; }
+      });
+      setStep(on);
+    };
+    window.addEventListener("scroll", () => { scrolled = true; byScroll(); }, { passive: true, capture: true });
+    window.addEventListener("resize", byScroll);
+
+    const ratio = new Map<Element, number>();
+    const steps10 = Array.from({ length: 21 }, (_, i) => i / 20);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => ratio.set(e.target, e.intersectionRatio));
+      if (scrolled) return;
+      if (inRow()) {
+        // a row: the cards take turns as it rises into view, the last one once it is fully on screen
+        const e = entries.find((x) => x.target === stepList);
+        if (!e) return;
+        const cutAtTop = e.intersectionRect.top > e.boundingClientRect.top + 1;
+        const r = e.intersectionRatio;
+        setStep(cutAtTop || r > 0.98 ? stepCards.length - 1 : Math.min(stepCards.length - 2, Math.floor(r * (stepCards.length - 1))));
+      } else {
+        // a stack: the middle one of the cards that are mostly on screen
+        const seen = stepCards.map((c, i) => ((ratio.get(c) ?? 0) > 0.6 ? i : -1)).filter((i) => i >= 0);
+        if (seen.length) setStep(seen[Math.floor((seen.length - 1) / 2 + 0.5)]);
+      }
+    }, { threshold: steps10 });
+    stepCards.forEach((c) => io.observe(c));
+    io.observe(stepList);
+    byScroll();
+  }
+</script>

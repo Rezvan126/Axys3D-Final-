@@ -1,0 +1,304 @@
+---
+// Site header: a flat bar attached to the top edge, full width, square corners, no blur.
+// White with a hairline over light sections, solid ink over the black sections.
+// "Services" opens a plain list of the eight services (hover, click or keyboard).
+// The logo still answers the pointer. Phones and tablets get a plain solid menu panel.
+import Logo from "./Logo.astro";
+import { services } from "../data/services";
+
+const links = [
+  { label: "Work", href: "/visuals/" },
+  { label: "Industries", href: "/industries/" },
+  { label: "Insights", href: "/insights/" },
+  { label: "About", href: "/about/" },
+  { label: "Hire us", href: "/hire/" },
+  { label: "Contact", href: "/contact/" },
+];
+const svc = services.map((s) => ({ label: s.title.replace(" & ", " and "), href: `/services/${s.slug}/` }));
+
+const raw = (Astro.url.pathname.replace(/\/+$/, "") || "/").toLowerCase();
+const isActive = (href: string) => {
+  const h = href.replace(/\/+$/, "").toLowerCase();
+  return raw === h || raw.startsWith(h + "/");
+};
+const inServices = raw.startsWith("/services");
+// the contact page is already the place the button leads to
+const showCta = !isActive("/contact/");
+---
+
+<a href="#main" class="ax-skip">Skip to content</a>
+
+<header class="ax-nav" id="axNav">
+  <div class="ax-nav-in">
+    <a href="/" class="ax-nav-logo" id="axNavLogo" aria-label="Axys3D home"><Logo /></a>
+
+    <nav class="ax-nav-links" id="axNavLinks" aria-label="Primary">
+      <div class="ax-nav-dd" id="axNavDd">
+        <button type="button" class:list={["ax-nav-item", inServices && "is-current"]} id="axNavDdBtn" aria-expanded="false" aria-controls="axNavMenu">
+          Services<i class="ax-chev" aria-hidden="true"></i>
+        </button>
+        <ul class="ax-nav-menu" id="axNavMenu">
+          {svc.map((s) => (
+            <li><a href={s.href} aria-current={isActive(s.href) ? "page" : undefined}>{s.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      {links.map((l) => (
+        <a class="ax-nav-item" href={l.href} aria-current={isActive(l.href) ? "page" : undefined}>{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="ax-nav-right">
+      {showCta && <a href="/contact/" class="ax-btn ax-btn--gold ax-btn--sm ax-nav-cta">Start a project</a>}
+      <button class="ax-nav-toggle" id="axNavToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="axSheet">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="ax-sheet" id="axSheet" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <nav aria-label="Mobile">
+    <button type="button" class:list={["ax-sheet-row", inServices && "is-current"]} id="axSheetSvc" aria-expanded="false" aria-controls="axSheetSvcList">
+      Services<i class="ax-chev" aria-hidden="true"></i>
+    </button>
+    <ul class="ax-sheet-sub" id="axSheetSvcList" hidden>
+      {svc.map((s) => (
+        <li><a href={s.href} aria-current={isActive(s.href) ? "page" : undefined}>{s.label}</a></li>
+      ))}
+    </ul>
+    {links.map((l) => (
+      <a class="ax-sheet-row" href={l.href} aria-current={isActive(l.href) ? "page" : undefined}>{l.label}</a>
+    ))}
+  </nav>
+  {showCta && <a href="/contact/" class="ax-btn ax-btn--gold ax-sheet-cta">Start a project</a>}
+</div>
+
+<style is:global>
+  .ax-skip {
+    position: fixed; top: 8px; left: 8px; z-index: 2000; padding: 12px 18px; border-radius: var(--ax-r-btn-sm);
+    background: #0b0c0f; color: #fff; font-weight: 600; font-size: 14px; text-decoration: none;
+    transform: translateY(-200%); transition: transform 0.2s ease;
+  }
+  .ax-skip:focus { transform: none; }
+  main:focus { outline: none; }
+
+  /* ---------- the bar: attached to the top, solid, square ---------- */
+  .ax-nav {
+    --nav-bg: #ffffff; --nav-fg: #0b0c0f; --nav-line: rgba(12, 14, 18, 0.12); --nav-hover: rgba(12, 14, 18, 0.06);
+    position: fixed; inset: 0 0 auto 0; z-index: 1200; height: var(--ax-nav-h);
+    background: var(--nav-bg); color: var(--nav-fg); border-bottom: 1px solid var(--nav-line);
+    font-family: var(--ax-font); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  /* over the ink black sections the bar is solid ink with light words */
+  .ax-nav.is-dark { --nav-bg: #0e1014; --nav-fg: #f5f6f8; --nav-line: rgba(255, 255, 255, 0.12); --nav-hover: rgba(255, 255, 255, 0.1); }
+  .ax-nav.is-dark :is(a, button):focus-visible { outline-color: var(--ax-accent); }
+  .ax-nav-in {
+    height: 100%; width: min(100% - var(--ax-gutter) * 2, var(--ax-wrap)); margin-inline: auto;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: clamp(12px, 2vw, 28px);
+  }
+
+  /* ---------- logo: tilts to the pointer, the dot is pulled toward it ---------- */
+  .ax-nav-logo { display: inline-flex; align-items: center; min-height: 44px; color: inherit; justify-self: start; perspective: 420px; }
+  .ax-logo { display: block; height: 24px; width: auto; overflow: visible; }
+  .ax-nav-logo .ax-logo { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--ls, 1)); transition: transform 0.6s var(--ax-ease); will-change: transform; }
+  .ax-nav-logo.is-live .ax-logo { transition: transform 0.12s linear; }
+  .ax-logo-dot { transform-box: fill-box; transform-origin: center; transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(var(--ds, 1)); transition: transform 0.7s cubic-bezier(0.34, 1.7, 0.5, 1); }
+  .ax-nav-logo.is-live .ax-logo-dot { transition: transform 0.16s ease-out; }
+  .ax-nav-logo.is-pop .ax-logo-dot { animation: ax-dot-pop 0.7s cubic-bezier(0.34, 1.6, 0.5, 1); }
+  @keyframes ax-dot-pop { 0% { transform: translate(0, 0) scale(1); } 35% { transform: translate(0, -46px) scale(1.25); } 100% { transform: translate(0, 0) scale(1); } }
+
+  /* ---------- links: plain words, the current page is underlined ---------- */
+  .ax-nav-links { display: flex; align-items: stretch; justify-content: flex-end; height: 100%; gap: clamp(0px, 0.6vw, 8px); }
+  .ax-nav-item {
+    position: relative; display: inline-flex; align-items: center; gap: 6px; height: 100%; min-height: 44px; padding: 0 clamp(8px, 1vw, 14px);
+    font: 600 15px/1 var(--ax-font); letter-spacing: -0.005em; color: inherit; text-decoration: none; white-space: nowrap; cursor: pointer;
+  }
+  .ax-nav-item::after { content: ""; position: absolute; left: clamp(8px, 1vw, 14px); right: clamp(8px, 1vw, 14px); bottom: -1px; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.25s var(--ax-ease); }
+  .ax-nav-item:hover::after, .ax-nav-dd.is-open .ax-nav-item::after { transform: scaleX(1); }
+  .ax-nav-item[aria-current="page"]::after, .ax-nav-item.is-current::after { transform: scaleX(1); background: var(--ax-accent); }
+  .ax-nav-item .ax-chev { width: 16px; height: 16px; -webkit-mask-size: 16px; mask-size: 16px; }
+  .ax-nav-dd.is-open .ax-chev { transform: rotate(180deg); }
+
+  /* ---------- services list ---------- */
+  .ax-nav-dd { position: relative; display: flex; align-items: stretch; height: 100%; }
+  .ax-nav-menu {
+    position: absolute; left: 0; top: 100%; z-index: 2; min-width: 300px; margin: 0; padding: 8px; list-style: none;
+    background: var(--nav-bg); color: var(--nav-fg); border: 1px solid var(--nav-line); border-top: 0; border-radius: 0 0 var(--ax-r-card) var(--ax-r-card);
+    box-shadow: 0 18px 32px -18px rgba(12, 14, 18, 0.28);
+    opacity: 0; visibility: hidden; transition: opacity 0.15s ease, visibility 0.15s;
+  }
+  .ax-nav-dd.is-open .ax-nav-menu, html:not(.ax-js) .ax-nav-dd:is(:hover, :focus-within) .ax-nav-menu { opacity: 1; visibility: visible; }
+  .ax-nav-menu a { display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: var(--ax-r-chip); font-size: 15px; font-weight: 500; color: inherit; text-decoration: none; white-space: nowrap; }
+  .ax-nav-menu a:hover { background: var(--nav-hover); }
+  .ax-nav-menu a[aria-current="page"] { font-weight: 700; box-shadow: inset 2px 0 0 var(--ax-accent); }
+
+  .ax-nav-right { display: flex; align-items: center; gap: 4px; justify-self: end; }
+  .ax-nav-cta { min-height: 44px; }
+  .ax-nav.is-open .ax-nav-cta { display: none; }
+
+  .ax-nav-toggle { display: none; position: relative; width: 44px; height: 44px; margin-right: -10px; border: 0; border-radius: var(--ax-r-btn-sm); background: none; cursor: pointer; color: inherit; }
+  .ax-nav-toggle span { position: absolute; left: 11px; right: 11px; height: 2px; background: currentColor; transition: transform 0.3s var(--ax-ease), top 0.3s var(--ax-ease); }
+  .ax-nav-toggle span:first-child { top: 17px; }
+  .ax-nav-toggle span:last-child { top: 25px; }
+  .ax-nav-toggle[aria-expanded="true"] span:first-child { top: 21px; transform: rotate(45deg); }
+  .ax-nav-toggle[aria-expanded="true"] span:last-child { top: 21px; transform: rotate(-45deg); }
+
+  /* ---------- phone and tablet menu: a plain solid panel under the bar ---------- */
+  .ax-sheet {
+    position: fixed; inset: var(--ax-nav-h) 0 0 0; z-index: 1100; padding: 4px var(--ax-gutter) max(20px, env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
+    background: #ffffff; color: #0b0c0f; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s;
+    overflow-y: auto; overscroll-behavior: contain; font-family: var(--ax-font);
+  }
+  .ax-sheet[hidden] { display: none; }
+  .ax-sheet.is-open { opacity: 1; visibility: visible; }
+  .ax-sheet nav { display: flex; flex-direction: column; }
+  .ax-sheet-row {
+    display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 52px; padding: 0; text-align: left;
+    border-bottom: 1px solid rgba(12, 14, 18, 0.1); font: 600 20px/1.2 var(--ax-font); letter-spacing: -0.01em; color: #0b0c0f; text-decoration: none; cursor: pointer;
+  }
+  .ax-sheet-row[aria-current="page"], .ax-sheet-row.is-current { box-shadow: inset 3px 0 0 var(--ax-accent); padding-left: 12px; }
+  .ax-sheet-row[aria-expanded="true"] .ax-chev { transform: rotate(180deg); }
+  .ax-sheet-sub { list-style: none; margin: 0; padding: 4px 0 8px 12px; border-bottom: 1px solid rgba(12, 14, 18, 0.1); }
+  .ax-sheet-sub[hidden] { display: none; }
+  .ax-sheet-sub a { display: flex; align-items: center; min-height: 44px; font-size: 16px; font-weight: 500; color: #3c3f47; text-decoration: none; }
+  .ax-sheet-sub a[aria-current="page"] { color: #0b0c0f; font-weight: 700; }
+  .ax-sheet-cta { flex: none; width: 100%; min-height: 52px; }
+  body.ax-lock { overflow: hidden; }
+
+  @media (max-width: 1040px) {
+    .ax-nav-in { grid-template-columns: 1fr auto; }
+    .ax-nav-links { display: none; }
+    .ax-nav-toggle { display: block; }
+  }
+  @media (max-width: 420px) { .ax-nav-cta { padding: 0 12px; font-size: 13.5px; } .ax-logo { height: 20px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ax-nav-logo .ax-logo, .ax-logo-dot, .ax-sheet, .ax-nav-menu, .ax-nav-item::after { transition: none; animation: none; }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById("axNav");
+  const toggle = document.getElementById("axNavToggle") as HTMLButtonElement | null;
+  const sheet = document.getElementById("axSheet");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // first in the page so keyboard users reach the menu before the content
+  if (sheet) document.body.prepend(sheet);
+  if (nav) document.body.prepend(nav);
+  const skip = document.querySelector(".ax-skip");
+  if (skip) document.body.prepend(skip);
+
+  /* ---------- the bar turns ink while it sits over a black section ---------- */
+  const darks = Array.from(document.querySelectorAll<HTMLElement>("section.ax-dark, footer.ax-dark"));
+  let ticking = false;
+  const tone = () => {
+    ticking = false;
+    if (nav?.classList.contains("is-open")) return;
+    const y = (nav?.offsetHeight ?? 60) / 2; // the middle of the bar
+    const over = darks.some((d) => { const r = d.getBoundingClientRect(); return r.top <= y && r.bottom >= y; });
+    nav?.classList.toggle("is-dark", over);
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(tone); } };
+  tone();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+
+  /* ---------- services list: hover, click and keyboard ---------- */
+  const dd = document.getElementById("axNavDd");
+  const ddBtn = document.getElementById("axNavDdBtn") as HTMLButtonElement | null;
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (dd && ddBtn) {
+    const isOpen = () => dd.classList.contains("is-open");
+    const setDd = (open: boolean) => { dd.classList.toggle("is-open", open); ddBtn.setAttribute("aria-expanded", String(open)); };
+    const items = () => Array.from(dd.querySelectorAll<HTMLAnchorElement>(".ax-nav-menu a"));
+    if (canHover) {
+      dd.addEventListener("pointerenter", () => setDd(true));
+      dd.addEventListener("pointerleave", () => setDd(false));
+    }
+    // a mouse click on a list that hover has already opened keeps it open; touch and keyboard toggle it
+    ddBtn.addEventListener("click", (e) => setDd(canHover && e.detail > 0 ? true : !isOpen()));
+    dd.addEventListener("keydown", (e) => {
+      const list = items(), at = list.indexOf(document.activeElement as HTMLAnchorElement);
+      if (e.key === "Escape" && isOpen()) { setDd(false); ddBtn.focus(); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); setDd(true); list[(at + 1) % list.length].focus(); }
+      else if (e.key === "ArrowUp" && isOpen()) { e.preventDefault(); list[(at - 1 + list.length) % list.length].focus(); }
+    });
+    dd.addEventListener("focusout", (e) => { if (!dd.contains(e.relatedTarget as Node)) setDd(false); });
+    document.addEventListener("pointerdown", (e) => { if (isOpen() && !dd.contains(e.target as Node)) setDd(false); });
+  }
+
+  /* ---------- the logo answers the pointer ---------- */
+  const logo = document.getElementById("axNavLogo");
+  if (logo && !reduce) {
+    const svg = logo.querySelector<SVGElement>("svg")!;
+    if (canHover) {
+      logo.addEventListener("pointermove", (e) => {
+        const r = svg.getBoundingClientRect();
+        const nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+        logo.classList.add("is-live");
+        logo.style.setProperty("--ry", `${nx * 26}deg`);
+        logo.style.setProperty("--rx", `${-ny * 30}deg`);
+        logo.style.setProperty("--ls", "1.06");
+        // the dot sits about 65% across, near the top: pull it toward the pointer (in the drawing's own units)
+        const k = 762 / r.width;
+        const dx = (e.clientX - (r.left + r.width * 0.655)) * k, dy = (e.clientY - (r.top + r.height * 0.21)) * k;
+        const d = Math.hypot(dx, dy) || 1, pull = Math.min(46, d * 0.5);
+        logo.style.setProperty("--dx", `${(dx / d) * pull}px`);
+        logo.style.setProperty("--dy", `${(dy / d) * pull}px`);
+        logo.style.setProperty("--ds", "1.18");
+      });
+      logo.addEventListener("pointerleave", () => {
+        logo.classList.remove("is-live");
+        ["--rx", "--ry", "--ls", "--dx", "--dy", "--ds"].forEach((p) => logo.style.removeProperty(p));
+      });
+    }
+    // touch and click: the dot jumps
+    logo.addEventListener("pointerdown", () => {
+      logo.classList.remove("is-pop"); void (logo as HTMLElement).offsetWidth; logo.classList.add("is-pop");
+      window.setTimeout(() => logo.classList.remove("is-pop"), 750);
+    });
+  }
+
+  /* ---------- phone menu ---------- */
+  const sheetSvc = document.getElementById("axSheetSvc");
+  const sheetSvcList = document.getElementById("axSheetSvcList");
+  sheetSvc?.addEventListener("click", () => {
+    const open = sheetSvc.getAttribute("aria-expanded") !== "true";
+    sheetSvc.setAttribute("aria-expanded", String(open));
+    if (sheetSvcList) sheetSvcList.hidden = !open;
+  });
+  const setOpen = (open: boolean) => {
+    if (!sheet || !toggle) return;
+    if (open) sheet.hidden = false;
+    requestAnimationFrame(() => sheet.classList.toggle("is-open", open));
+    if (!open) window.setTimeout(() => { if (!sheet.classList.contains("is-open")) sheet.hidden = true; }, 220);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.classList.toggle("ax-lock", open);
+    nav?.classList.toggle("is-open", open);
+    if (open) { nav?.classList.remove("is-dark"); window.setTimeout(() => sheet.querySelector<HTMLElement>("a, button")?.focus({ preventScroll: true }), 60); }
+    else { toggle.focus({ preventScroll: true }); tone(); }
+  };
+  toggle?.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+  sheet?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+  window.addEventListener("keydown", (e) => {
+    if (toggle?.getAttribute("aria-expanded") !== "true" || !sheet) return;
+    if (e.key === "Escape") setOpen(false);
+    if (e.key === "Tab") {
+      const f = [toggle, ...Array.from(sheet.querySelectorAll<HTMLElement>("a, button")).filter((el) => el.offsetParent !== null)];
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  window.matchMedia("(min-width: 1041px)").addEventListener("change", (e) => e.matches && setOpen(false));
+
+  /* ---------- one reveal system for every page ---------- */
+  document.documentElement.classList.add("ax-js");
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }),
+    { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+  );
+  document.querySelectorAll("[data-ax]").forEach((el) => io.observe(el));
+</script>

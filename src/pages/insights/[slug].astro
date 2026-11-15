@@ -1,0 +1,467 @@
+---
+// One guide. Built like a product page, not an article: a short headline over a picture that carries
+// the guide's own numbers, the key points in one panel, then each part of the guide as its own block
+// with a large sub heading. On phones the parts fold away and open on a tap.
+import SEO from "../../components/SEO.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { getCollection, render } from "astro:content";
+import { services } from "../../data/services";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("insights");
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+
+const published = d.publishDate ?? (d.publishedDate ? new Date(d.publishedDate) : undefined);
+const publishedISO = published && !isNaN(published.getTime()) ? published.toISOString() : undefined;
+const modifiedISO = d.updatedDate ? d.updatedDate.toISOString() : publishedISO;
+const siteUrl = Astro.site ?? new URL("https://axys3d.com");
+const url = new URL(`/insights/${article.id}/`, siteUrl).href;
+const image = d.image ?? "/media/svc-bim.webp";
+const sm = (src: string) => src.replace(".webp", "-sm.webp");
+const dateText = published ? published.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
+
+// headline: the part of the title before the colon or bracket; the rest becomes the line under it
+const plain = (s: string) => s.replace(/-/g, " ");
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const split = (t: string): [string, string] => {
+  const ci = t.indexOf(": "), pi = t.indexOf(" (");
+  if (ci > 0) return [plain(t.slice(0, ci)), plain(t.slice(ci + 2))];
+  if (pi > 0) return [plain(t.slice(0, pi)), plain(t.slice(pi + 2).replace(/\)\s*$/, ""))];
+  return [plain(t), ""];
+};
+const [head, rest] = split(d.title);
+const tail = rest ? `${cap(rest).replace(/[.?!]$/, "")}.` : d.summary;
+
+// Key points and counts, taken from the text of each guide in src/content/insights. Nothing here is new information.
+// A guide without an entry falls back to its own questions and shows the picture without a strip.
+const extras: Record<string, { brief: string[]; facts: { n: string; t: string; d: string }[] }> = {
+  "permit-ready-revit-drawing-sets": {
+    brief: [
+      "Most resubmissions are not about design. They come from missing information or drawings that contradict each other.",
+      "A typical set has a cover sheet, site plan, floor plans, roof plan, elevations, sections, details and schedules.",
+      "Schedules and tags that read from the model cannot disagree with the plans.",
+      "Requirements vary by city and county, so always check the local checklist.",
+    ],
+    facts: [
+      { n: "9", t: "Core sheet types", d: "General and architectural, before other disciplines" },
+      { n: "5", t: "Revit habits", d: "That keep every sheet consistent" },
+      { n: "7", t: "Checks", d: "To run before you submit" },
+    ],
+  },
+  "lod-and-loi-in-production-brief": {
+    brief: [
+      "LOD describes how complete and reliable a model element is. It does not measure how good the model looks.",
+      "LOD 300 is the level most construction documentation is produced at.",
+      "LOI is the data an element carries. A good brief specifies both.",
+      "Set the level per element type and per stage, not per project.",
+    ],
+    facts: [
+      { n: "6", t: "Levels", d: "From LOD 100 concept to LOD 500 as built" },
+      { n: "4", t: "Steps", d: "To choose the right level" },
+      { n: "4", t: "Mistakes", d: "That cost time, and how to avoid them" },
+    ],
+  },
+  "federated-model-review-environment": {
+    brief: [
+      "A federated model combines the discipline models in one view. Each discipline still owns and edits its own model.",
+      "There are three types of clash: hard, soft (clearance) and workflow (4D).",
+      "Group clashes into real issues and give each one a single named owner.",
+      "A coordination round every one to two weeks keeps issues manageable on most projects.",
+    ],
+    facts: [
+      { n: "3", t: "Types of clash", d: "Hard, soft and workflow" },
+      { n: "6", t: "Steps", d: "In one coordination round" },
+      { n: "5", t: "Rules", d: "That keep clash reports useful" },
+    ],
+  },
+};
+const extra = extras[article.id];
+const brief = extra?.brief ?? (d.faq ?? []).map((f) => f.a);
+const facts = extra?.facts ?? [];
+
+// split the rendered guide at its sub headings so each part can be laid out as its own block
+const html: string = (article as any).rendered?.html ?? "";
+const text = (s: string) => s.replace(/<[^>]+>/g, "");
+const parts = html ? html.split(/(?=<h2[\s>])/) : [];
+const intro = parts.length && !parts[0].startsWith("<h2") ? parts.shift()! : "";
+const sections = parts.map((p, i) => {
+  const m = p.match(/^<h2([^>]*)>([\s\S]*?)<\/h2>/);
+  const rest = p.slice(m?.[0].length ?? 0);
+  const subParts = rest.split(/(?=<h3[\s>])/);
+  const lead = subParts.length && !subParts[0].startsWith("<h3") ? subParts.shift()! : "";
+  const subs = subParts.map((sp) => {
+    const h = sp.match(/^<h3[^>]*>([\s\S]*?)<\/h3>/);
+    return { title: text(h?.[1] ?? ""), body: sp.slice(h?.[0].length ?? 0) };
+  });
+  return { id: m?.[1].match(/id="([^"]+)"/)?.[1] ?? `part-${i + 1}`, title: text(m?.[2] ?? ""), lead, subs };
+});
+const midAt = Math.ceil(sections.length / 2);
+
+// the services the guide itself links to
+const linked = [...new Set([...html.matchAll(/\/services\/([a-z0-9-]+)\//g)].map((m) => m[1]))];
+for (const s of ["bim-production", "revit-production"]) if (linked.length < 2 && !linked.includes(s)) linked.push(s);
+const related = linked.map((sl) => services.find((s) => s.slug === sl)).filter((s): s is (typeof services)[number] => !!s).slice(0, 3);
+
+const ld = [
+  {
+    "@context": "https://schema.org", "@type": "Article", headline: d.title, description: d.seoDescription ?? d.summary,
+    image: [new URL(image, siteUrl).href], datePublished: publishedISO, dateModified: modifiedISO, keywords: d.keywords?.join(", "), mainEntityOfPage: url,
+    author: { "@type": "Organization", name: "Axys3D", url: siteUrl.href },
+    publisher: { "@type": "Organization", name: "Axys3D", logo: { "@type": "ImageObject", url: new URL("/favicon.svg", siteUrl).href } },
+  },
+  {
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl.href },
+      { "@type": "ListItem", position: 2, name: "Insights", item: new URL("/insights/", siteUrl).href },
+      { "@type": "ListItem", position: 3, name: d.title, item: url },
+    ],
+  },
+  ...(d.faq?.length ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: d.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }] : []),
+];
+const others = (await getCollection("insights")).filter((a) => a.id !== article.id).slice(0, 2);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title={`${d.seoTitle ?? d.title} | Axys3D`} description={d.seoDescription ?? d.summary} image={image} type="article" jsonLd={ld} />
+    {publishedISO && <meta property="article:published_time" content={publishedISO} />}
+    {modifiedISO && <meta property="article:modified_time" content={modifiedISO} />}
+    <meta property="article:section" content={d.category} />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg ar">
+      <!-- what this guide is, in one headline and one line; the picture carries the guide's own numbers -->
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <a class="in-back" href="/insights/" data-ax>Insights</a>
+          <h1 class="ax-display ax-h1--sm" data-ax>{head}</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">{tail}</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <a href="#guide" class="ax-link">Read the guide</a>
+              <p class="pg-assure">{[d.category, `${d.readTime} read`, dateText, "By the Axys3D team"].filter(Boolean).join(" · ")}</p>
+            </div>
+          </div>
+        </div>
+        <figure class:list={["ax-wrap", facts.length ? "pg-panel ax-dark" : "pg-hero-media"]} data-ax>
+          <img src={image} srcset={`${sm(image)} 800w, ${image} 1600w`} sizes="(max-width: 1400px) 94vw, 1280px" width="1600" height="1000" alt={d.imageAlt ?? ""} fetchpriority="high" decoding="async" />
+          {facts.length > 0 && (
+            <ul class="pg-strip pg-strip--stack ar-facts" style={`--n:${facts.length}`} aria-label="This guide in numbers">
+              {facts.map((f) => <li><b>{f.n}</b><strong>{f.t}</strong><span>{f.d}</span></li>)}
+            </ul>
+          )}
+        </figure>
+      </section>
+
+      <!-- the short version, for the visitor who will not read further -->
+      <section class="ax-section ar-top" aria-labelledby="arBrief">
+        <div class="ax-wrap">
+          <div class="ar-brief" data-ax>
+            <div class="ar-brief-main">
+              <h2 id="arBrief">In brief</h2>
+              {tail !== d.summary && <p class="ar-sum">{d.summary}</p>}
+              <ul class="pg-ticks">{brief.map((b) => <li>{b}</li>)}</ul>
+            </div>
+            {sections.length > 0 && (
+              <nav class="ar-toc" aria-labelledby="arToc">
+                <h3 id="arToc">In this guide</h3>
+                <ol>{sections.map((s) => <li><a href={`#${s.id}`} set:html={s.title}></a></li>)}</ol>
+              </nav>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <article class="ax-wrap ar-body" id="guide">
+        {intro && <div class="ar-intro ar-prose" data-ax set:html={intro}></div>}
+        {!html && <div class="ar-intro ar-prose"><Content /></div>}
+
+        {sections.map((s, i) => (
+          <>
+            {i === midAt && i > 0 && (
+              <aside class="ar-mid ax-dark" aria-label="Start a project" data-ax>
+                <div>
+                  <p class="ar-mid-h">Rather hand this to us?</p>
+                  <p>Send your drawings and deadline. We reply within one working day with a clear scope, price and timeline.</p>
+                </div>
+                <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              </aside>
+            )}
+            <section class="ar-sec" id={s.id}>
+              <details class="ar-fold" open>
+                <summary><h2 set:html={s.title}></h2><i class="ax-chev" aria-hidden="true"></i></summary>
+                <div class="ar-sec-body">
+                  {s.lead.trim() && <div class="ar-prose" set:html={s.lead}></div>}
+                  {s.subs.length > 0 && (
+                    <div class="ar-subs">
+                      {s.subs.map((sub) => (
+                        <div class="ar-sub"><h3 set:html={sub.title}></h3><div class="ar-prose" set:html={sub.body}></div></div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </details>
+            </section>
+          </>
+        ))}
+      </article>
+
+      {d.faq?.length ? (
+        <section class="ax-section ar-faq" aria-labelledby="arFaq">
+          <div class="ax-wrap ax-split">
+            <header>
+              <h2 id="arFaq" data-ax>Short answers.</h2>
+              <p class="ax-lead" data-ax>The questions this guide is asked most.</p>
+              <button type="button" class="ax-btn ax-btn--ghost ax-btn--sm ar-copy" id="arCopy" data-label="Copy link to this guide" data-ax>Copy link to this guide</button>
+            </header>
+            <div class="ax-acc" data-ax>
+              {d.faq.map((f) => (
+                <details><summary><span>{f.q}</span><i aria-hidden="true"></i></summary><div class="ax-acc-body"><p>{f.a}</p></div></details>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <!-- where to go next: the services behind the guide, then the other guides -->
+      {related.length > 0 && (
+        <section class="ax-section ar-rel" aria-labelledby="arRel">
+          <div class="ax-wrap">
+            <header class="ax-head">
+              <h2 class="ax-display ar-h2" id="arRel" data-ax>The services behind this guide.</h2>
+            </header>
+            <ul class="pg-pics ar-pics" style={`--n:${Math.min(related.length, 3)}`}>
+              {related.map((s, i) => (
+                <li data-ax style={`--ax-d:${i * 0.06}s`}>
+                  <a href={`/services/${s.slug}/`}>
+                    <img src={sm(s.image)} srcset={`${sm(s.image)} 800w, ${s.image} 1600w`} sizes="(max-width: 560px) 94vw, 640px" width="800" height="500" alt="" loading="lazy" decoding="async" />
+                    <span class="pg-pics-go" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8M6 4h6v6" /></svg></span>
+                    <span class="pg-pics-t"><strong>{s.title.replace(" & ", " and ")}</strong><span>{s.short}</span></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {others.length > 0 && (
+              <div class="ar-more" data-ax>
+                <h3 id="arMore">More guides</h3>
+                <ul aria-labelledby="arMore">
+                  {others.map((o) => {
+                    const oi = o.data.image ?? "/media/svc-bim.webp";
+                    return (
+                      <li>
+                        <a href={`/insights/${o.id}/`}>
+                          <img src={sm(oi)} width="800" height="500" alt="" loading="lazy" decoding="async" />
+                          <span><strong>{split(o.data.title)[0]}</strong><small>{o.data.category} · {o.data.readTime} read</small></span>
+                          <i aria-hidden="true"></i>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      <!-- the ask -->
+      <section class="ax-dark pg-close" aria-labelledby="arClose">
+        <div class="pg-close-in">
+          <h2 class="ax-display" id="arClose" data-ax>Need this done on your project?</h2>
+          <p class="ax-lead" data-ax>Send us your drawings and deadline. We reply with a clear scope, price and timeline.</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="/hire/" class="ax-link">How hiring works</a>
+          </div>
+          <p class="pg-assure" data-ax>We reply within one working day. You approve the scope and price first.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/adu-8-sm.webp" srcset="/media/adu-8-sm.webp 800w, /media/adu-8.webp 1536w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+
+    <script>
+      const btn = document.getElementById("arCopy");
+      btn?.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(location.href); btn.textContent = "Link copied"; } catch { btn.textContent = "Could not copy"; }
+        setTimeout(() => (btn.textContent = btn.dataset.label ?? ""), 1800);
+      });
+
+      // phones: the parts of the guide start closed and open on a tap; wider screens always show them
+      const folds = Array.from(document.querySelectorAll<HTMLDetailsElement>(".ar-fold"));
+      const narrow = window.matchMedia("(max-width: 640px)");
+      const setFolds = () => folds.forEach((f) => { f.open = !narrow.matches; f.querySelector("summary")!.tabIndex = narrow.matches ? 0 : -1; });
+      // a link to a part of the guide opens that part first
+      const openFor = (hash: string) => {
+        if (hash.length < 2) return;
+        const part = document.getElementById(decodeURIComponent(hash.slice(1)));
+        const fold = part?.querySelector<HTMLDetailsElement>(".ar-fold");
+        if (part && fold && !fold.open) { fold.open = true; part.scrollIntoView({ behavior: "instant" }); }
+      };
+      if (folds.length) {
+        setFolds();
+        narrow.addEventListener("change", setFolds);
+        openFor(location.hash);
+        document.querySelectorAll<HTMLAnchorElement>('.ar a[href^="#"]').forEach((a) => a.addEventListener("click", () => openFor(a.getAttribute("href") ?? "")));
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .ar .in-back { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-bottom: 4px; color: var(--ax-text); text-decoration: none; }
+  .ar .in-back::before { content: "‹"; font-size: 1.4em; line-height: 1; transform: translateY(-1px); }
+  .ar .in-back:hover { text-decoration: underline; text-decoration-color: var(--ax-accent); text-underline-offset: 5px; }
+
+  /* three numbers from the guide on the foot of the picture */
+  @media (min-width: 561px) {
+    .ar .ar-facts { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
+    .ar .ar-facts > * { box-shadow: none !important; }
+    .ar .ar-facts > * + * { box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1) !important; }
+  }
+
+  /* the short version: one white panel, key points on the left, the parts of the guide on the right */
+  .ar-top { padding-bottom: 0; }
+  .ar-brief { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(24px, 5vw, 80px); padding: clamp(22px, 3.6vw, 56px); border-radius: var(--ax-r-card); background: var(--ax-surface); box-shadow: var(--ax-shadow); }
+  .ar-brief h2 { margin: 0 0 clamp(14px, 1.6vw, 22px); font-size: clamp(34px, 3.6vw, 56px); line-height: 0.94; }
+  .ar-sum { margin: 0 0 clamp(18px, 2vw, 28px); max-width: 34em; font-size: clamp(17px, 1.4vw, 20px); font-weight: 500; line-height: 1.5; color: var(--ax-text-2); }
+  .ar-brief .pg-ticks { gap: 14px; }
+  .ar-brief .pg-ticks li { max-width: 36em; font-size: clamp(17px, 1.35vw, 19px); font-weight: 600; line-height: 1.4; }
+  .ar-toc h3 { margin: 0 0 6px; font-size: clamp(20px, 1.6vw, 24px); letter-spacing: 0.04em; color: var(--ax-text-3); }
+  .ar-toc ol { list-style: none; margin: 0; padding: 0; }
+  .ar-toc a { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 48px; padding-block: 8px; font-size: 16.5px; font-weight: 600; line-height: 1.3; color: var(--ax-text); text-decoration: none; }
+  .ar-toc a::after { content: ""; flex: none; width: 16px; height: 16px; background: currentColor; -webkit-mask: var(--ax-arrow) center / 16px no-repeat; mask: var(--ax-arrow) center / 16px no-repeat; transform: rotate(90deg); transition: transform 0.3s var(--ax-ease); }
+  .ar-toc a:hover { text-decoration: underline; text-decoration-color: var(--ax-accent); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+  .ar-toc a:hover::after { transform: rotate(90deg) translateX(3px); }
+
+  /* the guide: each part is a block with its heading on the left and the detail on the right */
+  .ar-body { padding-block: clamp(36px, 5vw, 80px) 0; }
+  .ar-intro { max-width: 46em; margin-bottom: clamp(8px, 2vw, 28px); }
+  .ar-intro.ar-prose > p:first-child { font-size: clamp(20px, 1.9vw, 26px); font-weight: 500; line-height: 1.4; letter-spacing: -0.012em; color: var(--ax-text); }
+  .ar-sec { padding-block: clamp(28px, 3.6vw, 56px); scroll-margin-top: calc(var(--ax-nav-h) + 16px); }
+  .ar-fold::after { content: ""; display: block; clear: both; }
+  .ar-fold > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; list-style: none; }
+  .ar-fold > summary::-webkit-details-marker { display: none; }
+  .ar-fold > summary .ax-chev { display: none; }
+  .ar-fold > summary h2 { margin: 0; font-size: clamp(34px, 3.6vw, 56px); line-height: 0.94; text-wrap: balance; }
+  @media (min-width: 901px) {
+    .ar-fold > summary { float: left; width: 34%; }
+    .ar-sec-body { margin-left: 40%; }
+  }
+  @media (min-width: 641px) {
+    .ar-fold > summary { pointer-events: none; }
+    .ar-fold > summary + * { margin-top: clamp(16px, 2vw, 26px); }
+  }
+  @media (min-width: 901px) { .ar-fold > summary + * { margin-top: 0; } }
+
+  .ar-prose { font-size: 18px; line-height: 1.65; color: var(--ax-text-2); }
+  .ar-prose > :last-child { margin-bottom: 0; }
+  .ar-prose p { margin: 0 0 1.05em; max-width: 40em; }
+  .ar-prose strong { color: var(--ax-text); font-weight: 700; }
+  .ar-prose a { color: var(--ax-text); font-weight: 600; text-decoration: underline; text-decoration-color: var(--ax-accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .ar-prose ul { list-style: none; margin: 0 0 1.2em; padding: 0; display: grid; gap: 12px; max-width: 40em; }
+  .ar-prose ul li { position: relative; padding-left: 24px; line-height: 1.5; }
+  .ar-prose ul li::before { content: ""; position: absolute; left: 0; top: 0.58em; width: 8px; height: 8px; border-radius: 2px; background: var(--ax-accent); }
+  /* numbered steps: a large numeral beside each one */
+  .ar-prose ol { list-style: none; margin: 0 0 1.2em; padding: 0; display: grid; gap: 18px; max-width: 40em; counter-reset: ar; }
+  .ar-prose ol li { counter-increment: ar; position: relative; min-height: 40px; padding-left: 52px; line-height: 1.5; }
+  .ar-prose ol li::before { content: counter(ar); position: absolute; left: 0; top: -2px; font: 800 40px/1 var(--ax-display); color: var(--ax-text); font-variant-numeric: tabular-nums; }
+
+  /* the smaller parts inside a block: white tiles side by side */
+  .ar-subs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(8px, 1vw, 14px); }
+  .ar-prose + .ar-subs { margin-top: clamp(18px, 2vw, 28px); }
+  .ar-sub { min-width: 0; padding: clamp(18px, 2vw, 26px); border-radius: var(--ax-r-card); background: var(--ax-surface); box-shadow: var(--ax-shadow); }
+  .ar-sub:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .ar-sub h3 { margin: 0 0 10px; font-size: clamp(24px, 2.1vw, 32px); line-height: 0.98; }
+  .ar-sub .ar-prose { font-size: 16.5px; line-height: 1.55; }
+  .ar-sub .ar-prose ul { gap: 10px; }
+
+  /* the action half way down */
+  .ar-mid { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 40px; margin-block: clamp(20px, 2.6vw, 40px); padding: clamp(22px, 3.2vw, 48px); border-radius: var(--ax-r-card); }
+  .ar-mid > div { flex: 1 1 340px; }
+  .ar-mid-h { margin: 0 0 8px; font: 800 clamp(30px, 3.4vw, 52px)/0.94 var(--ax-display); text-transform: uppercase; color: var(--ax-text); }
+  .ar-mid p:not(.ar-mid-h) { margin: 0; max-width: 36em; font-size: 16.5px; line-height: 1.5; color: var(--ax-text-2); }
+
+  .ar-faq { padding-bottom: 0; }
+  .ar-copy { margin-top: clamp(18px, 2vw, 28px); }
+  .ar-h2 { font-size: clamp(40px, 5vw, 80px); }
+  .ar-pics a { height: clamp(240px, 24vw, 340px); }
+  /* the pictures are pale line drawings, so the words sit on a deeper shade */
+  .ar-pics a::after { background: linear-gradient(180deg, rgba(11, 12, 15, 0.3) 0%, rgba(11, 12, 15, 0.14) 26%, rgba(11, 12, 15, 0.95) 80%); }
+
+  /* the other guides: small picture, title, arrow */
+  .ar-more { margin-top: clamp(32px, 4.4vw, 64px); }
+  .ar-more h3 { margin: 0 0 8px; font-size: clamp(20px, 1.6vw, 24px); letter-spacing: 0.04em; color: var(--ax-text-3); }
+  .ar-more ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(24px, 4vw, 64px); }
+  .ar-more a { display: grid; grid-template-columns: 112px minmax(0, 1fr) 20px; align-items: center; gap: 16px; min-height: 96px; padding-block: 12px; color: var(--ax-text); text-decoration: none; }
+  .ar-more img { display: block; width: 112px; height: 72px; object-fit: cover; border-radius: var(--ax-r-chip); background: var(--ax-surface-2); }
+  .ar-more strong { display: block; font: 800 clamp(21px, 1.8vw, 26px)/1 var(--ax-display); text-transform: uppercase; text-wrap: balance; }
+  .ar-more small { display: block; margin-top: 6px; font-size: 14.5px; font-weight: 500; color: var(--ax-text-3); }
+  .ar-more i { width: 18px; height: 18px; background: currentColor; -webkit-mask: var(--ax-arrow) center / 18px no-repeat; mask: var(--ax-arrow) center / 18px no-repeat; transition: transform 0.3s var(--ax-ease); }
+  .ar-more a:hover i { transform: translateX(4px); }
+  .ar-more a:hover strong { text-decoration: underline; text-decoration-color: var(--ax-accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  @media (max-width: 900px) {
+    .ar-brief { grid-template-columns: 1fr; }
+    .ar-more ul { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .ar .pg-panel > img { aspect-ratio: 16 / 9; }
+    .ar-brief h2, .ar-h2 { font-size: 30px; }
+    .ar-brief .pg-ticks li { font-size: 16.5px; font-weight: 500; }
+    /* the parts are listed right below, so the list of them is not repeated */
+    .ar-toc { display: none; }
+    .ar-body { padding-top: 32px; }
+    .ar-intro { margin-bottom: 24px; }
+    .ar-intro.ar-prose > p:first-child { font-size: 18px; line-height: 1.5; }
+    .ar-prose { font-size: 16.5px; line-height: 1.6; }
+    .ar-sec { padding-block: 0; }
+    .ar-fold > summary { min-height: 60px; padding-block: 10px; cursor: pointer; border-top: 1px solid var(--ax-line-strong); }
+    .ar-fold > summary .ax-chev { display: block; }
+    .ar-fold[open] > summary .ax-chev { transform: rotate(180deg); }
+    .ar-fold > summary h2 { font-size: 24px; line-height: 1; }
+    .ar-sec-body { padding: 4px 0 24px; }
+    .ar-body > .ar-sec:last-of-type { border-bottom: 1px solid var(--ax-line-strong); }
+    .ar-subs { grid-template-columns: 1fr; gap: 0; }
+    .ar-sub { padding: 14px 0; border-radius: 0; background: none; box-shadow: none; }
+    .ar-sub + .ar-sub { border-top: 1px solid var(--ax-line); }
+    .ar-sub h3 { font-size: 22px; margin-bottom: 6px; }
+    .ar-prose ol li { padding-left: 40px; min-height: 32px; }
+    .ar-prose ol li::before { font-size: 30px; top: 0; }
+    .ar-mid { margin-block: 20px; padding: 22px 18px; }
+    .ar-mid-h { font-size: 28px; }
+    .ar-mid .ax-btn { width: 100%; }
+    .ar-copy { margin-top: 14px; }
+    /* the services become a plain list: small picture, name, arrow */
+    .ar .ar-pics { gap: 0; border-bottom: 1px solid var(--ax-line-strong); }
+    .ar .ar-pics a { display: grid; grid-template-columns: 88px minmax(0, 1fr) 18px; align-items: center; gap: 12px; height: auto; min-height: 84px; padding: 12px 0; border-radius: 0; border-top: 1px solid var(--ax-line-strong); background: none; color: var(--ax-text); overflow: visible; }
+    .ar .ar-pics a::after { display: none; }
+    .ar .ar-pics img { position: static; z-index: auto; width: 88px; height: 60px; border-radius: var(--ax-r-chip); transform: none !important; }
+    .ar .ar-pics .pg-pics-go { position: static; order: 3; width: 18px; height: 18px; color: var(--ax-text); transform: none !important; }
+    .ar .ar-pics .pg-pics-go svg { width: 18px; height: 18px; }
+    .ar .ar-pics .pg-pics-t { position: static; gap: 4px; }
+    .ar .ar-pics .pg-pics-t strong { font-size: 20px; line-height: 1; }
+    .ar .ar-pics .pg-pics-t span { font-size: 14.5px; color: var(--ax-text-3); }
+    .ar-more { margin-top: 32px; }
+    .ar-more a { grid-template-columns: 88px minmax(0, 1fr) 18px; gap: 12px; }
+    .ar-more img { width: 88px; height: 60px; }
+    .ar-more strong { font-size: 20px; }
+  }
+  @media (hover: none) { .ar-more a:hover i, .ar-toc a:hover::after { transform: none; } .ar-toc a:hover::after { transform: rotate(90deg); } }
+</style>

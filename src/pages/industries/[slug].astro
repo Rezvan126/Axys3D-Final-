@@ -1,0 +1,218 @@
+---
+// One page per kind of client: the problem, what they get, how a project runs, who stays responsible.
+import SEO from "../../components/SEO.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { services } from "../../data/services";
+
+export async function getStaticPaths() {
+  const industries = await getCollection("industries");
+  return industries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<"industries"> };
+const d = entry.data;
+const pressures = d.buyerPressures ?? [];
+const gets = d.productionRequirements ?? [];
+const steps = d.engagementModel ?? [];
+
+const images: Record<string, string> = {
+  "architecture-design-practices": "/media/svc-plan.webp",
+  "engineering-multidisciplinary": "/media/svc-mep.webp",
+  "developers-asset-teams": "/media/adu-9.webp",
+  "agencies-production-partners": "/media/lounge.webp",
+};
+const image = images[entry.id] ?? "/media/adu-1.webp";
+
+// match the plain service names in the content file to the real service pages
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+const hints: [RegExp, string][] = [[/bim/i, "bim-production"], [/revit/i, "revit-production"], [/mep/i, "mep-coordination"], [/3ds/i, "3ds-max-production"], [/3d.?model/i, "3d-modeling"], [/visuali[sz]ation/i, "architectural-visualization"], [/real.?time|unreal/i, "real-time"], [/animation/i, "animation-motion"]];
+const used = (d.typicalServices ?? [])
+  .map((name) => services.find((s) => norm(s.title) === norm(name)) ?? services.find((s) => s.slug === hints.find(([re]) => re.test(name))?.[1]))
+  .filter((s, i, a): s is (typeof services)[number] => !!s && a.indexOf(s) === i);
+
+const name = d.title.replace(" & ", " and ");
+const sm = (src: string) => src.replace(".webp", "-sm.webp");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title={`${d.title} | Axys3D`} description={d.description} image={image} />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg id">
+      <!-- the headline is the problem this visitor has; the small line above says who the page is for -->
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <a class="in-back" href="/industries/" data-ax>Industries</a>
+          <h1 class="ax-display ax-h1--sm" data-ax>{d.operatingContext ?? name}</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">{d.description}</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <a href="/visuals/" class="ax-link">See our work</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+        </div>
+        <figure class="ax-wrap pg-hero-media" data-ax>
+          <img src={image} srcset={`${sm(image)} 800w, ${image} 1600w`} sizes="(max-width: 1400px) 94vw, 1280px" width="1600" height="1000" alt={`Example of Axys3D work for ${name.toLowerCase()}`} fetchpriority="high" decoding="async" />
+        </figure>
+      </section>
+
+      <!-- before and after: what holds you up, set quietly on the ground, against what you get, on black -->
+      <section class="ax-section" aria-labelledby="idGet">
+        <div class="ax-wrap id-swap">
+          <div class="id-before" data-ax>
+            <h2 class="id-h">What usually gets in the way</h2>
+            <ul>{pressures.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <div class="id-after ax-dark" data-ax style="--ax-d:.08s">
+            <h2 class="id-h" id="idGet">What you get from us</h2>
+            <ul class="pg-ticks">{gets.map((t) => <li>{t}</li>)}</ul>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <p class="pg-assure">You approve the scope and price before any work starts.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- how a project runs for this kind of team -->
+      <section class="ax-section" style="padding-top:0" aria-labelledby="idSteps">
+        <div class="ax-wrap">
+          <header class="ax-head">
+            <h2 class="ax-display" id="idSteps" data-ax>Clear brief.<br />Steady updates.<br />Clean handoff.</h2>
+          </header>
+          <ol class="pg-steps" style={`--n:${Math.min(steps.length, 5) || 4}`}>
+            {steps.map((s, i) => (
+              <li data-ax style={`--ax-d:${i * 0.07}s`}>
+                <span class="n" aria-hidden="true">{i + 1}</span>
+                <h3>{(s as any).title ?? `Step ${i + 1}`}</h3>
+                <p>{s.description}.</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {used.length > 0 && (
+        <section class="ax-section" style="padding-top:0" aria-labelledby="idSvc">
+          <div class="ax-wrap">
+            <header class="ax-head">
+              <h2 class="ax-display id-h2" id="idSvc" data-ax>What teams like yours use most.</h2>
+            </header>
+            <ul class:list={["pg-pics", "id-pics", used.length === 5 && "id-five"]} style={`--n:${used.length > 4 ? 3 : Math.min(used.length, 4)}`}>
+              {used.map((s, i) => (
+                <li data-ax style={`--ax-d:${(i % 3) * 0.06}s`}>
+                  <a href={`/services/${s.slug}/`}>
+                    <img src={sm(s.image)} srcset={`${sm(s.image)} 800w, ${s.image} 1600w`} sizes="(max-width: 560px) 94vw, (max-width: 1000px) 47vw, 420px" width="800" height="500" alt="" loading="lazy" decoding="async" />
+                    <span class="pg-pics-go" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8M6 4h6v6" /></svg></span>
+                    <span class="pg-pics-t"><strong>{s.title.replace(" & ", " and ")}</strong><span>{s.short}</span></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      <!-- the ask, with the answer to the last worry (who stays responsible) right above it -->
+      <section class="ax-dark pg-close" aria-labelledby="idClose">
+        <div class="pg-close-in">
+          {d.responsibilityBoundary && (
+            <p class="id-who" data-ax><span class="ax-eyebrow">Who stays responsible</span>{d.responsibilityBoundary}</p>
+          )}
+          <h2 class="ax-display" id="idClose" data-ax>Tell us about your next project.</h2>
+          <p class="ax-lead" data-ax>Share your drawings, deadline and what you need. We reply within one working day with a clear scope and timeline.</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="/hire/" class="ax-link">How hiring works</a>
+          </div>
+          <p class="pg-assure" data-ax>No commitment. We sign your NDA before you share files.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/adu-8-sm.webp" srcset="/media/adu-8-sm.webp 800w, /media/adu-8.webp 1536w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .in-back { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-bottom: 4px; color: var(--ax-text); text-decoration: none; }
+  .in-back::before { content: "‹"; font-size: 1.4em; line-height: 1; transform: translateY(-1px); }
+
+  .id-swap { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(24px, 4.4vw, 72px); align-items: center; }
+  .id-h { margin: 0 0 clamp(18px, 2.2vw, 30px); font-size: clamp(32px, 3.4vw, 52px); line-height: 0.94; text-wrap: balance; }
+  .id-before ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .id-before li { position: relative; padding-left: 24px; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.45; color: var(--ax-text-2); }
+  .id-before li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 12px; height: 2px; border-radius: 2px; background: var(--ax-text-3); }
+  .id-after { padding: clamp(24px, 4vw, 60px); border-radius: var(--ax-r-card); }
+  .id-after .id-h { color: var(--ax-accent); }
+  .id-after .pg-ticks { gap: 16px; }
+  .id-after .pg-ticks li { font-size: clamp(18px, 1.5vw, 21px); font-weight: 600; }
+  .id-after .pg-act { margin-top: clamp(24px, 3vw, 40px); }
+  .id-h2 { font-size: clamp(40px, 5vw, 80px); }
+  .id-who { margin: 0 0 clamp(28px, 4vw, 56px); max-width: 34em; font-size: clamp(17px, 1.4vw, 20px); font-weight: 500; line-height: 1.5; color: var(--ax-text-2); }
+  .id-who .ax-eyebrow { margin-bottom: 10px; }
+  /* five cards: three above, two wider ones below, no empty corner */
+  @media (min-width: 1001px) { .id-five { grid-template-columns: repeat(6, minmax(0, 1fr)); } .id-five li { grid-column: span 2; } .id-five li:nth-child(n + 4) { grid-column: span 3; } }
+  /* the pictures are pale line drawings, so the words sit on a deeper shade */
+  .id-pics a::after { background: linear-gradient(180deg, rgba(11, 12, 15, 0.3) 0%, rgba(11, 12, 15, 0.14) 26%, rgba(11, 12, 15, 0.95) 80%); }
+  @media (max-width: 900px) { .id-swap { grid-template-columns: 1fr; } }
+  /* these headlines are whole sentences, so they are set a little smaller on phones to stay within three lines */
+  @media (max-width: 600px) { .id h1 { font-size: 31px; } .id-h { font-size: 28px; } .id-h2 { font-size: 30px; } }
+  @media (max-width: 560px) {
+    .id-before li { font-size: 16.5px; }
+    .id-after { padding: 22px 18px; }
+    .id-after .pg-ticks li { font-size: 17px; }
+    /* the services become a plain list: small picture, name, arrow */
+    .id .id-pics { gap: 0; border-bottom: 1px solid var(--ax-line-strong); }
+    .id .id-pics a { display: grid; grid-template-columns: 88px minmax(0, 1fr) 18px; align-items: center; gap: 12px; height: auto; min-height: 84px; padding: 12px 0; border-radius: 0; border-top: 1px solid var(--ax-line-strong); background: none; color: var(--ax-text); overflow: visible; }
+    .id .id-pics a::after { display: none; }
+    .id .id-pics img { position: static; z-index: auto; width: 88px; height: 60px; border-radius: var(--ax-r-chip); transform: none !important; }
+    .id .id-pics .pg-pics-go { position: static; order: 3; width: 18px; height: 18px; color: var(--ax-text); transform: none !important; }
+    .id .id-pics .pg-pics-go svg { width: 18px; height: 18px; }
+    .id .id-pics .pg-pics-t { position: static; gap: 4px; }
+    .id .id-pics .pg-pics-t strong { font-size: 20px; line-height: 1; }
+    .id .id-pics .pg-pics-t span { font-size: 14.5px; color: var(--ax-text-3); }
+    .id-who { margin-bottom: 28px; font-size: 16px; }
+  }
+</style>
+
+<script>
+  // steps: the tile you have scrolled to turns black. Scroll position where the page gets scroll events,
+  // and an IntersectionObserver as well, because some viewers scroll the page from outside.
+  const cards = Array.from(document.querySelectorAll<HTMLElement>(".pg-steps li"));
+  if (cards.length) {
+    let tick = false;
+    const pick = () => {
+      tick = false;
+      const vh = window.innerHeight, first = cards[0].getBoundingClientRect(), last = cards[cards.length - 1].getBoundingClientRect();
+      let on = 0;
+      if (Math.abs(first.top - last.top) < 30) {
+        const p = (vh * 0.92 - first.top) / (vh * 0.75);
+        on = Math.max(0, Math.min(cards.length - 1, Math.floor(p * cards.length)));
+      } else {
+        let best = Infinity;
+        cards.forEach((c, i) => { const r = c.getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - vh * 0.5); if (d < best) { best = d; on = i; } });
+      }
+      cards.forEach((c, i) => c.classList.toggle("is-on", i === on));
+    };
+    const ask = () => { if (!tick) { tick = true; requestAnimationFrame(pick); } };
+    window.addEventListener("scroll", ask, { passive: true, capture: true });
+    window.addEventListener("resize", ask);
+    const io = new IntersectionObserver(ask, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+    cards.forEach((c) => io.observe(c));
+    pick();
+  }
+</script>

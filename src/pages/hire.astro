@@ -1,0 +1,244 @@
+---
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import { platforms, rates } from "../data/hire";
+
+const ext = (p: { url: string }) => (p.url ? { target: "_blank", rel: "noopener" } : {});
+const plain = (s: string) => s.replace(/-/g, " ");
+
+// how the money moves: shown on the opening picture, because it is the first thing a new client asks
+const flow = [
+  { title: "You fund the order", text: "On Upwork or Fiverr, with your usual card." },
+  { title: "The platform holds it", text: "We cannot touch the payment yet." },
+  { title: "We deliver, you review", text: "In stages, with the agreed revisions." },
+  { title: "You approve, we are paid", text: "Only then is the payment released." },
+];
+const steps = [
+  { title: "Send your brief", text: "Share drawings, references and your deadline through our contact form or a message on Upwork or Fiverr." },
+  { title: "Get a clear quote", text: "We reply with the scope, a fixed price or hourly estimate, the timeline and how many revisions are included." },
+  { title: "Accept on the platform", text: "Accept our offer on Upwork or Fiverr. Your payment is held by the platform, not by us." },
+  { title: "Review each stage", text: "We deliver in stages. You comment, we revise, and nothing moves on until you approve it." },
+  { title: "Approve and receive files", text: "When you are happy, approve the work. The payment is released and the final files are yours." },
+];
+const reasons = [
+  { title: "Your money is protected", text: "The platform holds your payment and releases it only when you approve the delivery." },
+  { title: "Pay the way you already pay", text: "Cards, PayPal and local options depending on your country. No bank transfers, no new accounts with us." },
+  { title: "A contract from day one", text: "Scope, price, deadline and revisions are written into the platform contract before work starts." },
+  { title: "Help if something goes wrong", text: "Both platforms have their own resolution teams, so you never rely on our word alone." },
+];
+const faqs = [
+  { q: "Can I pay you directly instead?", a: "We keep all work and payments on Upwork or Fiverr. It protects you (your money is held until you approve), gives both sides a written contract, and keeps invoices and receipts in one place." },
+  { q: "Which platform should I choose?", a: "Use Upwork for larger, multi stage or ongoing work, and for hourly or monthly support. Use Fiverr for quick, well defined jobs with a fixed package. If you already have an account on one, use that one." },
+  { q: "Are there platform fees?", a: "Yes. Upwork and Fiverr each add a small service fee for buyers, shown at checkout before you pay. Our quoted price is what we charge; the platform fee is separate." },
+  { q: "Who owns the files?", a: "You do. Once the work is approved and paid through the platform, the final files are yours to use. Native files (Revit, 3ds Max, Blender) are included when agreed in the offer." },
+  { q: "Will you sign an NDA?", a: "Yes. We sign your NDA before you share any drawings or models, and we never show your project in our portfolio without your permission." },
+  { q: "What if I am not happy with the result?", a: "Every offer includes an agreed number of revisions. If something still is not right, the platform's resolution process protects your payment." },
+];
+const ld = [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title="Hire Axys3D: How Hiring and Payment Work" description="How to hire Axys3D for BIM, Revit and architectural visualization: fixed price, hourly or package options, paid securely through Upwork or Fiverr." jsonLd={ld} />
+  </head>
+
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg hr">
+      <!-- what: you pay through a platform that protects you. The picture carries the four moves of the money. -->
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 class="ax-h1--sm" data-ax>Your money stays safe until you approve.</h1>
+          <div class="pg-top-row" data-ax>
+            <p class="ax-lead">We work through Upwork and Fiverr. The platform holds your payment and releases it only when you approve the work. No new accounts with us, no bank transfers, no chasing invoices.</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              {platforms.upwork.url && <a href={platforms.upwork.url} class="ax-link" {...ext(platforms.upwork)}>Hire on Upwork</a>}
+              {platforms.fiverr.url && <a href={platforms.fiverr.url} class="ax-link" {...ext(platforms.fiverr)}>Order on Fiverr</a>}
+              <a href="#how" class="ax-link">See how it works</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+        </div>
+        <figure class="ax-wrap pg-panel ax-dark" data-ax>
+          <img src="/media/office.webp" srcset="/media/office-sm.webp 800w, /media/office.webp 1600w" sizes="(max-width: 1400px) 94vw, 1280px" width="1920" height="1080" alt="Office interior visualization by Axys3D" fetchpriority="high" decoding="async" />
+          <ol class="pg-strip pg-strip--stack" aria-label="How payment works">
+            {flow.map((f, i) => <li><b aria-hidden="true">{i + 1}</b><strong>{f.title}</strong><span>{f.text}</span></li>)}
+          </ol>
+        </figure>
+      </section>
+
+      <!-- trust: why a platform is better for the client than paying us directly -->
+      <section class="ax-section" aria-labelledby="hrWhy">
+        <div class="ax-wrap">
+          <div class="pg-duo" data-ax>
+            <div class="pg-duo-pic">
+              <img src="/media/kitchen-sm.webp" srcset="/media/kitchen-sm.webp 800w, /media/kitchen.webp 1600w" sizes="(max-width: 900px) 94vw, 640px" width="800" height="450" alt="Kitchen interior rendered by Axys3D" loading="lazy" decoding="async" />
+            </div>
+            <div class="pg-duo-body">
+              <h2 class="hr-h" id="hrWhy">Safer for you.<br />Simpler for everyone.</h2>
+              <ul class="pg-ticks">
+                {reasons.map((r) => <li>{r.title}<small>{r.text}</small></li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- choice: three ways to buy, on the black panel so it reads as the heart of the page -->
+      <section class="ax-section ax-dark" id="rates" aria-labelledby="hrRates">
+        <div class="ax-wrap">
+          <header class="ax-head pg-head2">
+            <h2 id="hrRates" data-ax>Pick the way that fits your job.</h2>
+            <p class="ax-lead" data-ax>Every job gets a written quote first, so you always know the price before anything starts.</p>
+          </header>
+          <div class="hr-ways">
+            {rates.map((r, i) => (
+              <article class:list={[(r as any).featured && "is-main"]} data-ax style={`--ax-d:${i * 0.07}s`}>
+                <details class="hr-fold" open>
+                  <summary>
+                    <span class="hr-sum"><span class="ax-eyebrow">{r.platform}</span><h3>{plain(r.name)}</h3></span>
+                    <i class="ax-chev" aria-hidden="true"></i>
+                  </summary>
+                  <div class="hr-way">
+                    <p class="hr-best">{plain(r.best)}</p>
+                    <p class="hr-cost">{r.price ? <><b>{r.price}</b> {r.unit}</> : "Quoted per project"}</p>
+                    <ul class="pg-ticks">{r.points.map((pt) => <li>{pt}</li>)}</ul>
+                  </div>
+                </details>
+              </article>
+            ))}
+          </div>
+          <div class="pg-next" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <p>Not sure which one fits? Send the brief and we suggest the right one. You approve the scope and price before any work starts.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- how: five steps, the one you have reached turns black -->
+      <section class="ax-section" id="how" aria-labelledby="hrHow">
+        <div class="ax-wrap">
+          <header class="ax-head">
+            <h2 id="hrHow" data-ax>Brief to files<br />in five steps.</h2>
+          </header>
+          <ol class="pg-steps" style="--n:5">
+            {steps.map((s, i) => (
+              <li data-ax style={`--ax-d:${i * 0.06}s`}><span class="n" aria-hidden="true">{i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <!-- objections -->
+      <section class="ax-section" style="padding-top:0" aria-labelledby="hrFaq">
+        <div class="ax-wrap ax-split">
+          <header>
+            <h2 id="hrFaq" data-ax>Payments, answered.</h2>
+            <p class="ax-lead" data-ax>What clients ask before they accept an offer.</p>
+          </header>
+          <div class="ax-acc" data-ax>
+            {faqs.map((f) => (
+              <details><summary><span>{f.q}</span><i aria-hidden="true"></i></summary><div class="ax-acc-body"><p>{f.a}</p></div></details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- the ask -->
+      <section class="ax-dark pg-close" aria-labelledby="hrClose">
+        <div class="pg-close-in">
+          <h2 id="hrClose" data-ax>Not sure where to start? Send your brief.</h2>
+          <p class="ax-lead" data-ax>Tell us what you need. We reply with a clear scope, price and timeline, then send the offer on the platform you prefer.</p>
+          <div class="pg-act" data-ax>
+            <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+          </div>
+          <p class="pg-assure" data-ax>We reply within one working day. No commitment until you accept the offer.</p>
+        </div>
+        <div class="pg-close-pic">
+          <img src="/media/bathroom-sm.webp" srcset="/media/bathroom-sm.webp 800w, /media/bathroom.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="800" height="450" alt="Bathroom interior visualization by Axys3D" loading="lazy" decoding="async" />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .hr-h { margin: 0 0 clamp(20px, 2.4vw, 34px); font-size: clamp(38px, 4.4vw, 68px); line-height: 0.92; }
+  .hr .pg-ticks { gap: 16px; }
+  .hr-ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 1vw, 14px); }
+  .hr-ways article { display: flex; flex-direction: column; min-width: 0; padding: clamp(20px, 2.4vw, 34px); border-radius: var(--ax-r-lg); background: var(--ax-surface); }
+  .hr-ways article.is-main { background: #f5f6f8; color: #0b0c0f; --ax-text: #0b0c0f; --ax-text-2: #3c3f47; --ax-text-3: #666a74; }
+  .hr-ways .ax-eyebrow { margin-bottom: clamp(28px, 4vw, 56px); }
+  .hr-ways article.is-main .ax-eyebrow { color: #666a74; }
+  .hr-ways h3 { min-height: 1.88em; font-size: clamp(30px, 2.8vw, 42px); font-weight: 800; line-height: 0.94; }
+  .hr-best { min-height: 3em; }
+  .hr-best { margin: 12px 0 0; font-size: 16px; line-height: 1.5; color: var(--ax-text-2); }
+  .hr-cost { margin: clamp(18px, 2vw, 26px) 0; font: 600 16px/1.3 var(--ax-font); color: var(--ax-text); }
+  .hr-cost b { font-family: var(--ax-display); font-size: 48px; font-weight: 800; }
+  .hr-ways .pg-ticks { margin-top: auto; gap: 12px; }
+  .hr-ways .pg-ticks li { font-size: 16px; }
+  /* each way to buy is a row that opens on phones; on wider screens it is always open and the heading is not a control */
+  .hr-fold > summary { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; list-style: none; }
+  .hr-fold > summary::-webkit-details-marker { display: none; }
+  .hr-fold > summary .ax-chev { display: none; }
+  .hr-sum { display: block; min-width: 0; }
+  @media (min-width: 641px) { .hr-fold > summary { pointer-events: none; } }
+  @media (max-width: 900px) { .hr-ways { grid-template-columns: 1fr; } .hr-ways .ax-eyebrow { margin-bottom: 18px; } .hr-ways h3, .hr-best { min-height: 0; } }
+  @media (max-width: 640px) {
+    .hr-h { font-size: 30px; }
+    .hr-ways { gap: 0; border-bottom: 1px solid var(--ax-line-strong); }
+    .hr-ways article, .hr-ways article.is-main { padding: 0; border-radius: 0; background: none; color: #f5f6f8; --ax-text: #f5f6f8; --ax-text-2: #b6bac4; --ax-text-3: #8a8f9b; border-top: 1px solid var(--ax-line-strong); }
+    .hr-ways article.is-main .ax-eyebrow { color: var(--ax-accent); }
+    .hr-fold > summary { align-items: center; min-height: 76px; padding-block: 12px; cursor: pointer; }
+    .hr-fold > summary .ax-chev { display: block; }
+    .hr-fold[open] > summary .ax-chev { transform: rotate(180deg); }
+    .hr-ways .ax-eyebrow { margin-bottom: 6px; font-size: 14px; }
+    .hr-ways h3 { font-size: 24px; }
+    .hr-way { padding-bottom: 22px; }
+    .hr-best { margin-top: 0; }
+    .hr-cost { margin: 14px 0; }
+    .hr .pg-panel > img { aspect-ratio: 16 / 9; }
+  }
+</style>
+
+<script>
+  // phones: the three ways to buy start as closed rows (the featured one is open); wider screens always show them
+  const folds = Array.from(document.querySelectorAll<HTMLDetailsElement>(".hr-fold"));
+  const narrow = window.matchMedia("(max-width: 640px)");
+  const setFolds = () => folds.forEach((f) => { f.open = !narrow.matches || !!f.closest(".is-main"); f.querySelector("summary")!.tabIndex = narrow.matches ? 0 : -1; });
+  if (folds.length) { setFolds(); narrow.addEventListener("change", setFolds); }
+
+  // steps: the tile you have scrolled to turns black. Scroll position where the page gets scroll events,
+  // and an IntersectionObserver as well, because some viewers scroll the page from outside.
+  const cards = Array.from(document.querySelectorAll<HTMLElement>(".pg-steps li"));
+  if (cards.length) {
+    let tick = false;
+    const pick = () => {
+      tick = false;
+      const vh = window.innerHeight, first = cards[0].getBoundingClientRect(), last = cards[cards.length - 1].getBoundingClientRect();
+      let on = 0;
+      if (Math.abs(first.top - last.top) < 30) {
+        const p = (vh * 0.92 - first.top) / (vh * 0.75);
+        on = Math.max(0, Math.min(cards.length - 1, Math.floor(p * cards.length)));
+      } else {
+        let best = Infinity;
+        cards.forEach((c, i) => { const r = c.getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - vh * 0.5); if (d < best) { best = d; on = i; } });
+      }
+      cards.forEach((c, i) => c.classList.toggle("is-on", i === on));
+    };
+    const ask = () => { if (!tick) { tick = true; requestAnimationFrame(pick); } };
+    window.addEventListener("scroll", ask, { passive: true, capture: true });
+    window.addEventListener("resize", ask);
+    const io = new IntersectionObserver(ask, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+    cards.forEach((c) => io.observe(c));
+    pick();
+  }
+</script>

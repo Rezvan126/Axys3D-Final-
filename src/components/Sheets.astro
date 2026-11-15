@@ -1,0 +1,115 @@
+---
+// Real permit sheets from a delivered residential remodel set. Client, address and firm details are
+// already off these sheets; the sheet numbers and every dimension, tag and note are as issued.
+const sheets = [
+  { id: "plan", no: "A104", name: "Demolition and new floor plans", w: 2400, h: 2178 },
+  { id: "elev", no: "A107", name: "Existing and new elevations", w: 2400, h: 1714 },
+  { id: "sect", no: "A108", name: "Sections and window details", w: 2400, h: 1714 },
+  { id: "mep", no: "MEP100", name: "Electrical plan and schedules", w: 2400, h: 1714 },
+];
+const { heading = "The sheets a plan checker reads.", lead = "Four sheets from a permit set we produced in Revit for a house remodel. Open one and zoom in: dimensions, keynotes, tags and schedules are all there." } = Astro.props;
+---
+
+<section class="ax-section sh" style="padding-top:0" aria-labelledby="shHead">
+  <div class="ax-wrap">
+    <header class="ax-head pg-head2">
+      <h2 class="ax-display" id="shHead" data-ax>{heading}</h2>
+      <p class="ax-lead" data-ax>{lead}</p>
+    </header>
+    <ul class="sh-grid">
+      {sheets.map((s, i) => (
+        <li data-ax style={`--ax-d:${i * 0.06}s`}>
+          <button type="button" class="sh-open" data-full={`/media/sheets/sheet-${s.id}.webp`} data-name={`${s.no} ${s.name}`}>
+            <span class="sh-paper">
+              <img src={`/media/sheets/sheet-${s.id}-sm.webp`} width="900" height={Math.round((900 * s.h) / s.w)} alt={`Permit sheet ${s.no}: ${s.name}`} loading="lazy" decoding="async" />
+            </span>
+            <span class="sh-meta"><b>{s.no}</b><span>{s.name}</span><i aria-hidden="true">Open</i></span>
+          </button>
+        </li>
+      ))}
+    </ul>
+    <p class="sh-note" data-ax>We work in the Revit version your project is already in, older releases and the latest one alike, so your file opens on your side without an upgrade.</p>
+  </div>
+
+  <dialog class="sh-box" id="shBox" aria-label="Permit sheet, full size">
+    <div class="sh-box-bar">
+      <p class="sh-box-name"></p>
+      <div class="sh-box-tools">
+        <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+        <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+        <button type="button" class="sh-box-x" aria-label="Close">Close</button>
+      </div>
+    </div>
+    <div class="sh-box-pan"><img alt="" /></div>
+  </dialog>
+</section>
+
+<script>
+  const box = document.getElementById("shBox") as HTMLDialogElement | null;
+  if (box) {
+    const img = box.querySelector("img")!;
+    const pan = box.querySelector<HTMLElement>(".sh-box-pan")!;
+    const name = box.querySelector<HTMLElement>(".sh-box-name")!;
+    let zoom = 1;
+    const apply = () => { img.style.width = `${zoom * 100}%`; };
+    document.querySelectorAll<HTMLButtonElement>(".sh-open").forEach((b) =>
+      b.addEventListener("click", () => {
+        img.src = b.dataset.full!;
+        img.alt = b.querySelector("img")?.alt ?? "";
+        name.textContent = b.dataset.name ?? "";
+        // phones start zoomed in, where a fitted sheet would be unreadable
+        zoom = window.innerWidth < 760 ? 2.5 : 1;
+        apply();
+        box.showModal();
+        pan.scrollTo(0, 0);
+      }),
+    );
+    box.querySelectorAll<HTMLButtonElement>("[data-zoom]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const cx = (pan.scrollLeft + pan.clientWidth / 2) / pan.scrollWidth;
+        const cy = (pan.scrollTop + pan.clientHeight / 2) / pan.scrollHeight;
+        zoom = Math.min(4, Math.max(1, zoom * (b.dataset.zoom === "in" ? 1.5 : 1 / 1.5)));
+        apply();
+        requestAnimationFrame(() => pan.scrollTo(cx * pan.scrollWidth - pan.clientWidth / 2, cy * pan.scrollHeight - pan.clientHeight / 2));
+      }),
+    );
+    img.addEventListener("click", () => { zoom = zoom > 1.01 ? 1 : 2.25; apply(); });
+    box.querySelector(".sh-box-x")!.addEventListener("click", () => box.close());
+    box.addEventListener("click", (e) => { if (e.target === box) box.close(); });
+  }
+</script>
+
+<style>
+  .sh-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
+  .sh-open { display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0; border: 0; background: none; text-align: left; color: inherit; cursor: zoom-in; font: inherit; }
+  .sh-paper { display: block; aspect-ratio: 7 / 5; overflow: hidden; border-radius: var(--ax-r-md); background: #fff; box-shadow: var(--ax-shadow); border: 1px solid var(--ax-line); }
+  .sh-paper img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 30% 30%; transform: scale(1.02); transition: transform 0.7s var(--ax-ease); }
+  .sh-open:hover .sh-paper img, .sh-open:focus-visible .sh-paper img { transform: scale(1.5); }
+  .sh-meta { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 14px 4px 0; }
+  .sh-meta b { font-family: var(--ax-display); font-size: clamp(24px, 2vw, 30px); font-weight: 800; line-height: 1; letter-spacing: 0.01em; }
+  .sh-meta span { grid-column: 1; font-size: 15px; color: var(--ax-text-2); }
+  .sh-meta i { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-style: normal; font-size: 14px; font-weight: 700; padding: 8px 12px; border-radius: var(--ax-r-chip); background: var(--ax-surface-2); }
+  .sh-open:hover .sh-meta i { background: var(--ax-ink); color: #fff; }
+  .sh-note { margin: clamp(28px, 3.2vw, 48px) 0 0; max-width: 62ch; font-size: clamp(17px, 1.4vw, 20px); font-weight: 600; color: var(--ax-text); }
+
+  .sh-box { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #17191e; color: #fff; }
+  .sh-box[open] { display: flex; flex-direction: column; }
+  .sh-box::backdrop { background: #0b0c0f; }
+  .sh-box-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); }
+  .sh-box-name { margin: 0; font-family: var(--ax-display); font-size: clamp(18px, 2vw, 26px); font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sh-box-tools { display: flex; gap: 8px; flex: none; }
+  .sh-box-tools button { min-width: 44px; height: 44px; padding: 0 16px; border: 0; border-radius: var(--ax-r-btn-sm); background: rgba(255, 255, 255, 0.14); color: #fff; font: 700 17px var(--ax-font); cursor: pointer; }
+  .sh-box-tools button:hover { background: rgba(255, 255, 255, 0.26); }
+  .sh-box-pan { flex: 1; min-height: 0; overflow: auto; background: #fff; overscroll-behavior: contain; }
+  .sh-box-pan img { display: block; max-width: none; height: auto; cursor: zoom-in; }
+
+  @media (max-width: 980px) { .sh-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) {
+    .sh-grid { gap: 18px 12px; }
+    .sh-meta { grid-template-columns: 1fr; }
+    .sh-meta i { display: none; }
+    .sh-meta span { font-size: 14px; }
+  }
+  @media (hover: none) { .sh-open:hover .sh-paper img { transform: scale(1.02); } }
+  @media (prefers-reduced-motion: reduce) { .sh-paper img { transition: none; } }
+</style>

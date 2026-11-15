@@ -1,0 +1,60 @@
+/* Fonts are stored with the site (Fontsource), so every visitor gets the same files. */
+@import "@fontsource-variable/big-shoulders/wght.css";
+@import "@fontsource-variable/hanken-grotesk/wght.css";
+@import "/src/styles/ax.css";
+
+/* the header is attached to the top edge: anchors stop just below it */
+html { scroll-padding-top: 76px; font-synthesis: none; -webkit-text-size-adjust: 100%; }
+section[id] { scroll-margin-top: 76px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0; width: 100%; max-width: 100%; min-height: 100vh;
+  /* clip stops sideways scroll without turning the body into a scroll container (keeps sticky sections working) */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+img, video { display: block; max-width: 100%; height: auto; }
+b, strong, th, dt, summary { font-weight: 600; }
+
+/* one clear keyboard focus ring everywhere */
+:is(a, button, summary, input, select, textarea, [tabindex="0"]):focus-visible {
+  outline: 2px solid var(--ax-text); outline-offset: 3px;
+}
+.ax-dark :is(a, button, summary, [tabindex="0"]):focus-visible { outline-color: var(--ax-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* =========================================================
+   TYPE SCALE: one scale for every page.
+   H1, H2 and H3 are tall condensed capitals (Big Shoulders). H4 and text are the reading font.
+========================================================= */
+:root {
+  --h1: clamp(58px, 10.4vw, 176px);
+  --h2: clamp(44px, 6.6vw, 104px);
+  --h3: clamp(25px, 2.3vw, 34px);
+  --h4: 16px;
+}
+h1, h2 { font-family: var(--ax-display); font-weight: 800; text-transform: uppercase; letter-spacing: 0; margin: 0; }
+h1 { font-size: var(--h1); line-height: 0.86; }
+h2 { font-size: var(--h2); line-height: 0.9; }
+/* sub headings speak in the same voice as the headlines, one step lighter */
+h3 { font-family: var(--ax-display); font-weight: 700; text-transform: uppercase; font-size: var(--h3); line-height: 0.98; letter-spacing: 0.005em; margin: 0; }
+h4 { font-family: var(--ax-font); font-weight: 700; font-size: var(--h4); line-height: 1.35; margin: 0; }
+.ax-h1--sm { font-size: clamp(48px, 7.6vw, 124px); }
+/* phones: calmer headings so nothing runs to four lines */
+@media (max-width: 600px) {
+  :root { --h1: 40px; --h2: 30px; --h3: 23px; }
+  h1, .ax-h1--sm { font-size: 40px; line-height: 0.94; }
+  h2 { line-height: 0.96; }
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

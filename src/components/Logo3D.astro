@@ -1,0 +1,44 @@
+---
+// The company logo as a real 3D object (the studio's own model). It turns slowly, leans toward
+// the pointer, and can be dragged round. Loaded only when it comes near the screen; without
+// WebGL or with reduced motion the flat logo is shown instead.
+import Logo from "./Logo.astro";
+---
+
+<div class="l3" id="logo3d">
+  <div class="l3-flat"><Logo /></div>
+  <canvas class="l3-canvas" aria-label="The Axys3D logo in 3D. Drag to turn it." role="img"></canvas>
+  <p class="l3-hint" aria-hidden="true">Drag to turn</p>
+</div>
+
+<style is:global>
+  .l3 { position: relative; aspect-ratio: 5 / 3; min-height: 220px; }
+  .l3-flat { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ax-text); transition: opacity 0.6s ease; }
+  .l3-flat .ax-logo { width: 72%; height: auto; }
+  .l3-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; cursor: grab; touch-action: pan-y; transition: opacity 0.8s ease; }
+  .l3-canvas:active { cursor: grabbing; }
+  .l3.is-live .l3-canvas { opacity: 1; }
+  .l3.is-live .l3-flat { opacity: 0; }
+  .l3-hint { position: absolute; right: 0; bottom: 0; margin: 0; font: 600 13.5px/1 var(--ax-font); text-transform: uppercase; color: var(--ax-text-3); opacity: 0; transition: opacity 0.6s ease; }
+  .l3.is-live .l3-hint { opacity: 1; }
+</style>
+
+<script>
+  const box = document.getElementById("logo3d");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const saveData = (navigator as any).connection?.saveData === true;
+  if (box && !reduce && !saveData) {
+    const io = new IntersectionObserver(async ([e], ob) => {
+      if (!e.isIntersecting) return;
+      ob.disconnect();
+      try {
+        const { createLogo } = await import("../scripts/logo3d");
+        await createLogo(box.querySelector("canvas")!, "/models/logo.glb");
+        box.classList.add("is-live");
+      } catch (err) {
+        console.error("3D logo could not start", err);
+      }
+    }, { rootMargin: "200px 0px" });
+    io.observe(box);
+  }
+</script>

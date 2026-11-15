@@ -1,0 +1,14 @@
+# Hostinger (Apache / LiteSpeed) settings for the static site.
+
+# Unknown addresses show our own 404 page.
+ErrorDocument 404 /404.html
+
+# Never serve the mail settings or the mail logs to a browser.
+<Files "mail-config.php">
+  Require all denied
+</Files>
+RedirectMatch 403 ^/mail/logs/
+RedirectMatch 403 ^/mail/PHPMailer/
+
+# Old case study addresses go to the Work page.
+RedirectMatch 301 ^/work/.+ /visuals/

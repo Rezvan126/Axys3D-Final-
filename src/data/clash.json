@@ -1,0 +1,178 @@
+{
+ "tested": {
+  "structure": 54,
+  "services": 160,
+  "pairs_checked": 19
+ },
+ "tolerance_mm": 12,
+ "clashes": 9,
+ "touches_ignored": 5,
+ "groups": {
+  "Framing against Ventilation": 2,
+  "Foundations against Ventilation": 7
+ },
+ "rows": [
+  {
+   "id": "C01",
+   "a": {
+    "cat": "Framing",
+    "type": "Floor Wood Joist 10\" Existing Wood Floor"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Exist Wall Vent 9\"H X 14\"W"
+   },
+   "depth_mm": 61,
+   "at": [
+    10.68,
+    8.4,
+    5.17
+   ]
+  },
+  {
+   "id": "C02",
+   "a": {
+    "cat": "Framing",
+    "type": "Floor Wood Joist 10\" Existing Wood Floor"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Exist Wall Vent 9\"H X 14\"W"
+   },
+   "depth_mm": 61,
+   "at": [
+    11.31,
+    8.4,
+    5.16
+   ]
+  },
+  {
+   "id": "C03",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    27.49,
+    9.35,
+    4.97
+   ]
+  },
+  {
+   "id": "C04",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    23.43,
+    9.35,
+    4.97
+   ]
+  },
+  {
+   "id": "C05",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    24.74,
+    9.35,
+    4.96
+   ]
+  },
+  {
+   "id": "C06",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    26.22,
+    9.35,
+    4.97
+   ]
+  },
+  {
+   "id": "C07",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    24.32,
+    4.44,
+    4.99
+   ]
+  },
+  {
+   "id": "C08",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    25.63,
+    4.44,
+    5.0
+   ]
+  },
+  {
+   "id": "C09",
+   "a": {
+    "cat": "Foundations",
+    "type": "Basic Wall Exterior 6\" Concrete stem wall"
+   },
+   "b": {
+    "disc": "mechanical",
+    "cat": "Ventilation",
+    "type": "Wall Vent Parametric Wall Vent 4\"H X 12\"W"
+   },
+   "depth_mm": 30,
+   "at": [
+    22.93,
+    4.43,
+    5.0
+   ]
+  }
+ ]
+}

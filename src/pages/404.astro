@@ -1,0 +1,56 @@
+---
+// Shown for any address that does not exist (the host serves dist/404.html).
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+const links = [
+  { label: "Home", href: "/" },
+  { label: "See our work", href: "/visuals/" },
+  { label: "Read the guides", href: "/insights/" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title="Page not found | Axys3D" description="This page does not exist. Find your way back to Axys3D." noindex />
+  </head>
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg nf">
+      <section class="pg-top nf-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 class="ax-display ax-h1--sm">This page is not on the drawings.</h1>
+          <div class="pg-top-row">
+            <p class="ax-lead">The link may be old or mistyped. Pick up from one of these.</p>
+            <div class="pg-act">
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
+            </div>
+          </div>
+          <ul class="nf-links" aria-label="Other places to go">
+            {links.map((l) => <li><a class="ax-link" href={l.href}>{l.label}</a></li>)}
+          </ul>
+        </div>
+        <figure class="ax-wrap pg-hero-media">
+          <img src="/media/adu-10.webp" srcset="/media/adu-10-sm.webp 800w, /media/adu-10.webp 1920w" sizes="(max-width: 1400px) 94vw, 1280px" width="1920" height="1080" alt="Exterior render of a residential unit by Axys3D" decoding="async" />
+        </figure>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .nf-top { padding-bottom: var(--ax-section); }
+  .nf-links { list-style: none; margin: clamp(18px, 2.4vw, 32px) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 clamp(20px, 3vw, 44px); }
+  @media (max-width: 560px) {
+    .nf-links { width: 100%; flex-direction: column; margin-top: 14px; border-bottom: 1px solid var(--ax-line-strong); }
+    .nf-links li { border-top: 1px solid var(--ax-line-strong); }
+    .nf-links .ax-link { width: 100%; min-height: 52px; justify-content: space-between; font-size: 18px; }
+  }
+</style>
