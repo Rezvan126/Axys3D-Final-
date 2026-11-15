@@ -1,0 +1,388 @@
+{
+ "elements": 700,
+ "triangles": 270666,
+ "size": [
+  10.29,
+  26.25,
+  9.7
+ ],
+ "bytes": 1684304,
+ "levels": [
+  {
+   "n": "Ground floor",
+   "f": 0,
+   "e": 2.07,
+   "parts": 172
+  },
+  {
+   "n": "Second floor",
+   "f": 1,
+   "e": 5.34,
+   "parts": 229
+  },
+  {
+   "n": "Mezzanine",
+   "f": 1,
+   "e": 6.12,
+   "parts": 13
+  },
+  {
+   "n": "Third floor",
+   "f": 2,
+   "e": 6.66,
+   "parts": 265
+  },
+  {
+   "n": "Roof",
+   "f": 3,
+   "e": 8.08,
+   "parts": 21
+  }
+ ],
+ "disciplines": {
+  "interiors": {
+   "elements": 85,
+   "triangles": 38810,
+   "categories": {
+    "Casework": 34,
+    "Furniture": 8,
+    "Generic models": 36,
+    "Specialty equipment": 7
+   }
+  },
+  "architecture": {
+   "elements": 450,
+   "triangles": 128366,
+   "categories": {
+    "Fascias": 3,
+    "Railings": 27,
+    "Doors": 37,
+    "Stairs": 8,
+    "Walls": 236,
+    "Floors": 30,
+    "Roofs": 13,
+    "Ceilings": 9,
+    "Site": 2,
+    "Windows": 28,
+    "Curtain walls": 57
+   }
+  },
+  "plumbing": {
+   "elements": 31,
+   "triangles": 87567,
+   "categories": {
+    "Plumbing fixtures": 26,
+    "Pipe accessories": 5
+   }
+  },
+  "mechanical": {
+   "elements": 4,
+   "triangles": 1216,
+   "categories": {
+    "Duct accessories": 1,
+    "Mechanical equipment": 3
+   }
+  },
+  "electrical": {
+   "elements": 4,
+   "triangles": 3767,
+   "categories": {
+    "Electrical equipment": 3,
+    "Electrical fixtures": 1
+   }
+  },
+  "structure": {
+   "elements": 126,
+   "triangles": 10940,
+   "categories": {
+    "Structural columns": 5,
+    "Structural framing": 121
+   }
+  }
+ },
+ "finishes": {
+  "metal": 93875,
+  "black": 86869,
+  "porcelain": 44305,
+  "white": 20218,
+  "oak": 10308,
+  "woodfloor": 4709,
+  "glass": 2556,
+  "brass": 2345,
+  "fabric": 1890,
+  "timber": 1485,
+  "siding": 748,
+  "tile": 502,
+  "concrete": 484,
+  "stucco": 134,
+  "stone": 116,
+  "ground": 68,
+  "roof": 54
+ },
+ "types": {
+  "Casework": {
+   "Casework": 3,
+   "Kitchen Space filler": 3,
+   "Facade Trim": 2,
+   "Flat Moulding": 2,
+   "Base Cabinet Double Door Sink Unit, 36\"": 2,
+   "Counter Top without back, 24\" Depth": 2,
+   "Wall Cabinet Double Doors, 30 H 30 D": 2,
+   "2 Door Tall Cabinet, 96 H 24 D": 2,
+   "Counter Top, 24\" Depth": 1,
+   "Base Cabinet Double Door and 2 Drawer, 39\"": 1,
+   "Countertop L, 1.5 x 24": 1,
+   "Countertop Straight, 1.5 x 24": 1,
+   "24in cabinet Double Doors Sink, Bathroom Square 24 H 21 D": 1,
+   "4 Doors 36in, 36 H 24 D": 1,
+   "Double Doors 36 in Drawer, 36 H 24 D": 1,
+   "Double Doors 64.63 in, 36 H 24 D": 1,
+   "Single Door Blind Corner Pullout, 36 H 24 D": 1,
+   "Wall Cabinet Double Door, 30 H 30 D": 1,
+   "14 in drawer, 36 H 12 D": 1,
+   "21in 3 Drawers, 36 H 12 D": 1,
+   "22 in Garbage Pullout, 36 H 12 D": 1,
+   "5 Drawers Standing Cabinet 84 in, 36 H 24 D": 1,
+   "Drawers Standing Cabinet, 36 H 24 D": 1,
+   "Wall Window Simple Straight": 1
+  },
+  "Ceilings": {
+   "Compound Ceiling, Generic Ceiling 2\" Unknown Thickness": 7,
+   "Compound Ceiling, 2' x 4' ACT System": 2
+  },
+  "Curtain walls": {
+   "Rectangular Mullion, 1\" x 1\" Type": 29,
+   "System Panel, Glazed": 10,
+   "Rectangular Mullion, 4\" x 2\"": 8,
+   "Rectangular Mullion, 1\" x 1/2\"": 7,
+   "Rectangular Mullion, 2\" x 1\"": 1,
+   "Rectangular Mullion, 2\" x 1\" Type": 1,
+   "Rectangular Mullion, 1\" x 1/2\" Type": 1
+  },
+  "Doors": {
+   "Door Interior Single Flush Panel Wood, 32\" x 81\"": 3,
+   "Single Flush, 34\" x 80\"": 2,
+   "Door Interior Single Flush Panel Wood, 28\" x 80": 2,
+   "Door Interior Single Flush Panel Wood, 32\" x 80\"": 2,
+   "Door Interior Single Pocket 2 Panel Wood, 28\" x 80\"": 2,
+   "Single Flush, 30\" x 80\"": 2,
+   "Door Exterior Single Entry Half Flat Glass Wood Clad, 32\" x 81\"": 2,
+   "Door Interior Single Flush Panel Wood, 28\" x 79\"": 2,
+   "Doors Bifolding, Door Bifolding 61\" x 81\"": 2,
+   "Sliding 1 Panel Milgard Trinsic Series Door, 80\" x 60\"": 2,
+   "AV200 Raynor Garage Door, Normal Headroom": 1,
+   "Aluprof MB 86N SI PanelDoor AP27 Sgl Out Open R 00761, 900 x 2100 mm": 1,
+   "Door Interior Single Pocket 2 Panel Wood, 34\" x 80\"": 1,
+   "Single Flush, 36\" x 80\"": 1,
+   "Door Garage 02, 180\" x 72\"": 1,
+   "Door Interior Single Flush Panel Wood, 29\" x 80\"": 1,
+   "Single Flush, 32\" x 80\"": 1,
+   "Door Double Sliding Glass, 70\" x 78\"": 1,
+   "Door Opening, 32\" x 81\"": 1,
+   "Door Interior Single Flush Panel Wood, 19\" x 46\"": 1,
+   "Door Interior Single Flush Panel Wood, 19\" x 80\"": 1,
+   "Door Interior Single Flush Panel Wood, 30\" x 81\"": 1,
+   "Doors Bifolding, Door Bifolding 49\" x 80\"": 1,
+   "Doors Bifolding, Door Bifolding 59\" x 81\"": 1,
+   "Single Flush, 24\" x 80\"": 1,
+   "Sliding 1 Panel Milgard Trinsic Series Door, 80\" x 72\"": 1
+  },
+  "Duct accessories": {
+   "Duct Accessories 01": 1
+  },
+  "Electrical equipment": {
+   "Electrical Box Rectangular": 2,
+   "Oven 01": 1
+  },
+  "Electrical fixtures": {
+   "Hafele Appliances Wine cabinet Liebherr WTes 1672, Freestanding Winecabinet": 1
+  },
+  "Fascias": {
+   "Fascia Flat 1x14": 3
+  },
+  "Floors": {
+   "Floor, Generic 6\" Unknown thickness": 5,
+   "Floor, Generic 2\"": 3,
+   "Floor, Generic 1\"": 3,
+   "Floor, Wood Joist 10\" Wood Finish": 3,
+   "Floor, Concrete 6\" Thick new": 2,
+   "Floor, Generic 14\" Unknown thickness": 2,
+   "Floor, Concrete 10\"": 1,
+   "Floor, Wood Joist 10\" Wood Finish 2 horiz": 1,
+   "Floor, 12 x 12 Checkerboard Matte Porcelain Tile": 1,
+   "Floor, Generic 6\" Unknown Structure": 1,
+   "Floor, Generic 11\"": 1,
+   "Floor, Generic 14\" Unknown Structure": 1,
+   "Floor, Generic 4\"": 1,
+   "Floor, Generic New Wood Floor": 1,
+   "Floor, Tile Finish": 1,
+   "Floor, Generic 16\"": 1,
+   "Floor, Porcelain Tile 16x32 Surface Art Impact": 1,
+   "Floor, Wood Joist 14\" Tile Finish": 1
+  },
+  "Furniture": {
+   "Furniture": 4,
+   "Bed Standard, Double 54\" x 75\"": 2,
+   "BI 48SS TH": 1,
+   "Bed Standard, King 78\" x 75\"": 1
+  },
+  "Generic models": {
+   "GM Shelf Corner": 13,
+   "GM Shelf": 10,
+   "GM Vertical divider, 1 1/2\" THK": 5,
+   "GM Vertical divider, 0 1/4\" THK": 3,
+   "SCW LB Casework Body, Pantry Cabinet H 95\" x D 15\"": 2,
+   "SCW LB Casework Body, Pantry Cabinet H 95\" x D 15\" Long": 1,
+   "DF36650 S P": 1,
+   "Shower Pan Rectangular": 1
+  },
+  "Mechanical equipment": {
+   "Exhaust fan panasonic whisper green select (fv 1115vk2), FV 1115VK2 4 50CFM": 3
+  },
+  "Pipe accessories": {
+   "Pipe Accessories 01": 1,
+   "Pipe Accessories 05": 1,
+   "Pipe Accessories 02": 1,
+   "Pipe Accessories 03": 1,
+   "Pipe Accessories 04": 1
+  },
+  "Plumbing fixtures": {
+   "Lavatory Oval 01": 3,
+   "Double Vanity 72 Inch MD 2172": 2,
+   "Double Vanity 72 in": 2,
+   "Bath Left Drain Kohler Villager 715, Cast Iron 0 White": 1,
+   "Shower Trims Delta Nicoli Monitor 14 Series H2Okinetic, Stainless": 1,
+   "Glacier Bay Delchester 30 in Vanity": 1,
+   "Toto BM 00552 CST446CEMG, CST446CEMG": 1,
+   "Bath Tub 02": 1,
+   "Faucet Kitchen Kohler Crue K 22972, BL Matte Black": 1,
+   "Kitchen Sinks Roca Praga 790mm Stainless steel single bowl": 1,
+   "Kitchen Sinks Roca Roma 500 Stainless steel single bowl": 1,
+   "Kitchen Taps Mixers hansgrohe Joleena Single l, Chrome 000": 1,
+   "Sanitary Taps Mixers hansgrohe 71710001 Talis E 110 Sin, Chrome 000": 1,
+   "Shower Trims Delta Nicoli Monitor 14 Series H2Okinetic, Chrome": 1,
+   "Shower Trims Delta Nicoli Monitor 14 Series Tub and Sho, Champagne Bronze": 1,
+   "Sink Under Mount Lavatory Kohler Caxton Oval K 2205, 0 White": 1,
+   "Sink Kitchen Double (F)": 1,
+   "BM 00455 MS992CUMFG": 1,
+   "BM 00623 MS7631CEMFG": 1,
+   "Plumbing Fixtures Shower Head": 1,
+   "Toilet Domestic 01": 1,
+   "Plumbing Drainage Menzies Metal Clamp Tite Box Scupper Aluminum, 3\" downspout": 1
+  },
+  "Railings": {
+   "Railing, Handrail Rectangular Internal Type": 5,
+   "Support Metal Circular": 4,
+   "Top Rail Type, Rectangular 1/4\"x1 1/2\"": 3,
+   "Handrail Type, Circular 1\"": 2,
+   "Handrail Type, Circular 1\" 2 NoSupport": 2,
+   "Handrail Type, Rectangular 3 1/2\"x1 1/4\"": 2,
+   "Railing, Handrail Circular Internal Type": 2,
+   "Top Rail Type, Circular 1 1/2\"": 2,
+   "Railing, Ultralox Victorian Post To Post, Square Picket Rail, 3\"": 1,
+   "Top Rail Type, Ultralox Top Rail Victorian Combination Black": 1,
+   "Railing, Morad AB S B 110cm": 1,
+   "Top Rail Type, Rectangular 1 1/2\"x1 1/2\"": 1,
+   "Top Rail Type, Rectangular 3 1/2\"x1 1/4\"": 1
+  },
+  "Roofs": {
+   "Basic Roof, Existing Wood Rafter 10\" TPO": 5,
+   "Basic Roof, Wood Rafter 10\" TPO New": 5,
+   "Basic Roof, Wood joist\" TPO tapered insulation": 2,
+   "Basic Roof, Wood Canopy Roof": 1
+  },
+  "Site": {
+   "Toposolid": 2
+  },
+  "Specialty equipment": {
+   "Dishwasher 02": 2,
+   "Dryer, 27\" x 25\" x 35\"": 1,
+   "Washer 320": 1,
+   "Cook Top 4 Unit": 1,
+   "Refrigerator 01": 1,
+   "Shower Door Kohler Levity K 706004": 1
+  },
+  "Stairs": {
+   "Assembled Stair, 7\" max riser 11\" tread Type": 5,
+   "Cast In Place Stair, Monolithic Stair": 2,
+   "Assembled Stair, 7.75\" max riser 10.5\" tread 2024": 1
+  },
+  "Structural columns": {
+   "HSS Round Hollow Structural Section Column, HSS4 1/2X": 4,
+   "Timber Column, 5x5": 1
+  },
+  "Structural framing": {
+   "Timber, 1 1/2x13": 81,
+   "Round Bars, RB 1 1/2": 12,
+   "Timber, 1/2x7": 8,
+   "Timber, 1 1/2x9": 6,
+   "Timber, 5 1/2x11": 3,
+   "Timber, 1 1/2x8 1/2": 1,
+   "Timber, 2x13": 1,
+   "Timber, 5 1/2x12 1/2": 1,
+   "Timber, 7x11": 1,
+   "Timber, 7x12 1/2": 1,
+   "Timber, 1 1/2x10": 1,
+   "Timber, 1 1/2x12": 1,
+   "Timber, 1 1/2x12 1/2": 1,
+   "Timber, 1 1/2x5": 1,
+   "Timber, 1 1/2x6": 1,
+   "Timber, 4 1/2x12": 1
+  },
+  "Walls": {
+   "Basic Wall, Generic 4 1/2\"": 30,
+   "Basic Wall, Generic 6 3/4\" New Interior Wall": 17,
+   "Basic Wall, Wall Existing Unknown Thickness 2\"": 15,
+   "Basic Wall, Generic 5\"": 13,
+   "Basic Wall, Wall Existing Unknown Thickness 5\"": 13,
+   "Basic Wall, Porcelain Tile 16x32 Surface Art Impact": 13,
+   "Basic Wall, Generic 5 1/2\"": 12,
+   "Basic Wall, Generic 0 1/2\"": 11,
+   "Basic Wall, Generic 6\"": 10,
+   "Basic Wall, Generic 8\"": 10,
+   "Basic Wall, Wall Existing Unknown Thickness 6\"": 9,
+   "Basic Wall, Travertine Porcelain Tile": 7,
+   "Basic Wall, Generic 7\" Vertical Siding": 6,
+   "Basic Wall, Generic 9 1/2\"": 6,
+   "Basic Wall, Interior 4 1/2\"": 6,
+   "Basic Wall, Generic 6 1/2\"": 5,
+   "Basic Wall, Wall Existing Unknown Thickness 4 1/2\"": 5,
+   "Basic Wall, Generic 4\"": 4,
+   "Basic Wall, Generic 9\"": 4,
+   "Basic Wall, Wall Existing Unknown Thickness 8 1/2\"": 4,
+   "Basic Wall, Generic 4 1/2\" New Interior Wall": 4,
+   "Basic Wall, Generic 6 3/4\" New Stucco Exterior wall": 3,
+   "Basic Wall, Generic 2\"": 3,
+   "Basic Wall, Wall Existing Unknown Thickness 7 1/2\"": 3,
+   "Basic Wall, Generic 7\" New": 3,
+   "Basic Wall, Wall Existing Unknown Thickness 4\"": 3,
+   "Basic Wall, Generic 1 1/2\"": 2,
+   "Basic Wall, Wall Existing Unknown Thickness 9\"": 2,
+   "Basic Wall, Generic 3 1/2\"": 2,
+   "Basic Wall, Generic 3\"": 2,
+   "Basic Wall, Ceramic Tile 2x6 Cleo": 2,
+   "Basic Wall, Bronze Stucco 10\"": 1,
+   "Basic Wall, glass opaque": 1,
+   "Basic Wall, Generic 1\"": 1,
+   "Basic Wall, Generic 7\"": 1,
+   "Basic Wall, Wall Existing Unknown Thickness 8\"": 1,
+   "Basic Wall, color Brushed nickel wall": 1,
+   "Basic Wall, Wall Existing Unknown Thickness 6 1/2\"": 1
+  },
+  "Windows": {
+   "Windows Curtain Wall, Window Type": 8,
+   "Marvin Window, 59\" x 96\"h": 4,
+   "Skylight Flat, 24\" x 48\"": 4,
+   "Fixed Sash, 18\" x 64\"": 2,
+   "Slider with Trim Wood, 48\" x 26\"": 2,
+   "Marvin Window, 84\" x 90\" high Ebony": 1,
+   "Fixed, 60\" x 48\"": 1,
+   "Fixed, 71\" x 48\"": 1,
+   "Slider with Trim Wood, 41\" x 37\"": 1,
+   "Fixed, 48\" x 27\"": 1,
+   "I Casement Dbl no Trim, 41\"x26\"": 1,
+   "I Casement Dbl no Trim, 50\" x 39": 1,
+   "I Casement Dbl no Trim, 50\" x 40\"": 1
+  }
+ }
+}

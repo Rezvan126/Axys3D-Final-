@@ -87,15 +87,17 @@ for r, _, fs in os.walk(OUT):
             if "_astro/" in t:
                 open(fp, "w", encoding="utf8", newline="").write(t.replace("_astro/", "assets/"))
 
-# the artifact host does not serve .glb files, so the two models travel as generic binary files
-for name in ("adu", "logo"):
-    os.rename(os.path.join(OUT, "models", name + ".glb"), os.path.join(OUT, "models", name + ".wasm"))
-for f in os.listdir(os.path.join(OUT, "assets")):
-    if f.endswith(".js"):
-        fp = os.path.join(OUT, "assets", f)
-        t = open(fp, encoding="utf8").read()
-        if ".glb" in t:
-            open(fp, "w", encoding="utf8", newline="").write(t.replace("models/adu.glb", "models/adu.wasm").replace("models/logo.glb", "models/logo.wasm"))
+# the artifact host does not serve .glb files, so every model travels as a generic binary file
+for f in os.listdir(os.path.join(OUT, "models")):
+    if f.endswith(".glb"):
+        os.rename(os.path.join(OUT, "models", f), os.path.join(OUT, "models", f[:-4] + ".wasm"))
+for r, _, fs in os.walk(OUT):
+    for f in fs:
+        if f.endswith((".js", ".html")):
+            fp = os.path.join(r, f)
+            t = open(fp, encoding="utf8").read()
+            if ".glb" in t:
+                open(fp, "w", encoding="utf8", newline="").write(re.sub(r"(models/[\w.-]+?)\.glb", r"\1.wasm", t))
 
 n = sum(len(f) for _, _, f in os.walk(OUT))
 size = sum(os.path.getsize(os.path.join(r, f)) for r, _, fs in os.walk(OUT) for f in fs)

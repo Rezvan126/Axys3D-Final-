@@ -1,0 +1,15 @@
+' Revit journal: open a project, make the default 3D view, export it to FBX, quit without saving.
+' Run: "C:\Program Files\Autodesk\Revit 2026\Revit.exe" <copy of this file with the two paths filled in> /nosplash
+' Paths are filled in by tools/revit-export.sh (RVT_PATH, FBX_PATH).
+Dim Jrn
+Set Jrn = CrsJournalScript
+Jrn.Directive "DebugMode", "PerformAutomaticActionInErrorDialog", 1
+Jrn.Directive "DebugMode", "PermissiveJournal", 1
+Jrn.Command "Ribbon" , "Open an existing project , ID_REVIT_FILE_OPEN"
+Jrn.Data "File Name" , "IDOK" , "RVT_PATH"
+Jrn.Data "WorksetConfig" , "Custom" , 0
+Jrn.Command "Ribbon" , "Create a default 3D orthographic view. , ID_VIEW_DEFAULT_3DVIEW"
+Jrn.Command "Ribbon" , "Export a 3D view to an FBX file , ID_EXPORT_FBX"
+Jrn.Data "File Name" , "IDOK" , "FBX_PATH"
+Jrn.Command "Internal" , "Quit the application; prompts to save projects , ID_APP_EXIT"
+Jrn.Data "TaskDialogResult" , "Do you want to save changes?", "No", "IDNO"

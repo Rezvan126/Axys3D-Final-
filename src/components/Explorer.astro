@@ -3,13 +3,41 @@
 // A real project model, exported from our own Revit file, walked through the six stages we deliver.
 // The section pins while the visitor scrolls; each step changes how the same model is shown.
 // Without WebGL, with reduced motion or with data saving on, it becomes a plain list with the final render.
+import model from "../data/house-model.json"; // written by tools/build-model-navis.py: real counts, never typed in by hand
+
+// FINAL STAGE MEDIA: the still and the film clips shown in the last stage ("Render").
+// Change the files and labels here and nowhere else.
+const render = {
+  still: {
+    // the same split level house as the model above, so the last stage shows what that model became
+    src: "/media/amber-3.webp",
+    srcset: "/media/amber-3-sm.webp 800w, /media/amber-3.webp 1920w",
+    width: 1920,
+    height: 1080,
+    alt: "Final render of the split level residence entry and garage at golden hour",
+  },
+  clips: [
+    { label: "Front", src: "/media/amber-film-hero.mp4" },
+    { label: "Street", src: "/media/amber-film-wide.mp4" },
+    { label: "Detail", src: "/media/amber-film-detail.mp4" },
+  ],
+};
+const modelUrl = "/models/house.glb";
+
+// the floors a visitor can look into, from the levels in the model (a mezzanine shows with the floor it opens onto)
+const floors = model.levels
+  .filter((l, i, all) => l.f < 3 && all.findIndex((x) => x.f === l.f) === i)
+  .sort((a, b) => a.f - b.f)
+  .map((l) => ({ f: l.f, label: l.n.replace(/ floor$/i, "") }));
+const count = (n: number) => n.toLocaleString("en-US");
+
 const stages = [
   { key: "Sketch", title: "It starts with your sketch.", text: "Send a hand sketch, a PDF or a survey. We check the brief and confirm scope before any modeling starts.", link: "/contact/", cta: "Send your drawings" },
   { key: "Drawings", title: "Drawings cut from one model.", text: "Plans, sections and elevations all come from the same coordinated Revit model, so they never disagree with each other.", link: "/services/revit-production/", cta: "Revit production" },
-  { key: "3D model", title: "Built in 3D, to your standards.", text: "Walls, roofs, stairs and openings modeled accurately in your templates. Click any part to fly in and see what it is.", link: "/services/3d-modeling/", cta: "3D modeling" },
-  { key: "BIM detail", title: "Every element carries its data.", text: "Structure, electrical, plumbing and ventilation sit in the same model. Click any element to zoom in and read its data.", link: "/services/bim-production/", cta: "BIM production" },
+  { key: "3D model", title: "Built in 3D, inside and out.", text: "Walls, stairs, joinery and fittings modeled accurately in your templates. Lift the roof, pick a floor or slice the house open, then click any part.", link: "/services/3d-modeling/", cta: "3D modeling" },
+  { key: "BIM detail", title: "Every element carries its data.", text: `${count(model.elements)} elements on ${floors.length} floors, each with its category, type and level. Structure, plumbing and services sit in the same model. Click any element to read it.`, link: "/services/bim-production/", cta: "BIM production" },
   { key: "Materials", title: "Materials and light.", text: "Finishes, glazing and lighting are set up on the approved model, so what you approve is what gets rendered.", link: "/services/3ds-max-production/", cta: "Scene production" },
-  { key: "Render", title: "Delivered as stills and film.", text: "Final renders and cinematic shots, produced in house from the same model you just turned. Pick an angle.", link: "/contact/", cta: "Start a project", main: true },
+  { key: "Render", title: "Delivered as stills and film.", text: "Final renders and cinematic shots, produced in house from the approved model. Pick an angle.", link: "/contact/", cta: "Start a project", main: true },
 ];
 const discs = [
   { id: "architecture", label: "Architecture" },
@@ -18,13 +46,13 @@ const discs = [
   { id: "mechanical", label: "Ventilation" },
   { id: "plumbing", label: "Plumbing" },
   { id: "interiors", label: "Interiors" },
-];
+].filter((d) => d.id in model.disciplines); // only the layers this model has parts in
 ---
 
-<section class="xp ax-dark" id="explore" aria-labelledby="xpTitle" style={`--n:${stages.length}`}>
+<section class="xp ax-dark" id="explore" aria-labelledby="xpTitle" style={`--n:${stages.length}`} data-model={modelUrl}>
   <div class="xp-intro ax-wrap">
     <h2 class="ax-display" id="xpTitle" data-ax>One building.<br />Every stage.</h2>
-    <p class="ax-lead" data-ax>This is what your project looks like in our hands. A real building from our own Revit file: scroll it from first sketch to final film, turn it, and click any part to inspect it.</p>
+    <p class="ax-lead" data-ax>This is what your project looks like in our hands. A real building from our own Revit file: scroll it from first sketch to final film, turn it, open it up and click any part to inspect it.</p>
     <a class="ax-btn ax-btn--glass ax-btn--sm xp-skip" href="#how" data-ax>Skip the walkthrough</a>
   </div>
 
@@ -32,12 +60,12 @@ const discs = [
     <div class="xp-pin">
       <div class="xp-stage">
         <canvas class="xp-canvas" aria-hidden="true"></canvas>
-        <img class="xp-render" src="/media/adu-1.webp" srcset="/media/adu-1-sm.webp 800w, /media/adu-1.webp 1536w" sizes="100vw" width="1536" height="1024" alt="Final render of the two storey residence at golden hour" loading="lazy" decoding="async" />
+        <img class="xp-render" src={render.still.src} srcset={render.still.srcset} sizes="100vw" width={render.still.width} height={render.still.height} alt={render.still.alt} loading="lazy" decoding="async" />
         <video class="xp-clip" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
         <div class="xp-views" role="group" aria-label="Camera angle" hidden>
-          <button type="button" data-clip="/media/adu-film-hero.mp4" aria-pressed="true">Front</button>
-          <button type="button" data-clip="/media/adu-film-wide.mp4" aria-pressed="false">Wide</button>
-          <button type="button" data-clip="/media/adu-film-detail.mp4" aria-pressed="false">Detail</button>
+          {render.clips.map((c, i) => (
+            <button type="button" data-clip={c.src} aria-pressed={i === 0 ? "true" : "false"}>{c.label}</button>
+          ))}
         </div>
         <div class="xp-loading" role="status"><span class="xp-loading-bar"><i></i></span><span class="xp-loading-text">Loading the model</span></div>
         <p class="xp-hint" aria-hidden="true"><span>Drag to turn</span><span class="xp-hint-click">Click any part to inspect it</span></p>
@@ -52,7 +80,7 @@ const discs = [
             <span class="xp-call-type"></span>
             <dl>
               <div><dt>Size</dt><dd class="xp-call-size"></dd></div>
-              <div><dt>Phase</dt><dd class="xp-call-phase"></dd></div>
+              <div><dt>Level</dt><dd class="xp-call-level"></dd></div>
               <div><dt>In this model</dt><dd class="xp-call-same"></dd></div>
             </dl>
           </div>
@@ -64,13 +92,52 @@ const discs = [
           <span class="xp-pick-type"></span>
         </div>
 
-        <div class="xp-layers" hidden>
-          <span class="xp-layers-h"><b class="xp-total">0</b> model elements</span>
-          {discs.map((d) => (
-            <button type="button" class="xp-layer" data-disc={d.id} aria-pressed="true">
-              <i></i><span>{d.label}</span><em>0</em>
-            </button>
-          ))}
+        <!-- look inside: floors, roof and a travelling section, plus the BIM layer switches.
+             Wide screens: two small panels over the model. Phones: one sheet under the picture, opened by the button. -->
+        <button type="button" class="xp-tools-btn" aria-expanded="false" aria-controls="xpTools" hidden>
+          <span class="xp-tools-btn-a">Look inside</span><span class="xp-tools-btn-b">Layers and cut away</span>
+        </button>
+        <div class="xp-tools" id="xpTools">
+          <div class="xp-cut" role="group" aria-label="Look inside the building" hidden>
+            <div class="xp-cut-top">
+              <span class="xp-cut-h">Look inside</span>
+              <button type="button" class="xp-cut-reset" hidden>Reset</button>
+              <button type="button" class="xp-tools-x" aria-label="Close"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg></button>
+            </div>
+            <div class="xp-seg xp-seg--floors" role="group" aria-label="Floors shown">
+              <button type="button" data-floor="-1" aria-pressed="true">All</button>
+              {floors.map((f) => (
+                <button type="button" data-floor={f.f} aria-pressed="false">{f.label}</button>
+              ))}
+            </div>
+            <div class="xp-row">
+              <span id="xpRoofL">Roof</span>
+              <div class="xp-seg" role="group" aria-labelledby="xpRoofL">
+                <button type="button" data-roof="on" aria-pressed="true">On</button>
+                <button type="button" data-roof="off" aria-pressed="false">Off</button>
+              </div>
+            </div>
+            <div class="xp-row">
+              <span id="xpAxisL">Slice</span>
+              <div class="xp-seg" role="group" aria-labelledby="xpAxisL">
+                <button type="button" data-axis="0" aria-pressed="true">Lengthways</button>
+                <button type="button" data-axis="1" aria-pressed="false">Across</button>
+              </div>
+            </div>
+            <label class="xp-slide">
+              <span>Depth</span>
+              <input type="range" min="0" max="100" step="1" value="0" aria-label="How far the slice cuts into the house" />
+              <output>Off</output>
+            </label>
+          </div>
+          <div class="xp-layers" hidden>
+            <span class="xp-layers-h"><b class="xp-total">{count(model.elements)}</b> model elements</span>
+            {discs.map((d) => (
+              <button type="button" class="xp-layer" data-disc={d.id} aria-pressed="true">
+                <i></i><span>{d.label}</span><em>{count(model.disciplines[d.id as keyof typeof model.disciplines].elements)}</em>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -106,7 +173,7 @@ const discs = [
   .xp-intro { padding: var(--ax-section) 0 clamp(32px, 5vw, 64px); }
   .xp-skip { margin-top: clamp(18px, 2vw, 28px); }
   /* the only glass on the site: small panels that float over the live model */
-  .xp :is(.xp-views, .xp-call-card, .xp-layers, .xp-pick) { background: rgba(14, 16, 20, 0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+  .xp :is(.xp-views, .xp-call-card, .xp-layers, .xp-cut, .xp-pick) { background: rgba(14, 16, 20, 0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
 
   .xp-track { position: relative; }
   .xp.is-live .xp-track { height: calc(var(--n) * 80vh + 100vh); }
@@ -133,7 +200,7 @@ const discs = [
   .xp-loading-bar i { display: block; height: 100%; width: 100%; background: var(--ax-gold); transform-origin: left; transform: scaleX(var(--p, 0.05)); transition: transform 0.3s ease; }
   .xp-loading-text { font: 600 13.5px/1 var(--ax-font); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ax-text-3); }
 
-  .xp-hint { position: absolute; z-index: 2; left: 50%; top: 34px; transform: translateX(-50%); margin: 0; display: flex; gap: 8px; pointer-events: none; opacity: 0; transition: opacity 0.5s ease; white-space: nowrap; }
+  .xp-hint { position: absolute; z-index: 2; left: 50%; top: 12px; transform: translateX(-50%); margin: 0; display: flex; gap: 8px; pointer-events: none; opacity: 0; transition: opacity 0.5s ease; white-space: nowrap; }
   .xp-hint span { padding: 9px 12px; border-radius: var(--ax-r-chip); background: rgba(14, 16, 20, 0.82); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); font: 600 13px/1 var(--ax-font); color: var(--ax-text-2); }
   .xp-hint-click { display: none; }
   .xp:is([data-stage="2"], [data-stage="3"], [data-stage="4"]) .xp-hint-click { display: block; }
@@ -186,7 +253,28 @@ const discs = [
   .xp-tab.is-on i { background: var(--ax-gold); }
   .xp-tab:hover { color: var(--ax-text); }
 
-  .xp-pick[hidden], .xp-layers[hidden] { display: none !important; }
+  .xp-pick[hidden], .xp-layers[hidden], .xp-cut[hidden], .xp-tools-btn[hidden], .xp-cut-reset[hidden] { display: none !important; }
+  /* look inside: floors, roof and section. On wide screens a small panel at the top left of the model */
+  .xp-tools { display: contents; }
+  .xp-tools-btn { display: none; position: absolute; z-index: 4; align-items: center; min-height: 44px; padding: 0 14px; border: 0; border-radius: var(--ax-r-btn-sm); background: rgba(14, 16, 20, 0.82); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22); cursor: pointer; font: 600 14px/1 var(--ax-font); color: #f5f6f8; }
+  .xp-tools-btn[aria-expanded="true"] { background: #fff; color: #0b0c0f; }
+  .xp-tools-btn-b { display: none; }
+  .xp-tools-x { display: none; place-items: center; width: 44px; height: 44px; margin: -8px -12px -8px 0; border: 0; background: none; color: var(--ax-text-2); cursor: pointer; }
+  .xp-cut { position: absolute; z-index: 4; left: var(--ax-gutter); top: 52px; width: 284px; display: flex; flex-direction: column; gap: 8px; padding: 12px 14px 14px; border-radius: var(--ax-r-card); }
+  .xp-cut-top { display: flex; align-items: center; justify-content: space-between; min-height: 28px; }
+  .xp-cut-h { font: 600 13px/1 var(--ax-font); color: var(--ax-text-2); }
+  .xp-cut-reset { min-height: 44px; margin: -8px -8px -8px auto; padding: 0 8px; border: 0; background: none; cursor: pointer; font: 600 13px/1 var(--ax-font); color: var(--ax-gold); }
+  .xp-cut-reset:hover { color: #fff; }
+  .xp-seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; padding: 2px; border-radius: var(--ax-r-btn-sm); background: rgba(255, 255, 255, 0.07); }
+  .xp-seg button { min-height: 44px; padding: 0 6px; border: 0; border-radius: var(--ax-r-chip); background: none; cursor: pointer; font: 600 13.5px/1 var(--ax-font); color: var(--ax-text-2); white-space: nowrap; transition: background-color 0.2s ease, color 0.2s ease; }
+  .xp-seg button:hover { color: #fff; }
+  .xp-seg button[aria-pressed="true"] { background: #fff; color: #0b0c0f; }
+  .xp-row { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 10px; }
+  .xp-row > span, .xp-slide > span { font: 400 13.5px/1 var(--ax-font); color: var(--ax-text-2); }
+  .xp-slide { display: grid; grid-template-columns: 52px minmax(0, 1fr) 40px; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+  .xp-slide input { width: 100%; height: 44px; margin: 0; background: none; accent-color: var(--ax-gold); cursor: pointer; }
+  .xp-slide output { font: 600 13px/1 var(--ax-font); color: var(--ax-text); text-align: right; font-variant-numeric: tabular-nums; }
+  .xp :is(.xp-seg button, .xp-cut-reset, .xp-slide input, .xp-tools-btn, .xp-tools-x, .xp-layer):focus-visible { outline: 2px solid var(--ax-gold); outline-offset: 2px; }
   /* BIM stage: layer switches and the element read out */
   .xp-layers { position: absolute; z-index: 4; right: var(--ax-gutter); top: 52px; display: flex; flex-direction: column; gap: 4px; padding: 14px; width: 216px; border-radius: var(--ax-r-card); opacity: 0; transform: translateY(8px); transition: opacity 0.45s var(--ax-ease), transform 0.45s var(--ax-ease); }
   .xp[data-stage="3"] .xp-layers { opacity: 1; transform: none; }
@@ -213,6 +301,19 @@ const discs = [
     .xp-copy { max-width: 460px; }
     .xp-stage::after { height: 58%; }
   }
+  /* short and wide: the look inside panel lies down in two columns so it stays clear of the heading */
+  @media (max-height: 720px) and (min-width: 1000px) {
+    .xp-cut { width: 560px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 16px; padding: 8px 14px 10px; }
+    .xp-cut-top { grid-column: 1 / -1; }
+  }
+  /* narrow screens that still use the wide layout (tablets): the panel would sit on the model,
+     so it stays closed behind one button until it is asked for */
+  @media (min-width: 761px) and (max-width: 999px) {
+    .xp-tools-btn { display: flex; left: var(--ax-gutter); top: 52px; }
+    .xp:not(.tools-open) .xp-cut { display: none; }
+    .xp-cut { top: 104px; }
+    .xp-tools-x { display: grid; }
+  }
 
   /* ---------- phones: picture on top, words below ---------- */
   @media (max-width: 760px) {
@@ -225,21 +326,34 @@ const discs = [
     .xp-panel { top: 56%; bottom: 0; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 14px; }
     .xp-tab span { display: none; }
     .xp-tab { min-height: 44px; justify-content: flex-end; padding-bottom: 14px; }
-    .xp-layers { top: 26px; right: 12px; width: auto; padding: 8px; flex-direction: row; flex-wrap: wrap; max-width: calc(100% - 24px); gap: 2px; }
+    /* the controls leave the picture: one button on the model opens a solid sheet over the words below it */
+    .xp-tools-btn { display: flex; right: 12px; top: 22px; }
+    .xp[data-stage="3"] .xp-tools-btn-a { display: none; }
+    .xp[data-stage="3"] .xp-tools-btn-b { display: inline; }
+    .xp-tools { position: absolute; z-index: 6; left: 0; right: 0; top: 100%; height: 44svh; display: none; flex-direction: column; gap: 6px; padding: 2px 16px 12px; overflow-y: auto; overscroll-behavior: contain; background: #0d0d0c; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+    .xp.tools-open .xp-tools { display: flex; }
+    .xp .xp-cut, .xp .xp-layers { position: static; width: auto; padding: 0; border-radius: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; }
+    .xp-cut-top { min-height: 44px; }
+    .xp-cut-h { font-size: 15px; color: var(--ax-text); }
+    .xp-cut-reset { margin: 0 4px 0 auto; }
+    .xp-tools-x { display: grid; margin: 0 -12px 0 0; }
+    .xp-cut { gap: 6px; }
+    .xp-seg { padding: 0; }
+    .xp-seg button { min-height: 44px; border-radius: var(--ax-r-btn-sm); }
+    .xp-layers { order: -1; flex-direction: row; flex-wrap: wrap; gap: 2px; transform: none; }
     .xp-layers-h, .xp-layer em { display: none; }
-    .xp-layer { grid-template-columns: 8px auto; gap: 6px; min-height: 44px; padding: 0 8px; font-size: 12.5px; }
-    .xp-hint { top: 30px; }
+    .xp-layer { grid-template-columns: 8px auto; gap: 6px; min-height: 44px; padding: 0 10px 0 6px; font-size: 13.5px; }
+    .xp-hint { top: 28px; left: 12px; transform: none; }
     .xp-hint span:first-child { display: none; }
     .xp[data-stage="3"] .xp-hint { display: none; }
     .xp-call { left: 0; top: auto; bottom: 0; width: 100%; height: auto; }
     .xp-call-dot { left: calc(50% - 7px); top: auto; bottom: calc(50vh * 0.56 - 28px); display: none; }
     .xp-call-card { position: relative; left: auto; transform: none; width: auto; margin: 0 12px 8px; padding: 14px 16px 10px; animation-name: xp-call-up; }
     .xp-call-cat { font-size: 22px; margin-top: 2px; }
-    .xp-call-type { display: none; }
-    .xp-call dl div:last-child { display: none; }
-    .xp-call dl { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    .xp-call dl { margin-top: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-    .xp-call dl div { flex-direction: column; gap: 3px; padding: 8px 0 0; }
+    .xp-call-type { padding-right: 36px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .xp-call dl { margin-top: 6px; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+    .xp-call dl div { font-size: 12.5px; }
+    .xp-call dl div { flex-direction: column; justify-content: flex-start; gap: 3px; padding: 8px 0 0; }
     .xp-call dd { text-align: left; }
     .xp.has-sel .xp-copy { opacity: 1; }
     .xp-views { top: 30px; right: 12px; }
@@ -251,7 +365,7 @@ const discs = [
   .xp:not(.is-live) .xp-call { display: none; }
   .xp:not(.is-live) .xp-pin { display: block; }
   .xp:not(.is-live) .xp-stage { position: relative; inset: auto; width: min(100% - var(--ax-gutter) * 2, var(--ax-wrap)); margin: 0 auto; aspect-ratio: 16 / 9; border-radius: var(--ax-r-lg); overflow: hidden; }
-  .xp:not(.is-live) .xp-stage::after, .xp:not(.is-live) :is(.xp-canvas, .xp-loading, .xp-hint, .xp-rail, .xp-layers, .xp-pick, .xp-clip, .xp-views) { display: none; }
+  .xp:not(.is-live) .xp-stage::after, .xp:not(.is-live) :is(.xp-canvas, .xp-loading, .xp-hint, .xp-rail, .xp-tools, .xp-tools-btn, .xp-pick, .xp-clip, .xp-views) { display: none; }
   .xp:not(.is-live) .xp-render { opacity: 1; position: absolute; }
   .xp:not(.is-live) .xp-panel { position: relative; padding: 40px 0 var(--ax-section); pointer-events: auto; }
   .xp:not(.is-live) .xp-copy { max-width: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 28px; }
@@ -296,6 +410,43 @@ const discs = [
       let api: import("../scripts/explorer").ExplorerApi | null = null;
       let stage = 0;
 
+      // look inside: floors, roof, section. The choices are kept here and handed to the 3D code
+      const cutEl = root.querySelector<HTMLElement>(".xp-cut")!;
+      const toolsBtn = root.querySelector<HTMLButtonElement>(".xp-tools-btn")!;
+      const resetBtn = root.querySelector<HTMLButtonElement>(".xp-cut-reset")!;
+      const slide = cutEl.querySelector<HTMLInputElement>(".xp-slide input")!;
+      const slideOut = cutEl.querySelector<HTMLOutputElement>(".xp-slide output")!;
+      const cut = { roof: false, floor: -1, section: 0, axis: 0 as 0 | 1 };
+      const setTools = (open: boolean) => { root.classList.toggle("tools-open", open); toolsBtn.setAttribute("aria-expanded", String(open)); };
+      toolsBtn.addEventListener("click", () => setTools(!root.classList.contains("tools-open")));
+      root.querySelector(".xp-tools-x")!.addEventListener("click", () => { setTools(false); toolsBtn.focus(); });
+      const syncCut = () => {
+        cutEl.querySelectorAll<HTMLButtonElement>("[data-floor]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.floor) === cut.floor)));
+        cutEl.querySelectorAll<HTMLButtonElement>("[data-roof]").forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.roof === "off") === cut.roof)));
+        cutEl.querySelectorAll<HTMLButtonElement>("[data-axis]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.axis) === cut.axis)));
+        slide.value = String(Math.round(cut.section * 100));
+        slideOut.textContent = cut.section > 0.005 ? `${Math.round(cut.section * 100)}%` : "Off";
+        resetBtn.hidden = !(cut.roof || cut.floor >= 0 || cut.section > 0.005);
+        api?.setCut(cut);
+      };
+      cutEl.querySelectorAll<HTMLButtonElement>("[data-floor]").forEach((b) => b.addEventListener("click", () => {
+        cut.floor = Number(b.dataset.floor);
+        cut.roof = cut.floor >= 0 ? true : cut.roof; // a single floor is always seen from above, without the roof
+        syncCut();
+      }));
+      cutEl.querySelectorAll<HTMLButtonElement>("[data-roof]").forEach((b) => b.addEventListener("click", () => {
+        cut.roof = b.dataset.roof === "off";
+        if (!cut.roof) cut.floor = -1; // the roof goes back on the whole house
+        syncCut();
+      }));
+      cutEl.querySelectorAll<HTMLButtonElement>("[data-axis]").forEach((b) => b.addEventListener("click", () => {
+        cut.axis = Number(b.dataset.axis) as 0 | 1;
+        if (cut.section <= 0.005) cut.section = 0.4; // choosing a direction starts the slice
+        syncCut();
+      }));
+      slide.addEventListener("input", () => { cut.section = Number(slide.value) / 100; syncCut(); });
+      resetBtn.addEventListener("click", () => { cut.roof = false; cut.floor = -1; cut.section = 0; syncCut(); });
+
       const show = (i: number) => {
         if (i === stage && root.dataset.stage === String(i)) return;
         stage = i;
@@ -303,6 +454,10 @@ const discs = [
         steps.forEach((s, k) => s.classList.toggle("is-on", k === i));
         tabs.forEach((t, k) => { t.classList.toggle("is-on", k === i); t.classList.toggle("is-done", k < i); t.setAttribute("aria-selected", String(k === i)); });
         layers.hidden = i !== 3;
+        const opens = i >= 2 && i <= 4; // the stages where the model can be opened up
+        cutEl.hidden = !opens;
+        toolsBtn.hidden = !opens;
+        if (!opens) setTools(false);
         views.hidden = i !== 5;
         if (i === 5) playClip(); else clip.pause();
         if (i !== 3) pickEl.hidden = true;
@@ -344,11 +499,11 @@ const discs = [
           const { createExplorer } = await import("../scripts/explorer");
           api = await createExplorer({
             canvas,
-            url: "/models/adu.glb",
+            url: root.dataset.model!,
             onProgress: (p) => root.style.setProperty("--p", String(Math.max(0.05, p))),
             onCounts: (c, total) => {
-              root.querySelector(".xp-total")!.textContent = String(total);
-              layers.querySelectorAll<HTMLElement>(".xp-layer").forEach((b) => { b.querySelector("em")!.textContent = String(c[b.dataset.disc!] ?? 0); });
+              root.querySelector(".xp-total")!.textContent = total.toLocaleString("en-US");
+              layers.querySelectorAll<HTMLElement>(".xp-layer").forEach((b) => { b.querySelector("em")!.textContent = (c[b.dataset.disc!] ?? 0).toLocaleString("en-US"); });
             },
             onSelect: (info) => {
               root.classList.toggle("has-sel", !!info);
@@ -363,7 +518,7 @@ const discs = [
               const [w, d, h] = info.size;
               const big = [w, d, h].sort((a, b) => b - a);
               call.querySelector(".xp-call-size")!.textContent = big.map((n) => (n < 1 ? `${Math.round(n * 1000)} mm` : `${n.toFixed(2)} m`)).join(" x ");
-              call.querySelector(".xp-call-phase")!.textContent = info.p || "New";
+              call.querySelector(".xp-call-level")!.textContent = info.l || "Whole building";
               call.querySelector(".xp-call-same")!.textContent = `${info.same} ${info.c.toLowerCase()}`;
             },
             onPick: (info, x, y) => {
@@ -371,11 +526,12 @@ const discs = [
               pickEl.hidden = false;
               pickEl.style.setProperty("--x", `${x}px`);
               pickEl.style.setProperty("--y", `${Math.max(90, y)}px`);
-              pickEl.querySelector(".xp-pick-disc")!.textContent = `${names[info.d] ?? info.d} · ${info.p}`;
+              pickEl.querySelector(".xp-pick-disc")!.textContent = `${names[info.d] ?? info.d} · ${info.l}`;
               pickEl.querySelector(".xp-pick-cat")!.textContent = info.c;
               pickEl.querySelector(".xp-pick-type")!.textContent = info.t;
             },
           });
+          api.setCut(cut);
           api.setStage(stage);
           root.classList.add("is-ready");
         } catch (err) {

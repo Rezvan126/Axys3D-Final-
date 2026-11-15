@@ -1,7 +1,9 @@
 // The interactive building on the home page.
-// One real project model (exported from Revit, see tools/build-model.py) shown through the
-// stages the studio delivers: sketch, drawings, 3D model, BIM detail, materials, final render.
-// Loaded only when the section comes near the screen. Draws only when something changes.
+// One real project model (exported from Revit through Navisworks, see tools/build-model-navis.py)
+// shown through the stages the studio delivers: sketch, drawings, 3D model, BIM detail, materials,
+// final render. The model has its interiors, so the 3D stages can lift the roof, show one floor at a
+// time and slice the house open. Loaded only when the section comes near the screen. Draws only when
+// something changes.
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
@@ -13,24 +15,43 @@ const DISC_COLOR: Record<Disc, number> = {
   architecture: 0x9a9aa0, structure: 0xefa11f, electrical: 0xff6b5e, mechanical: 0x5ac8fa, plumbing: 0x34c759, interiors: 0xb9a7ff,
 };
 
-// camera presets per stage: yaw and pitch in degrees, distance as a multiple of the fitted distance
-const VIEWS = [
-  { yaw: -38, pitch: 16, dist: 1.0 },   // sketch
-  { yaw: 0, pitch: 89.5, dist: 1.5 },  // drawings (plan)
-  { yaw: 32, pitch: 22, dist: 1.0 },    // 3D model
-  { yaw: 205, pitch: 30, dist: 1.2 },  // BIM (pulled back: the layers panel and the words share the screen)
-  { yaw: -52, pitch: 12, dist: 0.95 },  // materials
-  { yaw: -52, pitch: 10, dist: 0.9 },   // render (the photo covers the canvas)
+// camera presets per stage: yaw and pitch in degrees, distance as a multiple of the fitted distance.
+// The house is an infill plot, long and narrow with blank side walls: the street end is at yaw 180.
+// On wide screens the words sit bottom left, so the views keep the street front to the right of them.
+type View = { yaw: number; pitch: number; dist: number };
+const VIEWS: View[] = [
+  { yaw: 158, pitch: 13, dist: 1.12 },   // sketch: the street front
+  { yaw: 90, pitch: 89.5, dist: 1.24 },   // drawings (plan, long side across the screen)
+  { yaw: 150, pitch: 24, dist: 1.2 },    // 3D model
+  { yaw: 52, pitch: 30, dist: 1.36 },    // BIM
+  { yaw: 156, pitch: 18, dist: 1.15 },   // materials
+  { yaw: 158, pitch: 12, dist: 1.12 },   // render (the film covers the canvas)
+];
+// phones: the picture is a small landscape window, so come a little closer
+const VIEWS_PHONE: View[] = [
+  { yaw: 158, pitch: 13, dist: 0.74 },
+  { yaw: 90, pitch: 89.5, dist: 0.9 },
+  { yaw: 150, pitch: 24, dist: 0.88 },
+  { yaw: 54, pitch: 32, dist: 0.92 },
+  { yaw: 156, pitch: 20, dist: 0.84 },
+  { yaw: 158, pitch: 12, dist: 0.74 },
 ];
 
-export interface PartInfo { d: string; c: string; t: string; p: string; size: [number, number, number]; same: number }
-export interface ExplorerApi { setStage(i: number): void; setDiscipline(d: Disc, on: boolean): void; clearSelection(): void; resize(): void; dispose(): void; }
+export interface PartInfo { d: string; c: string; t: string; l: string; size: [number, number, number]; same: number }
+/** roof: lift the roof off. floor: -1 shows every floor, 0 to 2 shows up to that floor. section: 0 (off) to 1. axis: 0 slices along the length, 1 across it. */
+export interface CutState { roof: boolean; floor: number; section: number; axis: 0 | 1 }
+export interface ExplorerApi {
+  setStage(i: number): void; setDiscipline(d: Disc, on: boolean): void; setCut(c: Partial<CutState>): void;
+  clearSelection(): void; resize(): void; dispose(): void;
+}
+
+interface Part { d: Disc; c: string; t: string; l: string; f: number; node: THREE.Object3D; meshes: THREE.Mesh[] }
 
 export async function createExplorer(opts: {
   canvas: HTMLCanvasElement;
   url: string;
   onProgress?: (p: number) => void;
-  onPick?: (info: { d: string; c: string; t: string; p: string } | null, x: number, y: number) => void;
+  onPick?: (info: { d: string; c: string; t: string; l: string } | null, x: number, y: number) => void;
   onCounts?: (counts: Record<string, number>, total: number) => void;
   /** a part was clicked (or the selection was cleared) */
   onSelect?: (info: PartInfo | null) => void;
@@ -46,7 +67,7 @@ export async function createExplorer(opts: {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.08;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 500);
@@ -57,9 +78,12 @@ export async function createExplorer(opts: {
   scene.environmentIntensity = 0.55;
   pmrem.dispose();
   const hemi = new THREE.HemisphereLight(0xdfe9ff, 0x3a3630, 0.45); scene.add(hemi);
-  const sun = new THREE.DirectionalLight(0xffe9cf, 2.6); sun.position.set(7, 9, 6); scene.add(sun); scene.add(sun.target);
+  const sun = new THREE.DirectionalLight(0xffe9cf, 2.6); scene.add(sun); scene.add(sun.target);
   sun.castShadow = true;
   sun.shadow.mapSize.setScalar(coarse ? 1024 : 2048);
+  // the sun does not move, so the shadow map is drawn again only when the model changes, not on every frame
+  sun.shadow.autoUpdate = false;
+  sun.shadow.needsUpdate = true;
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 3;
   const fill = new THREE.DirectionalLight(0xbcd0ff, 0.35); fill.position.set(-8, 4, -6); scene.add(fill);
 
@@ -79,207 +103,254 @@ export async function createExplorer(opts: {
   root.updateMatrixWorld(true);
   scene.add(root);
   const H = size.y * k;
+  const halfX = (size.x * k) / 2, halfZ = (size.z * k) / 2;
   const radius = Math.hypot(size.x, size.y, size.z) * k * 0.5;
-  const target = new THREE.Vector3(0, H * 0.4, 0);
-  // the shadow covers the whole building and nothing more
+  const target = new THREE.Vector3(0, H * 0.42, 0);
+  // the shadow covers the whole building and nothing more. The sun comes in over a long side and from the street end
   sun.target.position.copy(target);
-  sun.position.copy(target).add(new THREE.Vector3(7, 9, 6).normalize().multiplyScalar(radius * 2.2));
+  sun.position.copy(target).add(new THREE.Vector3(6, 9, -7).normalize().multiplyScalar(radius * 2.2));
   const sc = sun.shadow.camera; sc.left = -radius * 1.15; sc.right = radius * 1.15; sc.top = radius * 1.15; sc.bottom = -radius * 1.15; sc.near = 0.1; sc.far = radius * 4.6; sc.updateProjectionMatrix();
 
+  // one part is one Revit instance. A part with several finishes arrives as a group of meshes, one per finish
+  const parts: Part[] = [];
   const meshes: THREE.Mesh[] = [];
-  root.traverse((o) => { if ((o as THREE.Mesh).isMesh) { const m = o as THREE.Mesh; m.castShadow = m.receiveShadow = true; meshes.push(m); } });
+  root.traverse((o) => {
+    if (typeof o.userData.d !== "string") return;
+    const part: Part = { d: o.userData.d as Disc, c: String(o.userData.c), t: String(o.userData.t), l: String(o.userData.l ?? ""), f: Number(o.userData.f ?? 0), node: o, meshes: [] };
+    o.traverse((m) => {
+      if (!(m as THREE.Mesh).isMesh) return;
+      const mesh = m as THREE.Mesh;
+      mesh.userData.part = part;
+      mesh.userData.cls = (mesh.material as THREE.Material).name || "white";
+      mesh.receiveShadow = true;
+      mesh.castShadow = mesh.userData.cls !== "glass";
+      part.meshes.push(mesh); meshes.push(mesh);
+    });
+    parts.push(part);
+  });
+  const partOf = (m: THREE.Object3D) => m.userData.part as Part;
   const counts: Record<string, number> = {};
-  meshes.forEach((m) => { const d = m.userData.d as string; counts[d] = (counts[d] || 0) + 1; });
-  opts.onCounts?.(counts, meshes.length);
+  const perCategory: Record<string, number> = {};
+  parts.forEach((p) => { counts[p.d] = (counts[p.d] || 0) + 1; perCategory[p.c] = (perCategory[p.c] || 0) + 1; });
+  opts.onCounts?.(counts, parts.length);
+
+  // level heights written by the builder: [name, floor group, metres above the base]
+  let levels: [string, number, number][] = [];
+  try { levels = JSON.parse(String(root.userData.levels ?? "[]")); } catch { levels = []; }
+  const topFloor = Math.max(0, ...parts.filter((p) => p.f < 3).map((p) => p.f));
+  const topLevel = levels.filter((l) => l[1] === topFloor).sort((a, b) => b[2] - a[2])[0];
 
   // ---------- materials ----------
-  const clip = new THREE.Plane(new THREE.Vector3(0, -1, 0), H * 0.6); // plan cut height
-  const noClip: THREE.Plane[] = [];
-  const hidden = new THREE.MeshBasicMaterial({ colorWrite: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
-  const clay = new THREE.MeshStandardMaterial({ color: 0xd8d3c9, roughness: 1, metalness: 0, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  const allMats = new Set<THREE.Material>();
+  const reg = <T extends THREE.Material>(m: T): T => { m.side = THREE.DoubleSide; m.shadowSide = THREE.DoubleSide; m.clipShadows = true; allMats.add(m); return m; };
+  // plan cut: a little above the floor of the top storey, so its rooms, doors and fittings all read
+  const clip = new THREE.Plane(new THREE.Vector3(0, -1, 0), topLevel ? (topLevel[2] + 1.25) * k : H * 0.8);
+  // the section slider: one upright plane that travels through the house
+  const sectionPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), halfX);
+  const hidden = reg(new THREE.MeshBasicMaterial({ colorWrite: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
+  const clay = reg(new THREE.MeshStandardMaterial({ color: 0xd8d3c9, roughness: 1, metalness: 0, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
   const bim: Record<string, THREE.Material> = {};
   DISCS.forEach((d) => {
-    bim[d] = d === "architecture"
+    bim[d] = reg(d === "architecture"
       ? new THREE.MeshStandardMaterial({ color: DISC_COLOR[d], roughness: 1, transparent: true, opacity: 0.1, depthWrite: false })
-      : new THREE.MeshStandardMaterial({ color: DISC_COLOR[d], roughness: 0.6, emissive: DISC_COLOR[d], emissiveIntensity: 0.25 });
+      : new THREE.MeshStandardMaterial({ color: DISC_COLOR[d], roughness: 0.6, emissive: DISC_COLOR[d], emissiveIntensity: 0.25 }));
   });
-  // Finishes use the same texture maps as the studio's rendered scene (see tools/extract-textures.py).
+  // Finishes use the texture maps from the studio's rendered scenes (see tools/extract-textures.py).
   // The web model carries no UVs, so each map is laid on by box projection in world space:
   // the face's direction picks the plane, and real sizes set how often the map repeats.
   const texLoader = new THREE.TextureLoader();
+  const texCache: Record<string, THREE.Texture> = {};
   const loadTex = (name: string) => {
+    if (texCache[name]) return texCache[name];
     const t = texLoader.load(`/media/tex/${name}.webp`, () => kick());
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
-    return t;
+    return (texCache[name] = t);
   };
-  const boxed = (map: THREE.Texture, tileMetres: number, gain: number, roughness: number, tint = 0xffffff) => {
+  // desat pulls a map toward grey (the deck boards are orange, white oak is not); upright turns boards to run up the wall
+  const boxed = (map: THREE.Texture, tileMetres: number, gain: number, roughness: number, tint = 0xffffff, desat = 0, upright = false) => {
     const mat = new THREE.MeshStandardMaterial({ color: tint, roughness, metalness: 0 });
     const scale = 1 / (tileMetres * k);
     mat.onBeforeCompile = (sh) => {
-      sh.uniforms.boxMap = { value: map }; sh.uniforms.boxScale = { value: scale }; sh.uniforms.boxGain = { value: gain };
+      sh.uniforms.boxMap = { value: map }; sh.uniforms.boxScale = { value: scale }; sh.uniforms.boxGain = { value: gain }; sh.uniforms.boxDesat = { value: desat };
       sh.vertexShader = sh.vertexShader
         .replace("#include <common>", "#include <common>\nvarying vec3 vBoxP; varying vec3 vBoxN;")
         .replace("#include <project_vertex>", "#include <project_vertex>\nvBoxP = (modelMatrix * vec4(transformed, 1.0)).xyz; vBoxN = normalize(mat3(modelMatrix) * objectNormal);");
       sh.fragmentShader = sh.fragmentShader
-        .replace("#include <common>", "#include <common>\nuniform sampler2D boxMap; uniform float boxScale; uniform float boxGain; varying vec3 vBoxP; varying vec3 vBoxN;")
-        .replace("#include <map_fragment>", "#include <map_fragment>\nvec3 bn = abs(normalize(vBoxN)); vec2 buv = bn.y > 0.5 ? vBoxP.xz : (bn.x > bn.z ? vBoxP.zy : vBoxP.xy); diffuseColor.rgb *= texture2D(boxMap, buv * boxScale).rgb * boxGain;");
+        .replace("#include <common>", "#include <common>\nuniform sampler2D boxMap; uniform float boxScale; uniform float boxGain; uniform float boxDesat; varying vec3 vBoxP; varying vec3 vBoxN;")
+        .replace("#include <map_fragment>", `#include <map_fragment>\nvec3 bn = abs(normalize(vBoxN)); vec2 buv = bn.y > 0.5 ? vBoxP.xz : (bn.x > bn.z ? vBoxP.zy : vBoxP.xy);${upright ? " if (bn.y <= 0.5) buv = buv.yx;" : ""} vec3 btex = texture2D(boxMap, buv * boxScale).rgb; btex = mix(btex, vec3(dot(btex, vec3(0.3, 0.59, 0.11))), boxDesat); diffuseColor.rgb *= btex * boxGain;`);
     };
-    mat.customProgramCacheKey = () => "box";
+    mat.customProgramCacheKey = () => (upright ? "boxup" : "box");
     return mat;
   };
   const std = (color: number, roughness = 0.85, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
-  const finish = {
-    siding: boxed(loadTex("siding"), 1.6, 2.1, 0.78),            // lap siding, boards about 200 mm
-    stucco: boxed(loadTex("stucco"), 3, 1.05, 0.95),
-    plaster: boxed(loadTex("plaster"), 2.5, 1.0, 0.95),
-    roof: boxed(loadTex("roof"), 2.4, 1.7, 0.94),            // charcoal shingles: even tone, rows visible, no patchwork
-    deck: boxed(loadTex("deck"), 1.8, 1.0, 0.7),
+  // one finish per class the builder wrote into the model: white plaster and stucco, black trim,
+  // white oak joinery and floors, clear glass, tile, stone, porcelain and stainless fittings
+  const finish: Record<string, THREE.Material> = {
+    glass: new THREE.MeshStandardMaterial({ color: 0xbcd3dc, roughness: 0.06, metalness: 0.25, transparent: true, opacity: 0.26, depthWrite: false, envMapIntensity: 1.8 }),
+    black: std(0x1b1c1f, 0.45, 0.55),
+    metal: std(0xcdd0d4, 0.28, 0.85),
+    brass: std(0xc8a468, 0.32, 0.85),
+    white: boxed(loadTex("stucco"), 3, 1.1, 0.92),               // smooth painted plaster indoors
+    stucco: boxed(loadTex("plaster"), 2.5, 1.06, 0.95),          // rougher white render outside
+    siding: boxed(loadTex("siding"), 1.6, 1.25, 0.78, 0xffffff, 0, true),
+    oak: boxed(loadTex("deck"), 1.5, 2.1, 0.6, 0xf0e4d0, 0.78),
+    woodfloor: boxed(loadTex("deck"), 2.4, 1.9, 0.55, 0xe6d6bc, 0.72),
+    timber: boxed(loadTex("deck"), 1.2, 1.8, 0.85, 0xeedcb8, 0.55),
+    tile: std(0xd6d3cc, 0.3),
+    stone: std(0xf0efeb, 0.25),
+    porcelain: std(0xf6f6f4, 0.18),
     concrete: boxed(loadTex("concrete"), 3, 0.95, 0.92),
-    grass: boxed(loadTex("grass"), 3.5, 0.9, 1),
-    // windows and glazed doors: glass and frame colours are painted per face in the model itself
-    glazed: new THREE.MeshStandardMaterial({ color: 0xffffff, vertexColors: true, roughness: 0.16, metalness: 0.15, envMapIntensity: 1.6 }),
-    trim: std(0xf2f1ed, 0.6), black: std(0x1b1c1f, 0.45, 0.55), casework: std(0xe6e0d5, 0.6), white: std(0xf4f4f2, 0.35),
-    light: std(0xdcdcdc, 0.5), tile: std(0xcfd2d4, 0.35), door: std(0xe9e7e2, 0.55),
+    ground: boxed(loadTex("concrete"), 3, 0.72, 0.95),
+    roof: std(0xe4e4e1, 0.85),
+    fabric: std(0xe6e0d4, 0.95),
   };
-  const finishFor = (m: THREE.Mesh) => {
-    const c = String(m.userData.c), t = String(m.userData.t).toLowerCase(), d = String(m.userData.d);
-    const existing = m.userData.p === "Existing";
-    if (c === "Roofs") return /fascia|gutter|downspout/.test(t) ? finish.black : finish.roof;
-    if (c === "Windows" || c === "Doors") return m.geometry.getAttribute("color") ? finish.glazed : finish.door;
-    if (c === "Stairs and railings") return /stair|run|tread|landing/.test(t) ? (/cast|monolithic/.test(t) ? finish.concrete : finish.deck) : finish.black;
-    if (c === "Walls") {
-      if (/stem wall|concrete/.test(t)) return finish.concrete;
-      if (/trim|sweep/.test(t)) return finish.trim;
-      if (/partition|interior/.test(t)) return finish.plaster;
-      if (/stucco|cement/.test(t)) return finish.stucco;
-      return finish.siding;
-    }
-    if (c === "Floors") return /surface/.test(t) ? finish.grass : finish.deck;
-    if (c === "Ceilings") return finish.white;
-    if (c === "Framing") return /deck/.test(t) ? finish.deck : existing ? finish.concrete : finish.deck;
-    if (c === "Columns") return /rectangular/.test(t) ? finish.black : finish.concrete;
-    if (d === "structure") return finish.concrete;
-    if (c === "Casework") return finish.casework;
-    if (c === "Finishes") return /tile/.test(t) ? finish.tile : finish.trim;
-    if (d === "plumbing") return finish.white;
-    return finish.light;
-  };
-  // drilled piers sit below ground: shown with the structure in the BIM stage, hidden in the finished views
-  const buried = (m: THREE.Mesh) => m.userData.c === "Columns" && /round/i.test(String(m.userData.t));
-  // Some pieces of the export are open sheets or have faces pointing inwards. Drawing every surface on
-  // both sides means none of them shows as a hole or a black patch, whichever way it faces.
-  [hidden, clay, ...Object.values(bim), ...Object.values(finish)].forEach((m) => { m.side = THREE.DoubleSide; m.shadowSide = THREE.DoubleSide; });
-  const finishOf = new Map<THREE.Mesh, THREE.Material>();
-  meshes.forEach((m) => finishOf.set(m, finishFor(m)));
-  const highlight = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.55, roughness: 0.4 , side: THREE.DoubleSide });
+  Object.values(finish).forEach(reg);
+  const finishFor = (m: THREE.Mesh) => finish[m.userData.cls as string] ?? finish.white;
+  const highlight = reg(new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.55, roughness: 0.4 }));
   // while one part is being inspected the rest of the building turns to faint glass around it
-  const ghost = new THREE.MeshStandardMaterial({ color: 0x9aa0ad, roughness: 1, transparent: true, opacity: 0.07, depthWrite: false , side: THREE.DoubleSide });
-  const picked = new THREE.MeshStandardMaterial({ color: 0xefa11f, emissive: 0xefa11f, emissiveIntensity: 0.35, roughness: 0.55 , side: THREE.DoubleSide });
+  const ghost = reg(new THREE.MeshStandardMaterial({ color: 0x9aa0ad, roughness: 1, transparent: true, opacity: 0.035, depthWrite: false }));
+  const picked = reg(new THREE.MeshStandardMaterial({ color: 0xefa11f, emissive: 0xefa11f, emissiveIntensity: 0.35, roughness: 0.55 }));
+  const copyOf = (mat: THREE.Material) => { const c = mat.clone(); c.onBeforeCompile = mat.onBeforeCompile; c.customProgramCacheKey = mat.customProgramCacheKey; return reg(c); };
   const glowCache = new Map<string, THREE.Material>();
   const glow = (mat: THREE.Material) => {
     let out = glowCache.get(mat.uuid);
-    if (!out) { const c = mat.clone() as THREE.MeshStandardMaterial; c.onBeforeCompile = mat.onBeforeCompile; c.customProgramCacheKey = mat.customProgramCacheKey; c.emissive = new THREE.Color(0xefa11f); c.emissiveIntensity = 0.3; out = c; glowCache.set(mat.uuid, out); }
+    if (!out) { const c = copyOf(mat) as THREE.MeshStandardMaterial; c.emissive = new THREE.Color(0xefa11f); c.emissiveIntensity = 0.3; c.transparent = false; c.opacity = 1; c.depthWrite = true; out = c; glowCache.set(mat.uuid, out); }
     return out;
   };
 
-  // Revit models often have two surfaces in exactly the same plane (a wall and its finish, an existing
-  // slab and a new one). Drawn as is they flicker. Each category is pushed back by its own tiny amount.
-  const ORDER = ["Finishes", "Windows", "Doors", "Casework", "Appliances", "Plumbing fixtures", "Lighting", "Power and switching", "Ventilation", "Heating and cooling",
-    "Stairs and railings", "Columns", "Framing", "Walls", "Roofs", "Ceilings", "Floors", "Slabs", "Foundations", "Other elements"];
+  // Revit models often have two surfaces in exactly the same plane (a wall and its tile, a slab and its
+  // finish). Drawn as is they flicker. Each category is pushed back by its own tiny amount.
+  const ORDER = ["Plumbing fixtures", "Pipe accessories", "Specialty equipment", "Electrical fixtures", "Electrical equipment", "Mechanical equipment", "Duct accessories",
+    "Furniture", "Casework", "Generic models", "Windows", "Curtain walls", "Doors", "Railings", "Stairs", "Structural columns", "Structural framing",
+    "Fascias", "Walls", "Roofs", "Ceilings", "Floors", "Site"];
   const layerCache = new Map<string, THREE.Material>();
   const layered = (mat: THREE.Material, m: THREE.Mesh) => {
     if (mat === hidden) return mat;
-    const i = Math.max(0, ORDER.indexOf(String(m.userData.c))) + (m.userData.p === "Existing" ? 0.5 : 0);
-    const k = mat.uuid + ":" + i;
-    let out = layerCache.get(k);
+    // tile and stone sit in front of the wall or floor they are laid on
+    const cls = m.userData.cls as string;
+    const i = Math.max(0, ORDER.indexOf(partOf(m).c)) - (cls === "tile" || cls === "stone" ? 0.5 : 0);
+    const key = mat.uuid + ":" + i;
+    let out = layerCache.get(key);
     // a constant nudge only: a slope based one lets interiors show through roofs seen at a low angle
-    if (!out) { out = mat.clone(); out.onBeforeCompile = mat.onBeforeCompile; out.customProgramCacheKey = mat.customProgramCacheKey; out.polygonOffset = true; out.polygonOffsetFactor = 1; out.polygonOffsetUnits = 1 + i * 3; layerCache.set(k, out); }
+    if (!out) { out = copyOf(mat); out.polygonOffset = true; out.polygonOffsetFactor = 1; out.polygonOffsetUnits = 1 + i * 3; layerCache.set(key, out); }
     return out;
   };
 
-  // ---------- edge drawings: one line object per discipline, built a little at a time ----------
+  // ---------- cut away: roof off, one floor at a time, and a travelling section ----------
+  const cut: CutState = { roof: false, floor: -1, section: 0, axis: 0 };
+  let stage = -1;
+  const cutLive = () => stage >= 2 && stage <= 4;
+  const cutShows = (f: number, ceiling: boolean) => {
+    if (!cutLive()) return true;
+    if (cut.floor >= 0 && f > cut.floor) return false;
+    if (cut.roof && f === 3) return false;
+    // a ceiling is the lid of its own floor: it goes when that floor is the one being looked into
+    if (ceiling && (cut.roof || cut.floor >= 0) && f >= (cut.floor >= 0 ? cut.floor : topFloor)) return false;
+    return true;
+  };
+  const sectionLive = () => cutLive() && cut.section > 0.005;
+  function placeSection() {
+    // along the length (axis 0) the plane starts at one long side wall and travels across the width;
+    // across (axis 1) it starts at the street end and travels down the length
+    const half = cut.axis === 0 ? halfX : halfZ;
+    sectionPlane.normal.set(cut.axis === 0 ? -1 : 0, 0, cut.axis === 0 ? 0 : 1);
+    sectionPlane.constant = half * 1.02 - cut.section * half * 2 * 0.96;
+  }
+
+  // ---------- edge drawings: one line object per discipline and floor, built a little at a time ----------
   const lineMat: Record<string, THREE.LineBasicMaterial> = {};
-  const lines: Record<string, THREE.LineSegments> = {};
+  const lineSets: { d: Disc; f: number; ceiling: boolean; obj: THREE.LineSegments }[] = [];
   const edgeCache = new Map<string, THREE.BufferGeometry>();
   const inv = new THREE.Matrix4().copy(root.matrixWorld).invert();
   async function buildEdges() {
-    const acc: Record<string, number[]> = {};
-    DISCS.forEach((d) => (acc[d] = []));
+    const acc = new Map<string, { d: Disc; f: number; ceiling: boolean; pts: number[] }>();
     const v = new THREE.Vector3();
     const local = new THREE.Matrix4();
     let last = performance.now();
     for (const m of meshes) {
-      if (buried(m)) continue; // piers below ground stay out of the line drawings
-      const d = m.userData.d as string;
+      const p = partOf(m);
+      const ceiling = p.c === "Ceilings";
+      const key = `${p.d}:${p.f}:${ceiling ? 1 : 0}`;
+      let set = acc.get(key);
+      if (!set) { set = { d: p.d, f: p.f, ceiling, pts: [] }; acc.set(key, set); }
       let eg = edgeCache.get(m.geometry.uuid);
       if (!eg) { eg = new THREE.EdgesGeometry(m.geometry, 32); edgeCache.set(m.geometry.uuid, eg); }
       local.multiplyMatrices(inv, m.matrixWorld);
       const pos = eg.getAttribute("position");
-      const out = acc[d];
+      const out = set.pts;
       for (let i = 0; i < pos.count; i++) { v.fromBufferAttribute(pos, i).applyMatrix4(local); out.push(v.x, v.y, v.z); }
       if (performance.now() - last > 10) { await new Promise((r) => setTimeout(r, 0)); last = performance.now(); }
     }
     edgeCache.forEach((g) => g.dispose()); edgeCache.clear();
-    DISCS.forEach((d) => {
+    DISCS.forEach((d) => { lineMat[d] = reg(new THREE.LineBasicMaterial({ color: 0xf5f5f7, transparent: true, opacity: 0 })); });
+    acc.forEach((set) => {
       const g = new THREE.BufferGeometry();
-      g.setAttribute("position", new THREE.Float32BufferAttribute(acc[d], 3));
-      lineMat[d] = new THREE.LineBasicMaterial({ color: 0xf5f5f7, transparent: true, opacity: 0 });
-      lines[d] = new THREE.LineSegments(g, lineMat[d]);
-      lines[d].visible = false;
-      root.add(lines[d]);
+      g.setAttribute("position", new THREE.Float32BufferAttribute(set.pts, 3));
+      const obj = new THREE.LineSegments(g, lineMat[set.d]);
+      obj.visible = false;
+      root.add(obj);
+      lineSets.push({ d: set.d, f: set.f, ceiling: set.ceiling, obj });
     });
   }
 
   // ---------- stage logic ----------
-  let stage = -1;
   const discOn: Record<string, boolean> = {};
   DISCS.forEach((d) => (discOn[d] = true));
   const lineTarget: Record<string, number> = {};
-  let hovered: THREE.Mesh | null = null;
-  let selected: THREE.Mesh | null = null;
+  let hovered: Part | null = null;
+  let selected: Part | null = null;
+  const planes: THREE.Plane[] = [];
 
   function paint() {
     const s = stage;
-    const cut = s === 1;
     for (const m of meshes) {
-      const d = m.userData.d as Disc;
-      const shell = d === "architecture" || d === "structure";
+      const p = partOf(m);
+      const shell = p.d === "architecture" || p.d === "structure";
       let mat: THREE.Material = hidden, vis = true;
-      if (s === 0) { vis = shell && !buried(m); mat = hidden; }
+      if (s === 0) { vis = shell; mat = hidden; }
       else if (s === 1) { mat = hidden; }
-      else if (s === 2) { vis = shell && !buried(m); mat = clay; }
-      else if (s === 3) { vis = discOn[d]; mat = bim[d]; }
-      else { vis = (d !== "electrical" && d !== "mechanical" || m.userData.c === "Lighting") && !buried(m); mat = finishOf.get(m)!; }
+      else if (s === 2) { mat = clay; }
+      else if (s === 3) { vis = discOn[p.d]; mat = bim[p.d]; }
+      else { mat = finishFor(m); }
+      vis = vis && cutShows(p.f, p.c === "Ceilings");
       m.visible = vis;
-      if (selected && vis && m !== selected) m.material = ghost;
-      else if (m === selected) { m.visible = true; m.material = s === 4 ? glow(mat) : picked; }
-      else m.material = m === hovered && s === 3 ? highlight : s === 3 ? mat : layered(mat, m);
+      if (selected && vis && p !== selected) m.material = ghost;
+      else if (p === selected) { m.visible = true; m.material = s === 4 ? glow(mat) : picked; }
+      else m.material = p === hovered && s === 3 ? highlight : s === 3 ? mat : layered(mat, m);
     }
-    [hidden, clay, ...Object.values(finish), ...layerCache.values()].forEach((m) => { m.clippingPlanes = cut ? [clip] : noClip; });
+    planes.length = 0;
+    if (s === 1) planes.push(clip);
+    if (sectionLive()) { placeSection(); planes.push(sectionPlane); }
+    const shared = planes.slice();
+    allMats.forEach((m) => { m.clippingPlanes = shared; });
     DISCS.forEach((d) => {
       const shell = d === "architecture" || d === "structure";
       const lm = lineMat[d]; if (!lm) return;
-      lm.clippingPlanes = cut ? [clip] : noClip;
       let o = 0, col = 0xf5f5f7;
       if (s === 0) o = shell ? 0.9 : 0;
       else if (s === 1) { o = shell ? 0.95 : 0.8; col = shell ? 0xf5f5f7 : 0xefa11f; }
-      else if (s === 2) { o = shell ? 0.28 : 0; col = 0x1a1a1a; }
+      else if (s === 2) { o = 0.26; col = 0x1a1a1a; }
       else if (s === 3) { o = d === "architecture" && discOn[d] ? 0.3 : 0; }
       if (selected && s >= 2) { o = shell ? 0.2 : 0; col = 0xf5f5f7; }
       lm.color.setHex(col);
       lineTarget[d] = o;
-      if (o > 0) lines[d].visible = true;
     });
+    lineSets.forEach((set) => { set.obj.visible = (lineTarget[set.d] > 0 || lineMat[set.d].opacity > 0) && cutShows(set.f, set.ceiling); });
     sun.intensity = s === 3 ? 1.2 : 2.6;
     sun.castShadow = (s === 2 || s === 4) && !selected;
+    sun.shadow.needsUpdate = true;
     // the clay model is lit harder from one side so its form reads; finishes get softer, fuller light
     scene.environmentIntensity = s === 2 ? 0.22 : 0.55;
     hemi.intensity = s === 2 ? 0.25 : 0.45;
     if (s === 2) sun.intensity = 3.1;
+    // opened up, the rooms need more light from all round than a closed house does
+    if (cutLive() && (cut.roof || cut.floor >= 0 || sectionLive())) { scene.environmentIntensity += 0.25; hemi.intensity += 0.2; }
   }
 
   // ---------- camera ----------
-  const cur = { yaw: VIEWS[0].yaw, pitch: VIEWS[0].pitch, dist: 1 };
+  const phone = () => canvas.clientWidth < 760;
+  const viewFor = (i: number): View => (phone() ? VIEWS_PHONE : VIEWS)[Math.max(0, i)];
+  const cur = { ...viewFor(0) };
   const goal = { ...cur };
   let userYaw = 0, userYawGoal = 0;
   let fitDist = 30;
@@ -295,7 +366,9 @@ export async function createExplorer(opts: {
     fitDist = r / Math.sin(Math.min(vFov, hFov) / 2);
     camera.near = fitDist * 0.03; camera.far = fitDist * 3.5;
     // on wide screens the words sit over the bottom of the picture, so lift the model clear of them
-    if (w >= 760) camera.setViewOffset(w, h, 0, Math.round(h * 0.13), w, h);
+    // and a little to the right, clear of the controls and the heading on the left (a selected part stays
+    // in the middle: its call out is drawn from the centre)
+    if (w >= 760) camera.setViewOffset(w, h, w >= 1000 && !selected ? -Math.round(w * 0.15) : 0, Math.round(h * 0.13), w, h);
     else if (selected) camera.setViewOffset(w, h, 0, Math.round(h * 0.2), w, h);
     else camera.clearViewOffset();
     camera.updateProjectionMatrix();
@@ -307,6 +380,20 @@ export async function createExplorer(opts: {
     camera.position.set(tCur.x + d * Math.cos(pitch) * Math.sin(yaw), tCur.y + d * Math.sin(pitch), tCur.z + d * Math.cos(pitch) * Math.cos(yaw));
     camera.up.set(0, 1, 0);
     camera.lookAt(tCur);
+  }
+  // where the camera should stand for the current stage and cut
+  function restView() {
+    const v = { ...viewFor(stage) };
+    if (cutLive() && !selected) {
+      if (sectionLive()) {
+        // face the cut: from the side that has been taken away
+        v.yaw = cut.axis === 0 ? 68 : 162; v.pitch = 13; v.dist = cut.axis === 0 ? (phone() ? 1.1 : 1.3) : (phone() ? 0.8 : 1.0);
+      } else if (cut.roof || cut.floor >= 0) {
+        // look down into the rooms
+        v.pitch = phone() ? 50 : 46; v.dist *= phone() ? 1.1 : 1.32;
+      }
+    }
+    Object.assign(goal, v);
   }
 
   // ---------- render loop (on demand) ----------
@@ -330,11 +417,16 @@ export async function createExplorer(opts: {
       const lm = lineMat[d]; if (!lm) return;
       const diff = (lineTarget[d] ?? 0) - lm.opacity;
       if (Math.abs(diff) > 0.01) { lm.opacity += diff * 0.14; moving = true; }
-      else { lm.opacity = lineTarget[d] ?? 0; if (lm.opacity === 0) lines[d].visible = false; }
+      else if (lm.opacity !== (lineTarget[d] ?? 0)) {
+        lm.opacity = lineTarget[d] ?? 0;
+        if (lm.opacity === 0) lineSets.forEach((set) => { if (set.d === d) set.obj.visible = false; });
+        moving = true;
+      }
     });
     // a slow breath of rotation while the section is on screen
     if (!reduce && visible && !dragging && !selected && stage !== 1 && stage !== 5) { sway = Math.sin(t / 5200) * 5; moving = true; } else sway *= 0.9;
-    if (moving || dirty) {
+    // nothing is drawn until the first stage is set: the raw model must not flash while the line drawings build
+    if ((moving || dirty) && stage >= 0) {
       const keep = userYaw; userYaw += sway; placeCamera(); userYaw = keep;
       renderer.render(scene, camera);
       dirty = false;
@@ -355,38 +447,47 @@ export async function createExplorer(opts: {
     if (!dragging) return;
     dragging = false;
     if (stage >= 2 && stage <= 4 && Math.hypot(e.clientX - downX, e.clientY - downY) < 6) {
-      const m = hitAt(e.clientX, e.clientY);
-      select(m === selected ? null : m);
+      const p = hitAt(e.clientX, e.clientY);
+      select(p === selected ? null : p);
     }
   };
   canvas.addEventListener("pointerup", end);
   canvas.addEventListener("pointercancel", () => { dragging = false; });
   canvas.addEventListener("pointerleave", () => { if (!coarse) setHover(null, 0, 0); });
 
-  // ---------- picking (BIM stage) ----------
+  // ---------- picking ----------
   const ray = new THREE.Raycaster();
   const ndc = new THREE.Vector2();
   let pickQueued = false, px = 0, py = 0;
   function queuePick(x: number, y: number) { px = x; py = y; if (pickQueued) return; pickQueued = true; requestAnimationFrame(() => { pickQueued = false; pick(px, py); }); }
-  function setHover(m: THREE.Mesh | null, x: number, y: number) {
-    canvas.style.cursor = m ? "pointer" : "";
+  function setHover(p: Part | null, x: number, y: number) {
+    canvas.style.cursor = p ? "pointer" : "";
     if (stage !== 3 || selected) { if (hovered) { hovered = null; paint(); kick(); opts.onPick?.(null, 0, 0); } return; }
-    if (hovered !== m) {
-      if (hovered) hovered.material = bim[hovered.userData.d];
-      hovered = m;
-      if (m) m.material = highlight;
+    if (hovered !== p) {
+      if (hovered) { const old = hovered; old.meshes.forEach((m) => (m.material = bim[old.d])); }
+      hovered = p;
+      if (p) p.meshes.forEach((m) => (m.material = highlight));
       kick();
     }
-    opts.onPick?.(m ? { d: m.userData.d, c: m.userData.c, t: m.userData.t, p: m.userData.p } : null, x, y);
+    opts.onPick?.(p ? { d: p.d, c: p.c, t: p.t, l: p.l } : null, x, y);
   }
-  function hitAt(x: number, y: number): THREE.Mesh | null {
+  function hitAt(x: number, y: number): Part | null {
     const r = canvas.getBoundingClientRect();
     ndc.set(((x - r.left) / r.width) * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
-    const hits = ray.intersectObjects(meshes.filter((m) => m.visible), false);
-    // the see through shell should not block what is inside it
-    const hit = (stage === 3 || selected ? hits.find((h) => { const o = h.object as THREE.Mesh; return o === selected || (stage === 3 && o.userData.d !== "architecture"); }) : null) ?? hits[0];
-    return hit ? (hit.object as THREE.Mesh) : null;
+    let hits = ray.intersectObjects(meshes.filter((m) => m.visible), false);
+    // what the section has sliced away cannot be clicked
+    if (sectionLive()) hits = hits.filter((h) => sectionPlane.distanceToPoint(h.point) >= 0);
+    // glass and the see through shell should not block what is behind them
+    const solid = (h: THREE.Intersection) => {
+      const p = partOf(h.object);
+      if (p === selected) return true;
+      if (selected) return false;
+      if (stage === 3) return p.d !== "architecture";
+      return !(stage === 4 && h.object.userData.cls === "glass" && p.c !== "Windows" && p.c !== "Curtain walls" && p.c !== "Doors");
+    };
+    const hit = hits.find(solid) ?? hits[0];
+    return hit ? partOf(hit.object) : null;
   }
   function pick(x: number, y: number) {
     const r = canvas.getBoundingClientRect();
@@ -395,27 +496,31 @@ export async function createExplorer(opts: {
 
   // ---------- inspect one part: the camera flies to it and the rest fades to glass ----------
   const bb = new THREE.Box3(), sph = new THREE.Sphere(), v3 = new THREE.Vector3();
-  function select(m: THREE.Mesh | null) {
-    if (m === selected) return;
+  function select(p: Part | null) {
+    if (p === selected) return;
     if (hovered) { hovered = null; opts.onPick?.(null, 0, 0); }
-    selected = m;
-    if (m) {
-      bb.setFromObject(m); bb.getBoundingSphere(sph);
+    selected = p;
+    if (p) {
+      bb.setFromObject(p.node); bb.getBoundingSphere(sph);
       tGoal.copy(sph.center);
       const vF = THREE.MathUtils.degToRad(camera.fov), hF = 2 * Math.atan(Math.tan(vF / 2) * camera.aspect);
-      const d = Math.max((sph.radius * 2.3) / Math.sin(Math.min(vF, hF) / 2), fitDist * 0.2);
+      const d = Math.max((sph.radius * 2.3) / Math.sin(Math.min(vF, hF) / 2), fitDist * 0.16);
       goal.dist = Math.min(1, d / fitDist);
-      goal.pitch = 20;
+      goal.pitch = 24;
       // look at it from the outside of the building, on the side the part is on
       cur.yaw += userYaw; userYaw = userYawGoal = 0;
       const hx = sph.center.x - target.x, hz = sph.center.z - target.z;
       goal.yaw = Math.hypot(hx, hz) > radius * 0.1 ? THREE.MathUtils.radToDeg(Math.atan2(hx, hz)) : cur.yaw;
       const sz = bb.getSize(v3);
+      // a wall, a door or a window is a thin slab: face its broad side, a little off square, never its edge
+      if (Math.min(sz.x, sz.z) < Math.max(sz.x, sz.z) * 0.35) {
+        goal.yaw = sz.x < sz.z ? (hx >= 0 ? 68 : -68) : (hz >= 0 ? 22 : 158);
+      }
       const dims = [sz.x / k, sz.z / k, sz.y / k].map((n) => Math.round(n * 100) / 100) as [number, number, number];
-      opts.onSelect?.({ d: m.userData.d, c: m.userData.c, t: m.userData.t, p: m.userData.p, size: dims, same: meshes.filter((o) => o.userData.c === m.userData.c).length });
+      opts.onSelect?.({ d: p.d, c: p.c, t: p.t, l: p.l, size: dims, same: perCategory[p.c] ?? 1 });
     } else {
       tGoal.copy(target);
-      Object.assign(goal, VIEWS[Math.max(0, stage)]);
+      restView();
       userYawGoal = 0;
       opts.onSelect?.(null);
     }
@@ -429,7 +534,8 @@ export async function createExplorer(opts: {
   io.observe(canvas);
   const onVis = () => { running = !document.hidden; if (running) kick(); };
   document.addEventListener("visibilitychange", onVis);
-  const ro = new ResizeObserver(() => { fit(); kick(); });
+  let wasPhone = phone();
+  const ro = new ResizeObserver(() => { fit(); if (phone() !== wasPhone) { wasPhone = phone(); if (!selected && stage >= 0) restView(); } kick(); });
   ro.observe(canvas);
 
   fit();
@@ -442,12 +548,26 @@ export async function createExplorer(opts: {
       if (selected) { selected = null; tGoal.copy(target); opts.onSelect?.(null); }
       canvas.style.cursor = "";
       stage = i;
-      Object.assign(goal, VIEWS[i]);
+      restView();
       userYawGoal = 0;
+      paint();
+      fit();
+      kick();
+    },
+    setDiscipline(d, on) { discOn[d] = on; if (selected && selected.d === d && !on) select(null); else if (stage === 3) { paint(); kick(); } },
+    setCut(c) {
+      const before = { ...cut };
+      Object.assign(cut, c);
+      cut.section = Math.max(0, Math.min(1, cut.section));
+      // dragging the slider only moves the plane: nothing is rebuilt
+      const sliding = before.section > 0.005 && cut.section > 0.005 && before.axis === cut.axis && before.roof === cut.roof && before.floor === cut.floor;
+      if (sliding) { placeSection(); sun.shadow.needsUpdate = true; kick(); return; }
+      // a part the cut has just hidden cannot stay selected
+      if (selected && !cutShows(selected.f, selected.c === "Ceilings")) { select(null); return; }
+      if (!selected) { restView(); userYawGoal = 0; }
       paint();
       kick();
     },
-    setDiscipline(d, on) { discOn[d] = on; if (selected && selected.userData.d === d && !on) select(null); else if (stage === 3) { paint(); kick(); } },
     clearSelection() { select(null); },
     resize() { fit(); kick(); },
     dispose() {

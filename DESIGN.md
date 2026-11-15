@@ -7,7 +7,7 @@ Rewritten 15 Nov 2026 when the owner asked for a new look ("Apple kind of touch"
 
 - **Do exactly what was asked, completely.** Removing a page means removing every link to it. The Services overview page stays removed; "Services" in the menu is a list of the eight service pages, not a page of its own.
 - **Real work only.** Every picture, film and model comes from the studio's own portfolio. No stock photos, no invented clients, team members, testimonials, logos or numbers, no "demonstration" case studies.
-- **Never show architect, client or site information.** No addresses, names, permit numbers or title blocks. Model element names are cleaned by `tools/build-model.py`.
+- **Never show architect, client or site information.** No addresses, names, permit numbers or title blocks. Model element names are cleaned by `tools/build-model-navis.py` (and `tools/build-model.py` for the earlier house), which also checks the finished file and prints `PRIVACY OK` or the words it found.
 - **No decoration nobody asked for.** No grid line backgrounds, faint background art, pulsing dots or endless decorative loops.
 - **No old school effects.** No card flips, bounces, glows, gradient text or busy hover tricks. One quiet fade and rise on scroll, once.
 - **Never let text overlap text.** Tooltips open above their trigger.
@@ -23,7 +23,7 @@ Third look, 15 Nov 2026, with a flat pass the same day. The owner rejected black
 - **Colour:** soft light ground `#f1f2f4`, white surfaces, ink `#0b0c0f`, greys `#3c3f47` and `#666a74`. The only colour is the amber from the logo, `#efa11f`. Sections that show 3D, film or the closing action are ink black (`.ax-dark`) and run edge to edge with square corners. The light and dark rhythm of the page stays.
 - **Type:** Big Shoulders (tall condensed capitals) for H1, H2 and H3 so headings and sub headings speak in one voice; Hanken Grotesk for reading, labels, buttons and H4. The line under a heading (`.ax-lead`) is large and semi bold. Self hosted through Fontsource. No other fonts. On phones (600px and under): H1 40px, H2 30px, lead 17px, and no heading runs to four lines.
 - **Radius scale (tokens in `ax.css`, never a raw number):** buttons 10px (`--ax-r-btn`), small buttons 8px (`--ax-r-btn-sm`), cards and panels 12px (`--ax-r-card`), pictures and film 8px (`--ax-r-media`), inputs 8px (`--ax-r-input`), chips and tags 6px (`--ax-r-chip`), full width sections 0. A full circle is allowed only for small status dots and tick marks.
-- **Glass and blur:** none, with one exception. The small panels that float over the live 3D model (`.xp-views`, `.xp-call-card`, `.xp-layers`, `.xp-pick` in `Explorer.astro`) use `rgba(14,16,20,.82)` with a 12px blur. Nothing else on the site uses `backdrop-filter`.
+- **Glass and blur:** none, with one exception. The small panels that float over the live 3D model (`.xp-views`, `.xp-call-card`, `.xp-layers`, `.xp-cut`, `.xp-pick` in `Explorer.astro`) use `rgba(14,16,20,.82)` with a 12px blur. Nothing else on the site uses `backdrop-filter`.
 - **Buttons:** 50px high (small 44px). `.ax-btn--gold` is the one primary action per screen: flat amber, ink text, no glow. Over film or pictures the second action is `.ax-btn--glass`, which is now a plain 1px white outline (the class name is historic). Other secondary actions are `.ax-link`: words followed by a plain arrow, no badge.
 - **One label for the primary action, sitewide: "Start a project".** Never "Get a quote", "Send your brief", "Start a project like this" and so on. Secondary links keep their own wording. The contact form's own submit button says "Send brief".
 - **Glyphs, not badges:** arrows on links and cards, the play triangle on film tiles and the chevron on rows that open are plain glyphs with no circle behind them. Tap areas stay 44px.
@@ -33,16 +33,20 @@ Third look, 15 Nov 2026, with a flat pass the same day. The owner rejected black
 - **Logo in the header is interactive:** it tilts toward the pointer, the amber dot is pulled toward the cursor and springs back, and the dot jumps on click or tap. `Logo3D.astro` is the full 3D logo in the home page closing section (left out on phones to keep that section short).
 - **Home page:** opens with the studio film edge to edge, the four figures in one plain row split by hairlines at its foot (visible without scrolling on a phone). "Built around how you work" uses underlined text tabs; the services named in it are plain text links. Services are picture cards on wide screens and a plain list on phones (small picture, name, arrow, 72px rows). The steps are four tiles with large numerals on wide screens (the one you reach turns black) and a compact numbered list on phones. Recent work shows three films on phones, then "See all work". Inner pages open with a picture or film panel (`.pg-hero-media`, `.pg-panel`) under the heading.
 - **Service pages on phones:** "You get back" comes first with a "Start a project" button under it; "You send", "How it is checked", "When it helps" and "How we work together" are closed rows that open on a tap (`.sv-fold`). The clash table shows four rows and a "Show all" button.
-- **Interactive building:** in the 3D model, BIM and Materials stages a click flies the camera to that part, fades the rest and opens the call out (`.xp-call`). The last stage plays the film clips with a Front, Wide, Detail switch. On phones the pinned walk is a quarter of a screen per stage, the stage bars can be tapped, and "Skip the walkthrough" is a full width outline button.
+- **Interactive building:** in the 3D model, BIM and Materials stages a click flies the camera to that part, fades the rest and opens the call out (`.xp-call`: category, type, size, level, how many in the model). The same three stages have the "Look inside" controls (`.xp-cut`): floors (All, Ground, Second, Third), roof on or off, and a slice that travels lengthways or across the house. Wide screens show them as a small panel top left (two columns on short screens); between 761 and 999px and on phones they stay closed behind one "Look inside" button, and on phones they open as a solid sheet over the words, never over the model. Every control is 44px high. The last stage plays the film clips with a Front, Wide, Detail switch. On phones the pinned walk is a quarter of a screen per stage, the stage bars can be tapped, and "Skip the walkthrough" is a full width outline button.
 - **Motion:** `data-ax` fade and rise, once. Reduced motion respected everywhere.
 
 ## The 3D building (`src/components/Explorer.astro`, `src/scripts/explorer.ts`)
 
 One real project, exported from our own Revit file, taken through six stages by scrolling: sketch, drawings, 3D model, BIM detail, materials, final render.
 
-- Source model: Revit FBX export. `tools/build-model.py` (run with Blender) classifies every element, strips identifying text, and writes `public/models/adu.glb` (Draco, about 1 MB, 434 elements).
-- Three.js and the model load only when the section nears the screen. The canvas draws only when something changes and pauses off screen.
-- BIM stage shows real element data (discipline, category, type, new or existing) and has layer switches.
+- Site version 1.1: the model is a three floor infill house with its full interior (joinery, stairs, fixtures, furniture), because the owner asked for "more detailed model ... so someone can view everything in it".
+- Source model: Revit, exported through Navisworks as FBX, which keeps the real tree (level, category, family, type, instance, one mesh per material). `tools/build-model-navis.py` (run with Blender) reads discipline, category, type and level from that tree, strips identifying text, folds the export's materials into 17 finish classes and writes `public/models/house.glb` (Draco, about 1.7 MB, 700 parts, 271,000 triangles) plus `src/data/house-model.json`. The page reads its counts and floor names from that JSON; never type them in.
+- The earlier house (`tools/build-model.py`, `public/models/adu.glb`) is kept: the service page stills and the clash report were made from it.
+- Three.js and the model load only when the section nears the screen. The canvas draws only when something changes and pauses off screen. The shadow map is redrawn only when the model changes.
+- BIM stage shows real element data (discipline, category, type, level) and has layer switches for the disciplines the model has parts in.
+- Materials stage: one finish per class (white plaster and stucco, black trim, white oak joinery and floors, clear glass, tile, stone, porcelain, stainless), using the box projected maps in `public/media/tex`.
+- The final stage's still and film clips are set in one `render` object at the top of `Explorer.astro`.
 - No WebGL, reduced motion or data saver: the section becomes a plain list with the final render. The page must always read correctly without the canvas.
 - Horizontal drag turns the model; vertical touch still scrolls the page.
 - `tools/render-shots.py` renders the service page stills from the same model.
@@ -65,7 +69,7 @@ Menu: Services (a list of the eight service pages) · Work (`/visuals/`) · Indu
 
 - Home page before scrolling: one hero image (about 240 KB, 77 KB on phones), three small font files, under 60 KB of CSS and script.
 - Films: short silent clips under 1 MB each, fetched only when played. Stills are WebP with a small version for phones.
-- 3D: model about 1 MB, engine about 160 KB compressed, fetched on demand.
+- 3D: model about 1.7 MB (ceiling 5 MB), engine about 160 KB compressed, fetched on demand.
 - Every image has width, height and lazy loading (except the hero).
 
 ## Checks before every publish
@@ -85,3 +89,19 @@ Raw files from the owner live in `assets-src/` (ignored by git, never published)
 ## Shareable preview
 
 `npx astro build && python tools/make-preview.py <folder>` writes a copy with relative addresses for the Artifact host (entry page `entry.html`). Published at https://claude.ai/artifact/WWvVZyjS2mAqJwDmCArq7T.
+
+## Virtual tour (`src/components/Tour.astro`, `src/scripts/tour.ts`)
+
+A 360 degree room to room tour on the Work page, rendered from the studio's own Revit model. The project is called "Split level residence" and nothing else.
+
+- **Placement:** its own ink black section straight after the Work page opening, before the project gallery, so the first thing in the showcase is something the visitor can move. One line of honest text, then "Start a project".
+- **Nothing loads until "Start the tour" is pressed.** Before that the section is one poster picture. The press fetches three.js, the viewer and the first panorama. Only one panorama is held in memory at a time.
+- **"Start the tour" is the plain white button, not amber.** The amber "Start a project" under the tour stays the one primary action.
+- **Glass:** the room label, the full screen button, the hint and the hotspots sit over the live view, so they use the same glass as the 3D building panels (`rgba(14,16,20,.82)`, 12px blur). The room list is plain text buttons under the view, current room underlined in amber like the header.
+- **Hotspots** are real buttons with the room name and a plain chevron (no circle), 44px high. Their directions come from the real standpoint positions in `src/data/tour.json`; never type angles into the component.
+- **Phone:** the view is upright (4 by 5), the label and full screen button sit in the top corners, the hint at the bottom edge, the room list under the view. Nothing covers the middle. Sideways drag turns the view; up and down still scrolls the page (full screen frees both directions). Phones, data saver and weak cards get the 2048 pixel pictures.
+- **Keyboard:** arrow keys turn, plus and minus zoom, Tab reaches every hotspot and room button; a hotspot that is out of view turns the view to itself when it takes focus. The wheel zooms only after the view has been clicked or is full screen, so it never traps page scrolling.
+- **Reduced motion:** no opening drift, no inertia, rooms change at once.
+- **Staging is declared:** the Revit model has joinery, kitchen, fixtures and beds but no loose furniture. All furniture, lamps, plants, art and accessories in the tour are virtual staging from free BlenderKit assets, placed by `tools/tour-dress.py` (list in `HANDOFF.md`); the neighbours and trees outside are set dressing. The owner allows virtual staging; do not describe the staging as part of the client's design.
+- **Materials:** owner's standing rule, "for better materials use BlenderKit". Free assets only, fetched with `tools/tour-bkit.py`.
+- **Privacy:** file names, JSON, alt text and labels carry no client, architect, address or person. `tools/tour-scene.py` and `tools/tour-dress.py` scrub and check names and print `PRIVACY OK`.
