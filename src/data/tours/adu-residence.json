@@ -24,18 +24,18 @@
    "spots": [
     {
      "to": "bedroom",
-     "yaw": 261.0,
-     "pitch": -22.0
+     "yaw": 248,
+     "pitch": -8
     },
     {
      "to": "deck",
-     "yaw": 69.4,
-     "pitch": -18.9
+     "yaw": 55,
+     "pitch": -8
     },
     {
      "to": "lower",
-     "yaw": 24.8,
-     "pitch": -22.0
+     "yaw": 23,
+     "pitch": -16
     }
    ]
   },
@@ -49,13 +49,13 @@
    "spots": [
     {
      "to": "living",
-     "yaw": 81.0,
-     "pitch": -22.0
+     "yaw": 129,
+     "pitch": -10
     },
     {
      "to": "bath",
-     "yaw": 353.1,
-     "pitch": -22.0
+     "yaw": 3,
+     "pitch": -10
     }
    ]
   },
@@ -69,8 +69,8 @@
    "spots": [
     {
      "to": "bedroom",
-     "yaw": 173.1,
-     "pitch": -22.0
+     "yaw": 142,
+     "pitch": -18
     }
    ]
   },
@@ -84,13 +84,13 @@
    "spots": [
     {
      "to": "living",
-     "yaw": 249.4,
-     "pitch": -17.4
+     "yaw": 307,
+     "pitch": -10
     },
     {
      "to": "garden",
-     "yaw": 98.1,
-     "pitch": -22.0
+     "yaw": 98,
+     "pitch": -22
     }
    ]
   },
@@ -104,13 +104,13 @@
    "spots": [
     {
      "to": "living",
-     "yaw": 204.8,
-     "pitch": 12.0
+     "yaw": 287,
+     "pitch": -10
     },
     {
      "to": "garden",
-     "yaw": 92.2,
-     "pitch": -19.9
+     "yaw": 74,
+     "pitch": -10
     }
    ]
   },
@@ -124,13 +124,13 @@
    "spots": [
     {
      "to": "lower",
-     "yaw": 272.2,
-     "pitch": -3.7
+     "yaw": 276,
+     "pitch": -4
     },
     {
      "to": "deck",
-     "yaw": 278.1,
-     "pitch": 12.0
+     "yaw": 282,
+     "pitch": 20
     }
    ]
   }
