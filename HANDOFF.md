@@ -13,7 +13,7 @@ Read `DESIGN.md` first. Older owner feedback is in `docs/chat-history.md`.
   5. Four steps; the card you have scrolled to turns black. "Send your brief" sits under them.
   6. Recent work (film tiles with a player that offers the next step), questions, closing action with the 3D logo.
 - **Navigation:** flat bar attached to the top edge (no glass, no rounding), Services list, interactive logo, turns ink over black sections. Flat pass of 15 Nov 2026: radius scale, edge to edge dark sections, one button label, shorter phone layouts. See `DESIGN.md`.
-- **Work page** (`/visuals/`): opens with the exterior film; every picture and drawing opens large.
+- **Work page** (`/visuals/`): opens with the exterior film, then the virtual tours (`#tours`), the projects and the films; every picture and drawing opens large. Virtual tours are part of Work (owner, 16 Nov 2026): there is no Tours menu item.
 - **Rule from the owner:** every element needs a reason for where it sits, and the site must feel built for the visiting client so they click through to "Start a project".
 
 ## 3D model and media pipeline (`tools/`)
@@ -93,7 +93,7 @@ New stills and clips of the white infill house from the owner's Blender scene, r
 
 ## Tour library (added 16 Nov 2026)
 
-The single tour became a library: `/tours/` lists every finished tour, `/tours/<slug>/` is one page per tour, and the Work page keeps one featured tour inline (`hillside`, or the first ready tour if its pictures are ever missing) with a "See all tours" link. "Tours" sits after "Work" in the header (fits at 1041px, the narrowest width that shows the full bar) and "Virtual tours" in the footer.
+Every finished tour is shown on the Work page in one section, `/visuals/#tours` (owner, 16 Nov 2026: "the virtual tours should go under the work section"). The featured tour (`hillside` by default, chosen in the editor as "Featured tour"; the first ready tour if its pictures are ever missing) sits inline; every other tour is a card under "More virtual tours." that opens its own viewer in place, just below the cards (script at the foot of `visuals.astro`; the card still links to the tour page when scripting is off). `/tours/<slug>/` stays as one page per tour for deep links, with "Work" as the active menu item and links back to `/visuals/#tours`. `/tours/` itself only forwards to `/visuals/#tours` (meta refresh, canonical `/visuals/`, noindex, left out of the sitemap). There is no Tours menu item; the footer's "Virtual tours" goes to `/visuals/#tours`.
 
 **To add a project, drop two things in place and edit nothing else:**
 

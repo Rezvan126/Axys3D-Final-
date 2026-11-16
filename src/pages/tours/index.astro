@@ -1,14 +1,9 @@
 ---
-// TOUR LIBRARY: every finished 360 degree tour, one card per project.
-// Cards come from src/data/tours.ts, which lists only tours whose data and pictures are all in place.
-import SEO from "../../components/SEO.astro";
-import Navbar from "../../components/Navbar.astro";
-import Footer from "../../components/Footer.astro";
-import TourCard from "../../components/TourCard.astro";
-import { tours } from "../../data/tours";
-import "../../styles/global.css";
-
-const image = tours[0] ? `${tours[0].base}poster.webp` : undefined;
+// Virtual tours are part of the Work page now (/visuals/#tours). This address stays so old links keep
+// working: it sends the visitor on at once, tells search engines the Work page is the real one, and is
+// left out of the sitemap (astro.config.mjs). The single tour pages /tours/<slug>/ still exist as deep links.
+const to = "/visuals/#tours";
+const canonical = new URL("/visuals/", Astro.site ?? "https://axys3d.com").href;
 ---
 
 <!doctype html>
@@ -16,66 +11,13 @@ const image = tours[0] ? `${tours[0].base}poster.webp` : undefined;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title="Virtual Tours: 360 Degree Walkthroughs | Axys3D" description="Walk through projects produced by Axys3D room by room, in 360 degree views rendered from the studio's own building models." image={image} />
+    <title>Virtual tours | Axys3D</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={canonical} />
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
   </head>
-
   <body>
-    <Navbar />
-    <main id="main" tabindex="-1" class="pg tl">
-      <!-- what this is and how to start, before the list -->
-      <section class="pg-top tl-top">
-        <div class="ax-wrap pg-top-in">
-          <h1 class="ax-h1--sm" data-ax>Virtual tours.</h1>
-          <div class="pg-top-row" data-ax>
-            <p class="ax-lead">Walk through our projects room by room. Every view is a 360 degree render made from the project's own building model. Pick a project, press Start, then follow the arrows from room to room.</p>
-            <div class="pg-act">
-              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
-              <p class="pg-assure">Free quote within one working day. NDA before you share files.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="tl-list" aria-label="Tours">
-        <div class="ax-wrap">
-          {tours.length > 0 ? (
-            <ul class:list={["tl-grid", tours.length === 1 && "is-one"]}>
-              {tours.map((t, i) => (
-                <li data-ax style={`--ax-d:${(i % 2) * 0.06}s`}><TourCard tour={t} eager={i < 2} /></li>
-              ))}
-            </ul>
-          ) : (
-            <p class="tl-empty" data-ax>New tours are being rendered. In the meantime, <a href="/visuals/">see our work</a>.</p>
-          )}
-        </div>
-      </section>
-
-      <section class="pg-cta ax-dark" aria-labelledby="tlClose">
-        <div class="ax-wrap">
-          <h2 class="ax-display" id="tlClose" data-ax>Want your project to walk like this?</h2>
-          <p class="ax-lead" data-ax>Send us your model or drawings and tell us which rooms matter. We reply with a clear scope, price and timeline.</p>
-          <div class="pg-actions" data-ax><a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a></div>
-        </div>
-      </section>
-    </main>
-    <Footer />
+    <p>Virtual tours are on our Work page. <a href={to}>Open the tours</a>.</p>
+    <script is:inline define:vars={{ to }}>location.replace(to);</script>
   </body>
 </html>
-
-<style is:global>
-  .tl-top { padding-bottom: clamp(36px, 5vw, 72px); }
-  .tl-list { padding-bottom: var(--ax-section); }
-  .tl-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(40px, 5vw, 72px) clamp(16px, 2.4vw, 32px); }
-  .tl-grid > li { min-width: 0; }
-  /* a single project: picture and words side by side instead of half a row standing empty */
-  .tl-grid.is-one { grid-template-columns: 1fr; }
-  .tl-grid.is-one .tc { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(24px, 3.4vw, 56px); align-items: end; }
-  .tl-grid.is-one .tc-body { padding-top: 0; }
-  .tl-empty { margin: 0; font-size: 18px; color: var(--ax-text-2); }
-  .tl-empty a { color: var(--ax-text); font-weight: 600; text-decoration: underline; text-decoration-color: var(--ax-accent); text-underline-offset: 4px; }
-  @media (max-width: 760px) {
-    .tl-grid { grid-template-columns: 1fr; }
-    .tl-grid.is-one .tc { display: flex; }
-    .tl-grid.is-one .tc-body { padding-top: 16px; }
-  }
-</style>

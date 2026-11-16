@@ -7,7 +7,8 @@ import noDashes from "./src/integrations/no-dashes.mjs";
 export default defineConfig({
   // Live address: used for canonical links, share previews, structured data and the sitemap
   site: "https://axys3d.com",
-  integrations: [sitemap(), noDashes()],
+  // left out of the sitemap: /tours/ only forwards to the tours on the Work page
+  integrations: [sitemap({ filter: (page) => !/\/tours\/$/.test(page) }), noDashes()],
   // Old pages that were merged or removed: send visitors and search engines to the new place
   redirects: {
     "/work": "/visuals",

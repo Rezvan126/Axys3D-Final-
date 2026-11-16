@@ -53,10 +53,10 @@ One real project, exported from our own Revit file, taken through six stages by 
 
 ## Site structure
 
-Menu: Services (a list of the eight service pages) · Work (`/visuals/`) · Tours (`/tours/`) · Industries · Insights · About · Hire us · Contact, then the "Start a project" button.
+Menu: Services (a list of the eight service pages) · Work (`/visuals/`) · Industries · Insights · About · Hire us · Contact, then the "Start a project" button. Virtual tours are part of Work (owner, 16 Nov 2026): no Tours menu item; the footer link "Virtual tours" goes to `/visuals/#tours`.
 
 - Home: hero with a real render, figures, the 3D building, eight services as a list, recent work, how it works, questions, closing action.
-- Work: one project in depth plus films from the portfolio. No client or site details.
+- Work: the virtual tours (`#tours`), projects in depth, then films from the portfolio. No client or site details. Words, projects, pictures and films are edited by the owner in Pages CMS (`EDITING.md`).
 - Case study pages were removed because they were fictional. Add real ones only with the client's permission.
 - Redirects: `/work`, `/services`, `/process` in `astro.config.mjs`; old `/work/...` addresses in `public/.htaccess`.
 - Page files and internal links are lowercase (Linux hosting).
@@ -99,7 +99,8 @@ A 360 degree room to room tour on the Work page, rendered from the studio's own 
 - **"Start the tour" is the plain white button, not amber.** The amber "Start a project" under the tour stays the one primary action.
 - **Glass:** the room label, the full screen button, the hint and the hotspots sit over the live view, so they use the same glass as the 3D building panels (`rgba(14,16,20,.82)`, 12px blur). The room list is plain text buttons under the view, current room underlined in amber like the header.
 - **Hotspots** are real buttons with the room name and a plain chevron (no circle), 44px high. Their directions come from the real standpoint positions in `src/data/tours/<slug>.json`; never type angles into the component.
-- **Library (`/tours/`, `/tours/<slug>/`):** cards are the poster, rooms and floors, the project name and one line, with no box around them; a single project sits picture left, words right. A tour page opens with the view itself (H1 is the project name) sized so "Start the tour" shows without scrolling at 1440 by 900 and 375 by 812, then the rooms by floor as hairline rows that open the tour at that room, then other tours, then "Start a project". How to add a project: `HANDOFF.md`, "Tour library".
+- **Tours on the Work page (`/visuals/#tours`):** the featured tour inline, then "More virtual tours." with one card per other tour (poster, rooms and floors, the project name and one line, no box around them; a single card sits picture left, words right). A card opens its own viewer in place just below the cards and starts it; with scripting off it links to the tour page. `/tours/` only forwards to `/visuals/#tours` (noindex, out of the sitemap).
+- **Tour pages (`/tours/<slug>/`)** stay as deep links; "Work" is the active menu item there and the links go back to `/visuals/#tours`. A tour page opens with the view itself (H1 is the project name) sized so "Start the tour" shows without scrolling at 1440 by 900 and 375 by 812, then the rooms by floor as hairline rows that open the tour at that room, then other tours, then "Start a project". How to add a project: `HANDOFF.md`, "Tour library".
 - **Phone:** the view is upright (4 by 5), the label and full screen button sit in the top corners, the hint at the bottom edge, the room list under the view. Nothing covers the middle. Sideways drag turns the view; up and down still scrolls the page (full screen frees both directions). Phones, data saver and weak cards get the 2048 pixel pictures.
 - **Keyboard:** arrow keys turn, plus and minus zoom, Tab reaches every hotspot and room button; a hotspot that is out of view turns the view to itself when it takes focus. The wheel zooms only after the view has been clicked or is full screen, so it never traps page scrolling.
 - **Reduced motion:** no opening drift, no inertia, rooms change at once.

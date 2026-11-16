@@ -2,6 +2,7 @@
 // ONE TOUR: the viewer first (so "Start the tour" shows without scrolling, phones included), then the rooms
 // by floor (each opens the tour at that room), other tours, and the closing "Start a project".
 // One page per tour in src/data/tours.ts; a tour whose pictures are not all in place gets no page.
+// Tours are part of the Work page (/visuals/#tours); these pages are deep links, and "Work" is the active menu item.
 import SEO from "../../components/SEO.astro";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
@@ -37,7 +38,7 @@ const count = `${cap(plural(tour.rooms.length, "room"))}${tour.floors.length > 1
   <body>
     <Navbar />
     <main id="main" tabindex="-1" class="pg tp">
-      <Tour slug={tour.slug} id="tour" level={1} heading={tour.project} lead={tour.summary} eager links={[{ href: "/tours/", label: "See all tours" }]} />
+      <Tour slug={tour.slug} id="tour" level={1} heading={tour.project} lead={tour.summary} eager links={[{ href: "/visuals/#tours", label: "See all tours in our work" }]} />
 
       <!-- what is inside: every room by floor; a tap opens the tour there -->
       <section class="ax-section tp-rooms" aria-labelledby="tpRooms">
@@ -72,7 +73,7 @@ const count = `${cap(plural(tour.rooms.length, "room"))}${tour.floors.length > 1
                 <li data-ax style={`--ax-d:${i * 0.06}s`}><TourCard tour={t} level={3} /></li>
               ))}
             </ul>
-            {others.length > 2 && <div class="pg-next" data-ax><a href="/tours/" class="ax-link">See all tours</a></div>}
+            {others.length > 2 && <div class="pg-next" data-ax><a href="/visuals/#tours" class="ax-link">See all tours</a></div>}
           </div>
         </section>
       )}

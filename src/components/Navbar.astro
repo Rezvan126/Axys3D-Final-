@@ -8,7 +8,6 @@ import { services } from "../data/services";
 
 const links = [
   { label: "Work", href: "/visuals/" },
-  { label: "Tours", href: "/tours/" },   // the tour library sits next to the work it comes from
   { label: "Industries", href: "/industries/" },
   { label: "Insights", href: "/insights/" },
   { label: "About", href: "/about/" },
@@ -17,7 +16,9 @@ const links = [
 ];
 const svc = services.map((s) => ({ label: s.title.replace(" & ", " and "), href: `/services/${s.slug}/` }));
 
-const raw = (Astro.url.pathname.replace(/\/+$/, "") || "/").toLowerCase();
+// virtual tours are part of the work: a tour page lights up "Work"
+const path = (Astro.url.pathname.replace(/\/+$/, "") || "/").toLowerCase();
+const raw = path.startsWith("/tours") ? "/visuals" : path;
 const isActive = (href: string) => {
   const h = href.replace(/\/+$/, "").toLowerCase();
   return raw === h || raw.startsWith(h + "/");
