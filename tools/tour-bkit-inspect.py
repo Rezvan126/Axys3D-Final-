@@ -1,12 +1,15 @@
 # Lists what each downloaded BlenderKit file holds: for models the objects, their combined size and
 # whether they share one root; for materials the material names, image sizes and texture coordinate setup.
-#   blender -b --factory-startup -P tools/tour-bkit-inspect.py
-import bpy, json, os
+#   blender -b --factory-startup -P tools/tour-bkit-inspect.py [-- <asset_base_id> ...]
+import bpy, json, os, sys
 from mathutils import Vector
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-log = json.load(open(os.path.join(ROOT, "assets-src", "amber", "tour", "bkit-assets.json")))
+log = json.load(open(os.environ.get("BKIT_LOG") or os.path.join(ROOT, "assets-src", "amber", "tour", "bkit-assets.json")))   # BKIT_LOG: a per project log
+ONLY = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 for base_id, a in log.items():
+    if ONLY and base_id not in ONLY:
+        continue
     path = a["file"]
     if a["type"] == "hdr":
         print("INSPECT hdr", a["name"], "|", path); continue
