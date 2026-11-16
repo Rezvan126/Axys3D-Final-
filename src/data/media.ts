@@ -37,7 +37,8 @@ export function pic(src: string, size?: { width?: number; height?: number }, fal
   const w = size?.width ?? real.w;
   const h = size?.height ?? real.h;
   const smUrl = smallOf(src);
-  const small = smUrl !== src ? webpSize(smUrl) : null;
+  const found = smUrl !== src ? webpSize(smUrl) : null;
+  const small = found && found.w < real.w ? found : null; // a "small" copy as big as the picture adds nothing
   return {
     src,
     sm: small ? smUrl : null,

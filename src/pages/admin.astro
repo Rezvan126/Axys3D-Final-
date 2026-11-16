@@ -1,0 +1,42 @@
+---
+// /admin: the owner's door to the content editor (Pages CMS, https://app.pagescms.org).
+// The editor itself runs at Pages CMS and signs in with GitHub; nothing private lives on this page.
+// Kept out of search results (noindex) and out of the sitemap (astro.config.mjs). How to edit: EDITING.md.
+import SEO from "../components/SEO.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+const editor = "https://app.pagescms.org";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title="Edit the website | Axys3D" description="Private editor for the Axys3D website." noindex />
+  </head>
+  <body>
+    <Navbar />
+    <main id="main" tabindex="-1" class="pg adm">
+      <section class="pg-top">
+        <div class="ax-wrap pg-top-in">
+          <h1 class="ax-display ax-h1--sm">Edit the website.</h1>
+          <div class="pg-top-row">
+            <p class="ax-lead">Change words, pictures, films and projects in the editor. Sign in with the GitHub account that holds the site; your changes go live about three minutes after you save.</p>
+            <div class="pg-act">
+              <a href={editor} class="ax-btn ax-btn--gold" rel="noopener">Open the editor</a>
+              <p class="pg-assure">Only people you have invited can sign in.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .adm .pg-top { padding-bottom: var(--ax-section); }
+</style>

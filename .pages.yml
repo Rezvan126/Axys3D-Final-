@@ -1,0 +1,841 @@
+# Pages CMS settings for the Axys3D site (https://pagescms.org/docs/configuration/).
+# The owner edits the site at https://app.pagescms.org (yourdomain/admin sends you there). Every "Save"
+# is a commit on GitHub; the publish workflow (.github/workflows/deploy.yml) then prepares the pictures
+# and films (tools/process-media.mjs), builds the site and uploads it to Hostinger. See EDITING.md.
+
+media:
+  - name: media
+    label: Pictures and films
+    input: public/media
+    output: /media
+    path: public/media/uploads
+    extensions: [jpg, jpeg, png, webp, tif, tiff, mp4, mov, m4v, webm]
+    rename: safe
+
+settings:
+  content:
+    # keep everything in a file that this editor does not show (for example the 3D tour's technical data)
+    merge: true
+
+# Shared field definitions, so every picture and text box carries the same help text.
+components:
+  picture:
+    type: image
+    label: Picture
+    description: "Upload a JPG, PNG or WebP of any size; the site makes the web sizes itself. Privacy: remove architect names, logos, tags and locations before uploading."
+    options:
+      media: media
+      path: public/media/uploads
+      extensions: [jpg, jpeg, png, webp, tif, tiff]
+  film:
+    type: file
+    label: Film
+    description: "Upload an MP4 or MOV under about 100 MB; the site compresses it for the web and makes a cover picture. Privacy: no architect names, logos, tags or locations in the film."
+    options:
+      media: media
+      path: public/media/uploads
+      extensions: [mp4, mov, m4v, webm]
+  alt:
+    type: string
+    label: What the picture shows
+    description: "One short plain sentence for people who cannot see the picture, for example: Kitchen of the hillside house at dusk. Privacy: no client, architect, street or town names."
+  line:
+    type: string
+    description: "Privacy: no client, architect, street or town names. Avoid dashes; the site removes them anyway."
+  words:
+    type: text
+    description: "Privacy: no client, architect, street or town names. Avoid dashes; the site removes them anyway."
+
+content:
+  # ------------------------------------------------------------------ WORK PAGE
+  - name: work-group
+    label: Work page
+    type: group
+    items:
+      - name: projects
+        label: Projects
+        description: "Each project is one block on the Work page, in the order of its number. Untick Show on the website to hide a project without deleting it."
+        type: collection
+        path: src/content/projects
+        format: json
+        filename:
+          template: "{fields.slug}.json"
+          field: create
+        view:
+          fields: [title, order, visible]
+          primary: title
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Project heading
+            component: line
+            required: true
+          - name: slug
+            label: Short file name
+            type: string
+            required: true
+            description: "Lowercase letters, numbers and hyphens only, for example: lake-house. Used only for the file; never a client or place name."
+            pattern:
+              regex: "^[a-z0-9-]+$"
+              message: "Use lowercase letters, numbers and hyphens only."
+          - name: summary
+            label: Short description under the heading
+            component: words
+          - name: order
+            label: Position on the page
+            type: number
+            description: "1 shows first, 2 second, and so on."
+            default: 10
+          - name: visible
+            label: Show on the website
+            type: boolean
+            default: true
+          - name: gallery
+            label: Pictures
+            description: "The first picture is shown large. Drag to reorder. Each picture opens full size when clicked."
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{alt}"
+            fields:
+              - name: image
+                component: picture
+                required: true
+              - name: alt
+                component: alt
+          - name: drawings
+            label: Drawings (optional)
+            description: "Plans, elevations and model views shown as a row of four under the pictures. Leave empty if there are none."
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: image
+                component: picture
+                required: true
+              - name: title
+                label: Name
+                component: line
+                required: true
+              - name: text
+                label: One line about it
+                component: words
+              - name: alt
+                component: alt
+          - name: films
+            label: Films (optional)
+            description: "Short films of this project, shown under its pictures."
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: title
+                label: Film name
+                component: line
+                required: true
+              - name: kind
+                label: Small line under the name
+                type: string
+                description: "For example: Exterior film."
+              - name: clip
+                label: Short preview (a few seconds, plays silently on the tile)
+                component: film
+                required: true
+              - name: film
+                label: Full film (optional; plays in the player when the tile is clicked)
+                component: film
+              - name: poster
+                label: Cover picture (optional; taken from the preview if empty)
+                component: picture
+          - name: links
+            label: Links under the description
+            description: "For example: Turn this building in 3D, pointing to /#explore. Most projects need none."
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{label}"
+            fields:
+              - name: label
+                label: Link words
+                type: string
+                required: true
+              - name: href
+                label: Where it goes
+                type: string
+                required: true
+                description: "A page address on this site, for example /#explore or /services/revit-production/"
+          - name: tour
+            label: Virtual tour of this project (optional)
+            type: string
+            description: "The short name of its tour, for example hillside. Adds a Walk through the rooms link. Leave empty if there is no tour."
+          - name: pictureName
+            label: Name used for the pictures by screen readers
+            type: string
+            description: "For example: exterior render. Read out as Open exterior render 3 large."
+            default: picture
+
+      - name: workPage
+        label: Work page words, opening film and tours
+        type: file
+        path: src/content/workPage/index.json
+        format: json
+        fields:
+          - name: heading
+            label: Page heading
+            component: line
+            required: true
+          - name: lead
+            label: Line under the heading
+            component: words
+          - name: heroFilm
+            label: Opening film
+            component: film
+          - name: heroPicture
+            label: Opening cover picture
+            component: picture
+            description: "Shown while the film loads, and instead of it when there is no film."
+            required: true
+          - name: heroFilmLabel
+            label: What the opening film shows
+            component: alt
+          - name: featuredTour
+            label: Featured virtual tour
+            type: string
+            description: "The tour shown first on the Work page, by its short name: hillside or garden-addition. Every other finished tour is listed under it."
+          - name: tourHeading
+            label: Heading above the featured tour
+            component: line
+            required: true
+          - name: tourLead
+            label: Line under that heading
+            component: words
+          - name: filmsHeading
+            label: Heading above the films
+            component: line
+            required: true
+          - name: filmsLead
+            label: Line under the films heading
+            component: words
+          - name: filmsCount
+            label: How many films to show
+            type: number
+            options:
+              min: 1
+          - name: closingHeading
+            label: Closing heading (above the last Start a project button)
+            component: line
+            required: true
+          - name: closingLead
+            label: Closing line
+            component: words
+          - name: seoTitle
+            label: Title in Google and browser tabs
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: seoDescription
+            label: Description in Google
+            type: text
+            options:
+              maxlength: 160
+
+      - name: tours
+        label: Virtual tours
+        description: "The 360 degree tours shown in the tours part of the Work page. New tours are made by Claude from your 3D model; here you can change names, words and room pictures."
+        type: collection
+        path: src/data/tours
+        format: json
+        operations:
+          create: false
+          rename: false
+          delete: false
+        view:
+          fields: [project]
+          primary: project
+        fields:
+          - name: project
+            label: Project name
+            component: line
+            required: true
+          - name: slug
+            label: Short name (do not change)
+            type: string
+            readonly: true
+          - name: summary
+            label: One line about the tour
+            component: words
+            required: true
+          - name: poster_alt
+            label: What the cover picture shows
+            component: alt
+          - name: order
+            label: Position in the list
+            type: number
+            description: "Lower numbers come first."
+          - name: rooms
+            label: Rooms
+            description: "One entry per 360 degree view, in the order the tour walks through them."
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{name}"
+            fields:
+              - name: name
+                label: Room name
+                type: string
+                required: true
+              - name: floor
+                label: Floor
+                type: string
+                description: "For example: Ground floor."
+              - name: image
+                label: New 360 degree picture for this room (optional)
+                component: picture
+                description: "Only to replace this room's view: a 360 degree (equirectangular) picture twice as wide as it is high, 4096 x 2048 or larger. The site makes the web sizes itself. Privacy: remove architect names, logos, tags and locations before uploading."
+              - name: slug
+                label: Room short name (do not change)
+                type: string
+                readonly: true
+              - name: staged
+                label: Virtually staged (furniture added in 3D)
+                type: boolean
+              - name: yaw
+                label: Starting view direction
+                type: number
+                description: "Degrees. You can leave this as it is, or ask Claude to set it."
+              - name: pitch
+                label: Starting view height
+                type: number
+                description: "Degrees. You can leave this as it is, or ask Claude to set it."
+              - name: spots
+                label: Arrows to other rooms
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "to {to}"
+                fields:
+                  - name: to
+                    label: Leads to room (short name)
+                    type: string
+                    required: true
+                  - name: yaw
+                    label: Arrow direction
+                    type: number
+                    description: "Degrees around the room. You can leave this as it is, or ask Claude to set it."
+                  - name: pitch
+                    label: Arrow height
+                    type: number
+                    description: "Degrees up or down. You can leave this as it is, or ask Claude to set it."
+
+      - name: films
+        label: Films
+        description: "The film tiles on the Work page and the home page, in this order. Drag to reorder; untick Show to hide one."
+        type: file
+        path: src/content/films/index.json
+        format: json
+        fields:
+          - name: films
+            label: Films
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: title
+                label: Film name
+                component: line
+                required: true
+              - name: kind
+                label: Small line under the name
+                type: string
+                description: "For example: Interior visualization."
+              - name: clip
+                label: Short preview (a few seconds, plays silently on the tile)
+                component: film
+                required: true
+              - name: film
+                label: Full film (optional; plays in the player when the tile is clicked)
+                component: film
+              - name: poster
+                label: Cover picture (optional; taken from the preview if empty)
+                component: picture
+              - name: visible
+                label: Show on the website
+                type: boolean
+                default: true
+
+  # ------------------------------------------------------------------ HOME PAGE
+  - name: home-group
+    label: Home page
+    type: group
+    items:
+      - name: homePage
+        label: Opening film, figures and questions
+        type: file
+        path: src/content/homePage/index.json
+        format: json
+        fields:
+          - name: heroPicture
+            label: Opening picture (wide screens)
+            component: picture
+            required: true
+            description: "A wide still, about 2.4 times as wide as it is high. Shown at once while the film loads. Privacy: remove architect names, logos, tags and locations before uploading."
+          - name: heroPictureTall
+            label: Opening picture (phones, upright)
+            component: picture
+            description: "An upright still, about 3 by 4. Leave empty to use the wide one."
+          - name: heroFilm
+            label: Opening film (wide screens)
+            component: film
+            description: "A short seamless loop, silent. Privacy: no architect names, logos, tags or locations in the film."
+          - name: heroFilmTall
+            label: Opening film (phones, upright)
+            component: film
+            description: "Leave empty to use the wide film."
+          - name: heroAlt
+            label: What the opening picture shows
+            component: alt
+          - name: figures
+            label: The four figures
+            type: object
+            list:
+              max: 4
+              collapsible:
+                collapsed: true
+                summary: "{value}{unit} {label}"
+            fields:
+              - name: value
+                label: Number
+                type: string
+                required: true
+              - name: unit
+                label: Small text after the number
+                type: string
+                description: "For example: + or days or /5. Can be empty."
+              - name: label
+                label: What it counts
+                type: string
+                required: true
+          - name: faqs
+            label: Questions and answers
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{q}"
+            fields:
+              - name: q
+                label: Question
+                component: line
+                required: true
+              - name: a
+                label: Answer
+                component: words
+                required: true
+          - name: reelCount
+            label: How many films to show on the home page
+            type: number
+            options:
+              min: 1
+
+      - name: explorer
+        label: 3D building, last stage
+        description: "The final render and the three film angles shown at the end of the interactive 3D building. Keep them of the same house as the 3D model."
+        type: file
+        path: src/content/explorer/index.json
+        format: json
+        fields:
+          - name: still
+            label: Final render
+            component: picture
+            required: true
+          - name: stillAlt
+            label: What the render shows
+            component: alt
+          - name: clips
+            label: Film angles
+            type: object
+            list:
+              min: 1
+              max: 4
+              collapsible:
+                collapsed: true
+                summary: "{label}"
+            fields:
+              - name: label
+                label: Button name
+                type: string
+                required: true
+                description: "One short word, for example: Front."
+              - name: film
+                label: Film
+                component: film
+                required: true
+
+  # ------------------------------------------------------------------ TEXT PAGES
+  - name: text-group
+    label: Text pages
+    type: group
+    items:
+      - name: services
+        label: Services
+        type: collection
+        path: src/content/services
+        format: yaml-frontmatter
+        operations:
+          create: false
+          rename: false
+          delete: false
+        view:
+          fields: [title, serviceNumber]
+          primary: title
+          sort: [serviceNumber]
+          default:
+            sort: serviceNumber
+            order: asc
+        fields:
+          - name: title
+            label: Service name
+            component: line
+            required: true
+          - name: serviceNumber
+            label: Number
+            type: string
+          - name: serviceLabel
+            label: Short label
+            type: string
+          - name: description
+            label: Short description
+            component: words
+            required: true
+          - name: bestFitBuyers
+            label: Best fit for
+            type: string
+            list: true
+          - name: projectStages
+            label: Project stages
+            type: string
+            list: true
+          - name: engagementContext
+            label: Typical engagements
+            type: string
+            list: true
+          - name: body
+            label: Page text (careful)
+            type: code
+            description: "The rest of the page. Lines starting with ## or # are headings and the page is built from them, so keep that pattern; if in doubt, ask Claude to make the change."
+            options:
+              format: markdown
+
+      - name: industries
+        label: Industries
+        type: collection
+        path: src/content/industries
+        format: yaml-frontmatter
+        operations:
+          create: false
+          rename: false
+          delete: false
+        view:
+          fields: [title]
+          primary: title
+        fields:
+          - name: title
+            label: Industry name
+            component: line
+            required: true
+          - name: description
+            label: Short description
+            component: words
+            required: true
+          - name: operatingContext
+            label: One line in the client's words
+            component: words
+          - name: buyerPressures
+            label: Their pressures
+            type: string
+            list: true
+          - name: productionRequirements
+            label: What they need from us
+            type: string
+            list: true
+          - name: engagementModel
+            label: How a project runs
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{step} {title}"
+            fields:
+              - name: step
+                label: Step number
+                type: string
+              - name: title
+                label: Step name
+                type: string
+              - name: description
+                label: What happens
+                component: words
+                required: true
+          - name: typicalServices
+            label: Typical services
+            type: string
+            list: true
+          - name: responsibilityBoundary
+            label: Who is responsible for what
+            component: words
+
+      - name: insights
+        label: Insights (guides)
+        type: collection
+        path: src/content/insights
+        format: yaml-frontmatter
+        filename:
+          template: "{fields.title}.md"
+          field: create
+        view:
+          fields: [title, publishDate]
+          primary: title
+          sort: [publishDate, title]
+          default:
+            sort: publishDate
+            order: desc
+        fields:
+          - name: title
+            label: Title
+            component: line
+            required: true
+          - name: summary
+            label: Summary (on the card)
+            component: words
+            required: true
+          - name: category
+            label: Category
+            type: string
+            required: true
+          - name: readTime
+            label: Reading time
+            type: string
+            required: true
+            description: "For example: 8 min"
+          - name: badgeText
+            label: Badge
+            type: string
+            required: true
+            description: "For example: Guide"
+          - name: ctaLabel
+            label: Button words
+            type: string
+            required: true
+            description: "For example: Read the guide"
+          - name: publishDate
+            label: Published on
+            type: date
+          - name: updatedDate
+            label: Updated on
+            type: date
+          - name: image
+            label: Picture
+            component: picture
+          - name: imageAlt
+            label: What the picture shows
+            component: alt
+          - name: seoTitle
+            label: Title in Google
+            type: string
+            options:
+              maxlength: 70
+          - name: seoDescription
+            label: Description in Google
+            type: text
+            options:
+              maxlength: 160
+          - name: keywords
+            label: Search words
+            type: string
+            list: true
+          - name: faq
+            label: Questions at the end
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{q}"
+            fields:
+              - name: q
+                label: Question
+                type: string
+                required: true
+              - name: a
+                label: Answer
+                component: words
+                required: true
+          - name: body
+            label: Article
+            type: code
+            description: "Written in Markdown: a line starting with ## is a section heading, ### a smaller heading, **word** is bold. Privacy: no client, architect, street or town names."
+            options:
+              format: markdown
+
+      - name: aboutPage
+        label: About page
+        type: file
+        path: src/content/aboutPage/index.md
+        format: yaml-frontmatter
+        fields:
+          - { name: heroEyebrow, label: Small line above the heading, type: string, required: true }
+          - { name: heroTitle, label: Heading, component: line, required: true }
+          - { name: heroDescription, label: Line under the heading, component: words, required: true }
+          - { name: whyTitle, label: Why us heading, component: line, required: true }
+          - { name: whySubtitle, label: Why us subheading, component: line, required: true }
+          - { name: whyDescription, label: Why us text, component: words, required: true }
+          - name: principles
+            label: Principles
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{num} {title}"
+            fields:
+              - { name: num, label: Number, type: string, required: true }
+              - { name: title, label: Title, type: string, required: true }
+              - { name: description, label: Text, component: words, required: true }
+          - { name: deliveryTitle, label: Closing heading, component: line, required: true }
+          - { name: deliveryDescription, label: Closing text, component: words, required: true }
+          - { name: ctaLabel, label: Button words, type: string, required: true }
+          - { name: ctaLink, label: Button goes to, type: string, required: true }
+          - { name: seoTitle, label: Title in Google, type: string, options: { maxlength: 70 } }
+          - { name: seoDescription, label: Description in Google, type: text, options: { maxlength: 160 } }
+
+      - name: contactPage
+        label: Contact page
+        type: file
+        path: src/content/contactPage/index.md
+        format: yaml-frontmatter
+        fields:
+          - { name: heroEyebrow, label: Small line above the heading, type: string, required: true }
+          - { name: heroTitle, label: Heading, component: line, required: true }
+          - { name: heroDescription, label: Line under the heading, component: words, required: true }
+          - { name: checklistTitle, label: Checklist heading, type: string, required: true }
+          - { name: checklistSubtitle, label: Checklist subheading, type: string, required: true }
+          - { name: checklistItems, label: Checklist, type: string, list: true }
+          - { name: disclaimerText, label: Responsibility note, component: words, required: true }
+          - { name: formTitle, label: Form heading, type: string, required: true }
+          - { name: formSubtitle, label: Form subheading, type: string, required: true }
+          - name: formFields
+            label: Form field names
+            type: object
+            fields:
+              - { name: name, label: Name, type: string, required: true }
+              - { name: workEmail, label: Work email, type: string, required: true }
+              - { name: company, label: Company, type: string, required: true }
+              - { name: projectType, label: Project type, type: string, required: true }
+              - { name: projectStage, label: Project stage, type: string, required: true }
+              - { name: disciplines, label: Disciplines, type: string, required: true }
+              - { name: sourceInformation, label: Source information, type: string, required: true }
+              - { name: projectBrief, label: Project brief, type: string, required: true }
+              - { name: deliverables, label: Deliverables, type: string, required: true }
+              - { name: targetDate, label: Target date, type: string, required: true }
+              - { name: additionalInformation, label: Additional information, type: string, required: true }
+          - { name: projectTypes, label: Project type choices, type: string, list: true }
+          - { name: projectStages, label: Project stage choices, type: string, list: true }
+          - { name: disciplineOptions, label: Discipline choices, type: string, list: true }
+          - { name: sourceOptions, label: Source information choices, type: string, list: true }
+          - { name: deliverableOptions, label: Deliverable choices, type: string, list: true }
+          - { name: channelTitle, label: Platforms heading, type: string, required: true }
+          - { name: channelSubtitle, label: Platforms subheading, type: string, required: true }
+          - { name: channelDescription, label: Platforms text, component: words, required: true }
+          - { name: channelActionNote, label: Platforms note, component: words, required: true }
+          - { name: seoTitle, label: Title in Google, type: string, options: { maxlength: 70 } }
+          - { name: seoDescription, label: Description in Google, type: text, options: { maxlength: 160 } }
+
+      - name: industriesPage
+        label: Industries page (top)
+        type: file
+        path: src/content/industriesPage/index.md
+        format: yaml-frontmatter
+        fields:
+          - { name: heroTitle, label: Heading, component: line, required: true }
+          - { name: heroSubtitle, label: Subheading, component: line, required: true }
+          - { name: heroDescription, label: Line under the heading, component: words, required: true }
+          - name: industrySections
+            label: Industry blocks
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{targetBuyer}"
+            fields:
+              - { name: id, label: Number, type: string, required: true }
+              - { name: targetBuyer, label: Who it is for, type: string, required: true }
+              - { name: title, label: Heading, type: string, required: true }
+              - { name: description, label: Text, component: words, required: true }
+              - { name: ctaLabel, label: Link words, type: string, required: true }
+              - { name: ctaLink, label: Link goes to, type: string, required: true }
+          - { name: seoTitle, label: Title in Google, type: string, options: { maxlength: 70 } }
+          - { name: seoDescription, label: Description in Google, type: text, options: { maxlength: 160 } }
+
+      - name: insightsPage
+        label: Insights page (top)
+        type: file
+        path: src/content/insightsPage/index.md
+        format: yaml-frontmatter
+        fields:
+          - { name: heroTitle, label: Heading, component: line, required: true }
+          - { name: heroSubtitle, label: Subheading, component: line, required: true }
+          - { name: heroDescription, label: Line under the heading, component: words, required: true }
+          - { name: seoTitle, label: Title in Google, type: string, options: { maxlength: 70 } }
+          - { name: seoDescription, label: Description in Google, type: text, options: { maxlength: 160 } }
+
+  # ------------------------------------------------------------------ SETTINGS
+  - name: siteSettings
+    label: Contact and profile links
+    description: "The email shown on every page, your Upwork and Fiverr links and social profiles. An empty link is simply not shown."
+    type: file
+    path: src/content/siteSettings/index.json
+    format: json
+    fields:
+      - name: email
+        label: Contact email
+        type: string
+        required: true
+        pattern:
+          regex: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+          message: "Enter a full email address."
+      - name: upworkUrl
+        label: Upwork profile link
+        type: string
+        description: "The full address, starting with https://. Leave empty until the profile is ready; the buttons then go to the Contact page."
+      - name: fiverrUrl
+        label: Fiverr profile link
+        type: string
+        description: "The full address, starting with https://. Leave empty until the profile is ready."
+      - name: social
+        label: Social profiles (footer)
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{name}"
+        fields:
+          - name: name
+            label: Network
+            type: string
+            required: true
+          - name: url
+            label: Profile link
+            type: string
+            description: "The full address, starting with https://. Leave empty to hide this network."

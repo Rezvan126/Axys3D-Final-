@@ -1,0 +1,88 @@
+# PUBLISH: every save in the editor (Pages CMS) is a commit on "main"; this workflow then
+#   1. prepares uploaded pictures and films (tools/process-media.mjs) and saves the results back to the repo,
+#   2. builds the site (npx astro build),
+#   3. uploads dist/ to Hostinger by FTP.
+# One-time setup (EDITING.md): repository secrets FTP_SERVER, FTP_USERNAME, FTP_PASSWORD.
+# Optional repository variable FTP_PROTOCOL: "ftps" (default, encrypted) or "ftp" if the host refuses FTPS.
+name: Publish the website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # "Run workflow" button in the Actions tab, to publish again without a change
+
+# one publish at a time; a newer save waits for the running one instead of cancelling it half way
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write # to save the prepared media back to the repository
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Get the site
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install ffmpeg (for films)
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg >/dev/null
+          fi
+          ffmpeg -version | head -1
+
+      - name: Install packages
+        run: npm ci --no-audit --no-fund
+
+      - name: Prepare uploaded pictures and films
+        run: node tools/process-media.mjs
+
+      - name: Save prepared media back to the repository
+        run: |
+          git add -A public/media src/content src/data/tours tools/media-cache.json
+          if git diff --cached --quiet; then
+            echo "Nothing new to save."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Prepare uploaded media [skip ci]"
+          # the owner may have saved again in the meantime: put this commit on top of theirs
+          for i in 1 2 3; do
+            git pull --rebase --quiet origin main && git push --quiet origin HEAD:main && exit 0
+            sleep 5
+          done
+          echo "Could not save the prepared media back (the site is still published from this run)." >&2
+
+      - name: Build the site
+        run: npx astro build
+
+      - name: Upload to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./dist/
+          server-dir: public_html/
+          # Never touched on the server (not uploaded, never deleted): the mail settings and mail logs live
+          # only on the server (public/mail/mail-config.php is git ignored), plus the host's own folders.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            mail/mail-config.php
+            mail/logs/**
+            .well-known/**
+            cgi-bin/**
