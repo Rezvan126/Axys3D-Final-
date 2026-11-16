@@ -6,21 +6,33 @@ import Footer from "../components/Footer.astro";
 import WorkReel from "../components/WorkReel.astro";
 import Tour from "../components/Tour.astro";
 import { getTour, tours } from "../data/tours";
+import { getCollection, getEntry } from "astro:content";
+import { pic, posterOf } from "../data/media";
 import "../styles/global.css";
 
-// the featured tour: the hillside house while its pictures are in place, otherwise the first ready tour
-const featured = getTour("hillside") ?? tours[0];
+// Everything on this page is edited in Pages CMS (see EDITING.md):
+//   Work page words, opening film and featured tour  src/content/workPage/index.json
+//   Projects, in their order, hidden ones left out    src/content/projects/<name>.json
+const page = (await getEntry("workPage", "index"))!.data;
+const heroPoster = page.heroPicture;
 
-// adu-9 to adu-11 are new camera angles rendered from the same scene (tools/render-portfolio.py)
-const renders = [1, 14, 9, 15, 11, 16, 10, 13].map((n) => `adu-${n}`);
-// hillside house: frame from the cinematic film first, then the stills (tools/amber-*.py)
-const amber = ["amber-cine-1", "amber-2", "amber-3", "amber-5", "amber-6"];
-const stages = [
-  { img: "svc-plan", title: "Floor plan", text: "Cut straight from the coordinated Revit model: existing house on the left, the new unit on the right." },
-  { img: "svc-elevation", title: "Elevation", text: "Elevations and sections come from the same model, so they always agree with the plans." },
-  { img: "svc-model", title: "3D model", text: "The existing house and the new two storey addition, modeled together." },
-  { img: "svc-bim", title: "BIM detail", text: "434 model elements across architecture, structure, electrical, plumbing and ventilation." },
-];
+// the featured tour: the one chosen in the editor while its pictures are in place, otherwise the first ready tour
+const featured = (page.featuredTour ? getTour(page.featuredTour) : undefined) ?? tours[0];
+
+const projects = (await getCollection("projects"))
+  .map((p) => p.data)
+  .filter((p) => p.visible && p.gallery.length > 0)
+  .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title))
+  .map((p, k) => ({
+    ...p,
+    // the first project keeps the anchor "#project" that the opening links to
+    id: k === 0 ? "project" : `project-${k + 1}`,
+    head: k === 0 ? "vsProject" : `vsProject${k + 1}`,
+    pics: p.gallery.map((g) => ({ ...pic(g.image, g), alt: g.alt })),
+    stages: p.drawings.map((d) => ({ ...pic(d.image, undefined, { w: 1600, h: 1000 }), title: d.title, text: d.text, alt: d.alt })),
+    reel: p.films.map((f) => ({ ...f, film: f.film ?? f.clip, cover: pic(f.poster ?? posterOf(f.clip), undefined, { w: 1600, h: 900 }) })),
+    tourLink: p.tour && featured?.slug === p.tour ? "#tour" : p.tour && getTour(p.tour) ? `/tours/${p.tour}/` : "",
+  }));
 ---
 
 <!doctype html>
@@ -28,7 +40,7 @@ const stages = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title="Work: Renders, Films and BIM Projects | Axys3D" description="Projects produced in house by Axys3D: Revit models, permit drawing sets, photoreal renders and walkthrough films." image="/media/adu-1.webp" />
+    <SEO title={page.seoTitle} description={page.seoDescription} image="/media/adu-1.webp" />
   </head>
 
   <body>
@@ -36,15 +48,17 @@ const stages = [
     <main id="main" tabindex="-1" class="pg">
       <section class="pg-hero">
         <div class="ax-wrap">
-          <h1 class="ax-display ax-h1--sm" data-ax>Our work, from model to final frame.</h1>
-          <p class="ax-lead" data-ax>Everything on this page was produced in house. Client and site details are left out on purpose: we do not publish them without permission.</p>
+          <h1 class="ax-display ax-h1--sm" data-ax>{page.heading}</h1>
+          {page.lead && <p class="ax-lead" data-ax>{page.lead}</p>}
           <div class="pg-actions" data-ax>
             <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
-            <a href="#project" class="ax-link">See one project start to finish</a>
+            {projects.length > 0 && <a href="#project" class="ax-link">See one project start to finish</a>}
           </div>
         </div>
         <figure class="ax-wrap pg-hero-media" data-ax>
-          <video muted playsinline loop autoplay preload="metadata" poster="/media/exterior.webp" src="/media/exterior.mp4" aria-label="Exterior film of the two storey residence"></video>
+          {page.heroFilm
+            ? <video muted playsinline loop autoplay preload="metadata" poster={heroPoster} src={page.heroFilm} aria-label={page.heroFilmLabel}></video>
+            : <img src={heroPoster} alt={page.heroFilmLabel} decoding="async" />}
         </figure>
       </section>
 
@@ -52,73 +66,72 @@ const stages = [
       {featured && (
         <Tour
           slug={featured.slug}
-          heading="Walk through it. A virtual tour from the Revit model."
-          lead={featured.slug === "hillside"
-            ? "Six 360 degree views of a split level residence, rendered room by room from our own Revit model and virtually staged. Drag to look around, then follow the arrows from room to room."
-            : featured.summary}
+          heading={page.tourHeading}
+          lead={featured.slug === page.featuredTour && page.tourLead ? page.tourLead : featured.summary}
           links={[{ href: "/tours/", label: "See all tours" }, { href: "/services/real-time/", label: "Interactive tours and showrooms" }]}
         />
       )}
 
-      <!-- one project, start to finish -->
-      <section aria-labelledby="vsProject" id="project">
-        <div class="ax-wrap">
-          <header class="ax-head">
-            <h2 class="ax-display" id="vsProject" data-ax>Two storey residence. Revit model to final render.</h2>
-            <p class="ax-lead" data-ax>A new two storey unit added to an existing house. We modeled both in Revit, produced the permit drawing set, then built the scene and rendered the exterior.</p>
-            <a class="ax-link" href="/#explore" data-ax>Turn this building in 3D</a>
-          </header>
-          <ul class="pg-gallery">
-            {renders.map((r, i) => (
-              <li class:list={[i === 0 && "wide"]} data-ax style={`--ax-d:${(i % 3) * 0.06}s`}>
-                <button type="button" class="vs-zoom" data-full={`/media/${r}.webp`} aria-label={`Open exterior render ${i + 1} large`}><img src={`/media/${r}.webp`} srcset={`/media/${r}-sm.webp 800w, /media/${r}.webp 1536w`} sizes={i === 0 ? "(max-width: 900px) 94vw, 820px" : "(max-width: 900px) 46vw, 400px"} width="1536" height="1024" alt={`Exterior render ${i + 1} of the two storey residence`} loading={i === 0 ? "eager" : "lazy"} decoding="async" /></button>
-              </li>
-            ))}
-          </ul>
-          <ol class="vs-stages">
-            {stages.map((s, i) => (
-              <li data-ax style={`--ax-d:${i * 0.07}s`}>
-                <button type="button" class="vs-zoom" data-full={`/media/${s.img}.webp`} aria-label={`Open the ${s.title.toLowerCase()} large`}><img src={`/media/${s.img}.webp`} srcset={`/media/${s.img}-sm.webp 800w, /media/${s.img}.webp 1600w`} sizes="(max-width: 900px) 94vw, 400px" width="1600" height="1000" alt={`${s.title} of the residence, from the project model`} loading="lazy" decoding="async" /><span class="vs-zoom-i" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 2h4v4M6 14H2v-4M14 2L9.5 6.5M2 14l4.5-4.5" /></svg></span></button>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <!-- second project: the hillside house in the home page 3D explorer and the virtual tour -->
-      <section class="ax-section" aria-labelledby="vsProject2" id="project-2">
-        <div class="ax-wrap">
-          <header class="ax-head">
-            <h2 class="ax-display" id="vsProject2" data-ax>Split level hillside house. One Revit model, every output.</h2>
-            <p class="ax-lead" data-ax>The same model drives the interactive 3D view, the virtual tour, the stills and the film. Change the model once and every output follows.</p>
-            <div class="vs-links" data-ax><a class="ax-link" href="/#explore">Open the 3D model</a>{featured?.slug === "hillside" && <a class="ax-link" href="#tour">Walk through the rooms</a>}</div>
-          </header>
-          <ul class="pg-gallery">
-            {amber.map((r, i) => (
-              <li class:list={[i === 0 && "wide"]} data-ax style={`--ax-d:${(i % 3) * 0.06}s`}>
-                <button type="button" class="vs-zoom" data-full={`/media/${r}.webp`} aria-label={`Open hillside house render ${i + 1} large`}><img src={`/media/${r}.webp`} srcset={`/media/${r}-sm.webp 800w, /media/${r}.webp 1920w`} sizes={i === 0 ? "(max-width: 900px) 94vw, 820px" : "(max-width: 900px) 46vw, 400px"} width="1920" height={i === 0 ? 804 : 1080} alt={`Render ${i + 1} of the split level hillside house`} loading="lazy" decoding="async" /></button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {projects.map((p, k) => (
+        <section class:list={[k > 0 && "ax-section"]} aria-labelledby={p.head} id={p.id}>
+          <div class="ax-wrap">
+            <header class="ax-head">
+              <h2 class="ax-display" id={p.head} data-ax>{p.title}</h2>
+              {p.summary && <p class="ax-lead" data-ax>{p.summary}</p>}
+              {p.tour || p.links.length > 1 ? (
+                <div class="vs-links" data-ax>{p.links.map((l) => <a class="ax-link" href={l.href}>{l.label}</a>)}{p.tourLink && <a class="ax-link" href={p.tourLink}>Walk through the rooms</a>}</div>
+              ) : p.links.map((l) => <a class="ax-link" href={l.href} data-ax>{l.label}</a>)}
+            </header>
+            <ul class="pg-gallery">
+              {p.pics.map((r, i) => (
+                <li class:list={[i === 0 && "wide"]} data-ax style={`--ax-d:${(i % 3) * 0.06}s`}>
+                  <button type="button" class="vs-zoom" data-full={r.src} aria-label={`Open ${p.pictureName} ${i + 1} large`}><img src={r.src} srcset={r.srcset} sizes={i === 0 ? "(max-width: 900px) 94vw, 820px" : "(max-width: 900px) 46vw, 400px"} width={r.w} height={r.h} alt={r.alt} loading={k === 0 && i === 0 ? "eager" : "lazy"} decoding="async" /></button>
+                </li>
+              ))}
+            </ul>
+            {p.stages.length > 0 && (
+              <ol class="vs-stages">
+                {p.stages.map((s, i) => (
+                  <li data-ax style={`--ax-d:${i * 0.07}s`}>
+                    <button type="button" class="vs-zoom" data-full={s.src} aria-label={`Open the ${s.title.toLowerCase()} large`}><img src={s.src} srcset={s.srcset} sizes="(max-width: 900px) 94vw, 400px" width={s.w} height={s.h} alt={s.alt} loading="lazy" decoding="async" /><span class="vs-zoom-i" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 2h4v4M6 14H2v-4M14 2L9.5 6.5M2 14l4.5-4.5" /></svg></span></button>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </li>
+                ))}
+              </ol>
+            )}
+            {p.reel.length > 0 && (
+              <ul class="wr-grid vs-reel">
+                {p.reel.map((w) => (
+                  <li class="wr-item" data-ax>
+                    <button type="button" class="wr-tile" data-clip={w.clip} data-film={w.film} data-title={w.title} aria-label={`Play film: ${w.title}`}>
+                      <img src={w.cover.src} srcset={w.cover.srcset} sizes="(max-width: 760px) 94vw, 610px" width={w.cover.w} height={w.cover.h} alt="" loading="lazy" decoding="async" />
+                      <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+                      <span class="wr-cap"><strong>{w.title}</strong>{w.kind && <span>{w.kind}</span>}</span>
+                      <span class="wr-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" /></svg></span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      ))}
 
       <section class="ax-section vs-films" aria-labelledby="vsFilms" id="films">
         <div class="ax-wrap">
           <header class="ax-head" style="margin-bottom:0">
-            <h2 class="ax-display" id="vsFilms" data-ax>Exteriors, interiors and environments.</h2>
-            <p class="ax-lead" data-ax>Frames from our films. Select any piece to watch it.</p>
+            <h2 class="ax-display" id="vsFilms" data-ax>{page.filmsHeading}</h2>
+            {page.filmsLead && <p class="ax-lead" data-ax>{page.filmsLead}</p>}
           </header>
         </div>
-        <WorkReel limit={9} heading={false} feature={true} />
+        <WorkReel limit={page.filmsCount} heading={false} feature={true} />
       </section>
 
       <section class="pg-cta ax-dark">
         <div class="ax-wrap">
-          <h2 class="ax-display" data-ax>Need something like this? Send us your drawings.</h2>
-          <p class="ax-lead" data-ax>Tell us what you are working on and we will reply with a clear scope, price and timeline.</p>
+          <h2 class="ax-display" data-ax>{page.closingHeading}</h2>
+          {page.closingLead && <p class="ax-lead" data-ax>{page.closingLead}</p>}
           <div class="pg-actions" data-ax><a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a></div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 ---
 import SEO from "../components/SEO.astro";
+import { email } from "../data/settings";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import Explorer from "../components/Explorer.astro";
@@ -8,11 +9,18 @@ import Logo3D from "../components/Logo3D.astro";
 import "../styles/global.css";
 import { services } from "../data/services";
 import { figures, steps, faqs, audiences } from "../data/site";
+import { getEntry } from "astro:content";
+import { pic } from "../data/media";
+// hero film and pictures: edited in Pages CMS (Home page), src/content/homePage/index.json
+const home = (await getEntry("homePage", "index"))!.data;
+const hero = pic(home.heroPicture);
+const heroTall = home.heroPictureTall ? pic(home.heroPictureTall) : hero;
+const heroFilmTall = home.heroFilmTall ?? home.heroFilm;
 const svcBySlug = Object.fromEntries(services.map((x) => [x.slug, x.title.replace(" & ", " and ")]));
 
 const siteUrl = Astro.site ?? new URL("https://axys3d.com");
 const ld = [
-  { "@context": "https://schema.org", "@type": "Organization", name: "Axys3D", url: siteUrl.href, email: "info@axys3d.com" },
+  { "@context": "https://schema.org", "@type": "Organization", name: "Axys3D", url: siteUrl.href, email },
   { "@context": "https://schema.org", "@type": "WebSite", name: "Axys3D", url: siteUrl.href },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
 ];
@@ -29,8 +37,8 @@ const ld = [
       jsonLd={ld}
       image="/media/adu-1.webp"
     />
-    <link rel="preload" as="image" href="/media/hero-film.webp" imagesrcset="/media/hero-film-sm.webp 900w, /media/hero-film.webp 1720w" imagesizes="100vw" media="(min-width: 901px)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/media/hero-film-tall.webp" media="(max-width: 900px)" fetchpriority="high" />
+    <link rel="preload" as="image" href={hero.src} imagesrcset={hero.srcset} imagesizes="100vw" media="(min-width: 901px)" fetchpriority="high" />
+    <link rel="preload" as="image" href={heroTall.src} media="(max-width: 900px)" fetchpriority="high" />
   </head>
 
   <body>
@@ -39,10 +47,10 @@ const ld = [
       <!-- HERO: the studio's own film fills the screen, the headline sits on it -->
       <section class="hm-hero ax-dark" aria-labelledby="hmTitle">
         <picture class="hm-hero-pic">
-          <source media="(max-width: 900px)" srcset="/media/hero-film-tall.webp" width="540" height="720" />
-          <img src="/media/hero-film.webp" srcset="/media/hero-film-sm.webp 900w, /media/hero-film.webp 1720w" sizes="100vw" width="1720" height="720" alt="Two storey residence at golden hour, modeled and rendered by Axys3D" fetchpriority="high" decoding="async" />
+          <source media="(max-width: 900px)" srcset={heroTall.src} width={heroTall.w} height={heroTall.h} />
+          <img src={hero.src} srcset={hero.srcset} sizes="100vw" width={hero.w} height={hero.h} alt={home.heroAlt} fetchpriority="high" decoding="async" />
         </picture>
-        <video class="hm-hero-film" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-src="/media/hero-film.mp4" data-src-tall="/media/hero-film-tall.mp4"></video>
+        {home.heroFilm && <video class="hm-hero-film" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-src={home.heroFilm} data-src-tall={heroFilmTall}></video>}
         <div class="hm-hero-in ax-wrap">
           <h1 class="hm-title hm-in" id="hmTitle" style="--i:0">From first sketch<br />to final render<i aria-hidden="true"></i></h1>
           <div class="hm-below hm-in" style="--i:1">
@@ -150,7 +158,7 @@ const ld = [
         </div>
       </section>
 
-      <WorkReel />
+      <WorkReel limit={home.reelCount} />
 
       <!-- QUESTIONS -->
       <section class="ax-section" aria-labelledby="faqTitle">
@@ -178,7 +186,7 @@ const ld = [
             <p class="ax-lead" data-ax>A sketch, a PDF set or a Revit model is enough to start. We reply within one working day with a clear scope, price and timeline.</p>
             <div class="hm-actions" data-ax>
               <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
-              <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+              <a href={`mailto:${email}`} class="ax-link">{email}</a>
             </div>
             <p class="hm-assure hm-assure--left" data-ax>No commitment. You approve the scope and price before any work starts.</p>
           </div>

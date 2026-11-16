@@ -1,0 +1,56 @@
+{
+  "heroPicture": "/media/hero-film.webp",
+  "heroPictureTall": "/media/hero-film-tall.webp",
+  "heroFilm": "/media/hero-film.mp4",
+  "heroFilmTall": "/media/hero-film-tall.mp4",
+  "heroAlt": "Two storey residence at golden hour, modeled and rendered by Axys3D",
+  "reelCount": 5,
+  "figures": [
+    {
+      "value": "172",
+      "unit": "",
+      "label": "Projects delivered"
+    },
+    {
+      "value": "43",
+      "unit": "+",
+      "label": "Studio partners"
+    },
+    {
+      "value": "7",
+      "unit": "days",
+      "label": "Brief to first render"
+    },
+    {
+      "value": "4.8",
+      "unit": "/5",
+      "label": "Average client rating"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "What do you need from me to start?",
+      "a": "Whatever you have: a hand sketch, PDF drawings, a CAD file or a Revit model, plus your deadline and the standards or templates you want us to follow. We tell you if anything is missing before we quote."
+    },
+    {
+      "q": "Will the work follow our office standards?",
+      "a": "Yes. We build in your Revit templates, naming rules and sheet setup, and a sample is approved by you before full production starts."
+    },
+    {
+      "q": "Which Revit version do you work in?",
+      "a": "Yours. We work in older Revit releases and the latest one, and we keep your project in the version it is already in so the file opens on your side without an upgrade."
+    },
+    {
+      "q": "Who stays responsible for the design?",
+      "a": "You do. We provide production support. Design decisions, code compliance and professional sign off stay with you and your appointed professionals."
+    },
+    {
+      "q": "Is our project kept confidential?",
+      "a": "Yes. We sign your NDA before you share anything, and we never show a project in our portfolio without your written permission."
+    },
+    {
+      "q": "How do revisions and payment work?",
+      "a": "The number of revisions is agreed in the quote. We work through Upwork and Fiverr, so the platform holds your payment until you approve the delivery."
+    }
+  ]
+}

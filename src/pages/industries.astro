@@ -1,5 +1,6 @@
 ---
 import SEO from "../components/SEO.astro";
+import { email } from "../data/settings";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
@@ -104,7 +105,7 @@ const sectors = [
           <p class="ax-lead" data-ax>Tell us what you are building and what you need next. We reply with a clear scope.</p>
           <div class="pg-act" data-ax>
             <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
-            <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+            <a href={`mailto:${email}`} class="ax-link">{email}</a>
           </div>
           <p class="pg-assure" data-ax>We reply within one working day. You approve the scope and price first.</p>
         </div>

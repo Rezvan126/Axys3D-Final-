@@ -1,11 +1,10 @@
 // Facts and short texts used on more than one page. Change a number here and it changes everywhere.
+// The four figures and the home page questions are edited in Pages CMS: src/content/homePage/index.json.
+// The film tiles moved to src/content/films/index.json.
+import home from "../content/homePage/index.json";
 
-export const figures = [
-  { value: "172", unit: "", label: "Projects delivered" },
-  { value: "43", unit: "+", label: "Studio partners" },
-  { value: "7", unit: "days", label: "Brief to first render" },
-  { value: "4.8", unit: "/5", label: "Average client rating" },
-];
+// the editor leaves out empty values when it saves, so every text falls back to ""
+export const figures = (home.figures ?? []).map((f) => ({ value: f.value, unit: f.unit ?? "", label: f.label }));
 
 export const steps = [
   { title: "Send your brief", text: "Drawings, references and your deadline. A sketch or a PDF set is enough to start." },
@@ -14,27 +13,7 @@ export const steps = [
   { title: "Receive your files", text: "Native Revit, 3ds Max or Blender files, drawings and final images. They are yours to keep and reuse." },
 ];
 
-export const faqs = [
-  { q: "What do you need from me to start?", a: "Whatever you have: a hand sketch, PDF drawings, a CAD file or a Revit model, plus your deadline and the standards or templates you want us to follow. We tell you if anything is missing before we quote." },
-  { q: "Will the work follow our office standards?", a: "Yes. We build in your Revit templates, naming rules and sheet setup, and a sample is approved by you before full production starts." },
-  { q: "Which Revit version do you work in?", a: "Yours. We work in older Revit releases and the latest one, and we keep your project in the version it is already in so the file opens on your side without an upgrade." },
-  { q: "Who stays responsible for the design?", a: "You do. We provide production support. Design decisions, code compliance and professional sign off stay with you and your appointed professionals." },
-  { q: "Is our project kept confidential?", a: "Yes. We sign your NDA before you share anything, and we never show a project in our portfolio without your written permission." },
-  { q: "How do revisions and payment work?", a: "The number of revisions is agreed in the quote. We work through Upwork and Fiverr, so the platform holds your payment until you approve the delivery." },
-];
-
-// Real work from the studio's own portfolio. Clips are short, silent and load only when played.
-export const work = [
-  { id: "residence", title: "Residence interiors and terraces", kind: "Interior visualization" },
-  { id: "lounge", title: "Lounge and home office", kind: "Interior visualization" },
-  { id: "landscape", title: "Garden and landscape", kind: "Landscape visualization" },
-  { id: "kitchen", title: "Kitchen", kind: "Interior visualization" },
-  { id: "office", title: "Office interior", kind: "Commercial visualization" },
-  { id: "bathroom", title: "Bathroom", kind: "Interior visualization" },
-  { id: "environment", title: "Exterior environment", kind: "Environment and real time" },
-  { id: "product", title: "Product visualization", kind: "Product animation" },
-  { id: "exterior", title: "Two storey residence", kind: "Exterior film" },
-];
+export const faqs = (home.faqs ?? []).map((f) => ({ q: f.q, a: f.a }));
 
 // The four kinds of team that hire us. Used by the "built for you" picker on the home page and by the Industries page.
 export const audiences = [

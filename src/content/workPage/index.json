@@ -1,0 +1,17 @@
+{
+  "seoTitle": "Work: Renders, Films and BIM Projects | Axys3D",
+  "seoDescription": "Projects produced in house by Axys3D: Revit models, permit drawing sets, photoreal renders and walkthrough films.",
+  "heading": "Our work, from model to final frame.",
+  "lead": "Everything on this page was produced in house. Client and site details are left out on purpose: we do not publish them without permission.",
+  "heroFilm": "/media/exterior.mp4",
+  "heroPicture": "/media/exterior.webp",
+  "heroFilmLabel": "Exterior film of the two storey residence",
+  "featuredTour": "hillside",
+  "tourHeading": "Walk through it. A virtual tour from the Revit model.",
+  "tourLead": "Six 360 degree views of a split level residence, rendered room by room from our own Revit model and virtually staged. Drag to look around, then follow the arrows from room to room.",
+  "filmsHeading": "Exteriors, interiors and environments.",
+  "filmsLead": "Frames from our films. Select any piece to watch it.",
+  "filmsCount": 9,
+  "closingHeading": "Need something like this? Send us your drawings.",
+  "closingLead": "Tell us what you are working on and we will reply with a clear scope, price and timeline."
+}

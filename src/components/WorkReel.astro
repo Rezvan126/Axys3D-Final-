@@ -2,11 +2,19 @@
 // Work tiles: real stills from the studio's own films. A tile previews its short clip on hover
 // (or while on screen on touch devices) and opens the longer film in a player when selected.
 // Nothing but the still is downloaded until the visitor asks for it.
-import { work } from "../data/site";
+// The films and their order are edited in Pages CMS (Films): src/content/films/index.json.
+// Each film has a short silent preview (`clip`), an optional longer cut (`film`) and a cover picture,
+// which by default is the clip's own poster next to it ("x.mp4" -> "x.webp", written by tools/process-media.mjs).
+import { getEntry } from "astro:content";
+import { pic, posterOf } from "../data/media";
 // `cap`: on phones show the first three and a link to the rest (on by default wherever the heading is shown).
 interface Props { limit?: number; heading?: boolean; feature?: boolean; cap?: boolean }
 const { limit = 5, heading = true, feature = true, cap = heading } = Astro.props;
-const items = work.slice(0, limit);
+const all = (await getEntry("films", "index"))?.data.films ?? [];
+const items = all
+  .filter((f) => f.visible)
+  .slice(0, limit)
+  .map((f) => ({ ...f, film: f.film ?? f.clip, cover: pic(f.poster ?? posterOf(f.clip), undefined, { w: 1600, h: 900 }) }));
 ---
 
 <section class:list={["ax-section wr ax-dark", cap && items.length > 3 && "wr--cap"]} id="work" aria-labelledby={heading ? "wrTitle" : undefined}>
@@ -22,8 +30,8 @@ const items = work.slice(0, limit);
     <ul class="wr-grid">
       {items.map((w, i) => (
         <li class:list={["wr-item", feature && i === 0 && "wr-item--wide"]} data-ax style={`--ax-d:${(i % 2) * 0.07}s`}>
-          <button type="button" class="wr-tile" data-clip={`/media/${w.id}.mp4`} data-film={`/media/${w.id}-full.mp4`} data-title={w.title} aria-label={`Play film: ${w.title}`}>
-            <img src={`/media/${w.id}.webp`} srcset={`/media/${w.id}-sm.webp 800w, /media/${w.id}.webp 1600w`} sizes={feature && i === 0 ? "(max-width: 1300px) 94vw, 1240px" : "(max-width: 760px) 94vw, 610px"} width="1600" height="900" alt="" loading="lazy" decoding="async" />
+          <button type="button" class="wr-tile" data-clip={w.clip} data-film={w.film} data-title={w.title} aria-label={`Play film: ${w.title}`}>
+            <img src={w.cover.src} srcset={w.cover.srcset} sizes={feature && i === 0 ? "(max-width: 1300px) 94vw, 1240px" : "(max-width: 760px) 94vw, 610px"} width={w.cover.w} height={w.cover.h} alt="" loading="lazy" decoding="async" />
             <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
             <span class="wr-cap"><strong>{w.title}</strong><span>{w.kind}</span></span>
             <span class="wr-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" /></svg></span>

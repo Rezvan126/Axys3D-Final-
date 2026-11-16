@@ -171,6 +171,119 @@ const contactPage = defineCollection({
   }),
 });
 
+// ---------------------------------------------------------------------------
+// Visual work and site settings, edited by the owner in Pages CMS (/admin, see EDITING.md and .pages.yml).
+// Paths are site addresses such as "/media/uploads/kitchen.webp". The editor drops empty values and empty
+// lists when it saves, so everything that may be left blank is optional or has a default.
+// ---------------------------------------------------------------------------
+const mediaPath = z.string().regex(/^\/media\//, "Pictures and films live under /media/");
+const text = z.string().default("");
+
+// 12. Projects on the Work page (/visuals/), one JSON file each
+const projects = defineCollection({
+  loader: glob({ pattern: "*.json", base: "./src/content/projects" }),
+  schema: z.object({
+    slug: z.string().regex(/^[a-z0-9-]+$/).optional(),
+    title: z.string(),
+    summary: text,
+    order: z.coerce.number().default(100),
+    visible: z.boolean().default(true),
+    pictureName: z.string().default("picture"),
+    tour: text,
+    links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
+    gallery: z
+      .array(
+        z.object({
+          image: mediaPath,
+          alt: text,
+          // optional: the size a page has always declared for an older picture; new pictures leave it out
+          width: z.number().optional(),
+          height: z.number().optional(),
+        }),
+      )
+      .default([]),
+    drawings: z.array(z.object({ image: mediaPath, title: z.string(), text: text, alt: text })).default([]),
+    films: z.array(z.object({ title: z.string(), kind: text, clip: mediaPath, film: mediaPath.optional(), poster: mediaPath.optional() })).default([]),
+  }),
+});
+
+// 13. Home page: hero film and pictures, the four figures, the questions
+const homePage = defineCollection({
+  loader: glob({ pattern: "index.json", base: "./src/content/homePage" }),
+  schema: z.object({
+    heroPicture: mediaPath,
+    heroPictureTall: mediaPath.optional(),
+    heroFilm: mediaPath.optional(),
+    heroFilmTall: mediaPath.optional(),
+    heroAlt: text,
+    reelCount: z.coerce.number().default(5),
+    figures: z.array(z.object({ value: z.string(), unit: text, label: z.string() })).default([]),
+    faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
+  }),
+});
+
+// 14. Work page (/visuals/): opening, featured tour, films and closing words
+const workPage = defineCollection({
+  loader: glob({ pattern: "index.json", base: "./src/content/workPage" }),
+  schema: z.object({
+    seoTitle: z.string(),
+    seoDescription: text,
+    heading: z.string(),
+    lead: text,
+    heroFilm: mediaPath.optional(),
+    heroPicture: mediaPath,
+    heroFilmLabel: text,
+    featuredTour: text,
+    tourHeading: z.string(),
+    tourLead: text,
+    filmsHeading: z.string(),
+    filmsLead: text,
+    filmsCount: z.coerce.number().default(9),
+    closingHeading: z.string(),
+    closingLead: text,
+  }),
+});
+
+// 15. Last stage of the interactive building on the home page
+const explorer = defineCollection({
+  loader: glob({ pattern: "index.json", base: "./src/content/explorer" }),
+  schema: z.object({
+    still: mediaPath,
+    stillAlt: text,
+    clips: z.array(z.object({ label: z.string(), film: mediaPath })).min(1),
+  }),
+});
+
+// 16. Films: the film tiles on the home page and the Work page, in this order
+const films = defineCollection({
+  loader: glob({ pattern: "index.json", base: "./src/content/films" }),
+  schema: z.object({
+    films: z
+      .array(
+        z.object({
+          title: z.string(),
+          kind: text,
+          clip: mediaPath,
+          film: mediaPath.optional(),
+          poster: mediaPath.optional(),
+          visible: z.boolean().default(true),
+        }),
+      )
+      .default([]),
+  }),
+});
+
+// 17. Contact email, Upwork and Fiverr links, social profiles
+const siteSettings = defineCollection({
+  loader: glob({ pattern: "index.json", base: "./src/content/siteSettings" }),
+  schema: z.object({
+    email: z.email(),
+    upworkUrl: text,
+    fiverrUrl: text,
+    social: z.array(z.object({ name: z.string(), url: text })).default([]),
+  }),
+});
+
 export const collections = {
   services,
   industriesPage,
@@ -179,4 +292,10 @@ export const collections = {
   insights,
   aboutPage,
   contactPage,
+  projects,
+  homePage,
+  workPage,
+  explorer,
+  films,
+  siteSettings,
 };

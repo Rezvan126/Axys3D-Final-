@@ -5,22 +5,17 @@
 // Without WebGL, with reduced motion or with data saving on, it becomes a plain list with the final render.
 import model from "../data/house-model.json"; // written by tools/build-model-navis.py: real counts, never typed in by hand
 
+import { getEntry } from "astro:content";
+import { pic } from "../data/media";
+
 // FINAL STAGE MEDIA: the still and the film clips shown in the last stage ("Render").
-// Change the files and labels here and nowhere else.
+// Edited in Pages CMS (3D building, last stage): src/content/explorer/index.json.
+// Keep it the same house as the model above, so the last stage shows what that model became.
+const media = (await getEntry("explorer", "index"))!.data;
+const still = pic(media.still);
 const render = {
-  still: {
-    // the same split level house as the model above, so the last stage shows what that model became
-    src: "/media/amber-3.webp",
-    srcset: "/media/amber-3-sm.webp 800w, /media/amber-3.webp 1920w",
-    width: 1920,
-    height: 1080,
-    alt: "Final render of the split level residence entry and garage at golden hour",
-  },
-  clips: [
-    { label: "Front", src: "/media/amber-film-hero.mp4" },
-    { label: "Street", src: "/media/amber-film-wide.mp4" },
-    { label: "Detail", src: "/media/amber-film-detail.mp4" },
-  ],
+  still: { src: still.src, srcset: still.srcset, width: still.w, height: still.h, alt: media.stillAlt },
+  clips: media.clips.map((c) => ({ label: c.label, src: c.film })),
 };
 const modelUrl = "/models/house.glb";
 

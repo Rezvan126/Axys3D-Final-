@@ -4,6 +4,7 @@
 // Content wahi use hota hai jo service ke frontmatter + markdown mein pehle se hai (nayi details nahi bharni).
 
 import SEO from "../../components/SEO.astro";
+import { email } from "../../data/settings";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import Sheets from "../../components/Sheets.astro";
@@ -410,7 +411,7 @@ const context = engagementContext.slice(0, 4);
           <p class="ax-lead" data-ax>A sketch, a PDF set or a Revit model is enough to start. We reply within one working day with a clear scope, price and timeline.</p>
           <div class="pg-act" data-ax>
             <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
-            <a href="mailto:info@axys3d.com" class="ax-link">info@axys3d.com</a>
+            <a href={`mailto:${email}`} class="ax-link">{email}</a>
           </div>
           <p class="pg-assure" data-ax>No commitment. We sign your NDA before you share files.</p>
         </div>

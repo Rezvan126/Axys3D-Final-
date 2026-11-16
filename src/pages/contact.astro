@@ -1,5 +1,6 @@
 ---
 import SEO from "../components/SEO.astro";
+import { email } from "../data/settings";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
@@ -32,7 +33,7 @@ import { services } from "../data/services";
               <li>Built in your templates and standards</li>
               <li>Checked in house before it reaches you</li>
             </ul>
-            <p class="ct-mail">Prefer email? <a href="mailto:info@axys3d.com">info@axys3d.com</a></p>
+            <p class="ct-mail">Prefer email? <a href={`mailto:${email}`}>{email}</a></p>
           </div>
 
           <form class="ax-form ct-form" id="contact-form" action="/mail/contact-handler.php" method="POST" novalidate>

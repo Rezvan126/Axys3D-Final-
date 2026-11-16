@@ -1,0 +1,67 @@
+{
+  "films": [
+    {
+      "title": "Residence interiors and terraces",
+      "kind": "Interior visualization",
+      "clip": "/media/residence.mp4",
+      "film": "/media/residence-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Lounge and home office",
+      "kind": "Interior visualization",
+      "clip": "/media/lounge.mp4",
+      "film": "/media/lounge-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Garden and landscape",
+      "kind": "Landscape visualization",
+      "clip": "/media/landscape.mp4",
+      "film": "/media/landscape-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Kitchen",
+      "kind": "Interior visualization",
+      "clip": "/media/kitchen.mp4",
+      "film": "/media/kitchen-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Office interior",
+      "kind": "Commercial visualization",
+      "clip": "/media/office.mp4",
+      "film": "/media/office-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Bathroom",
+      "kind": "Interior visualization",
+      "clip": "/media/bathroom.mp4",
+      "film": "/media/bathroom-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Exterior environment",
+      "kind": "Environment and real time",
+      "clip": "/media/environment.mp4",
+      "film": "/media/environment-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Product visualization",
+      "kind": "Product animation",
+      "clip": "/media/product.mp4",
+      "film": "/media/product-full.mp4",
+      "visible": true
+    },
+    {
+      "title": "Two storey residence",
+      "kind": "Exterior film",
+      "clip": "/media/exterior.mp4",
+      "film": "/media/exterior-full.mp4",
+      "visible": true
+    }
+  ]
+}

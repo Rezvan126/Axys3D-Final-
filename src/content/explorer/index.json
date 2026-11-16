@@ -1,0 +1,18 @@
+{
+  "still": "/media/amber-3.webp",
+  "stillAlt": "Final render of the split level residence entry and garage at golden hour",
+  "clips": [
+    {
+      "label": "Front",
+      "film": "/media/amber-film-hero.mp4"
+    },
+    {
+      "label": "Street",
+      "film": "/media/amber-film-wide.mp4"
+    },
+    {
+      "label": "Detail",
+      "film": "/media/amber-film-detail.mp4"
+    }
+  ]
+}

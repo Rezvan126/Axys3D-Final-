@@ -1,0 +1,88 @@
+{
+  "slug": "two-storey-residence",
+  "title": "Two storey residence. Revit model to final render.",
+  "summary": "A new two storey unit added to an existing house. We modeled both in Revit, produced the permit drawing set, then built the scene and rendered the exterior.",
+  "order": 1,
+  "visible": true,
+  "pictureName": "exterior render",
+  "links": [
+    {
+      "label": "Turn this building in 3D",
+      "href": "/#explore"
+    }
+  ],
+  "gallery": [
+    {
+      "image": "/media/adu-1.webp",
+      "alt": "Exterior render 1 of the two storey residence"
+    },
+    {
+      "image": "/media/adu-14.webp",
+      "alt": "Exterior render 2 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "image": "/media/adu-9.webp",
+      "alt": "Exterior render 3 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "image": "/media/adu-15.webp",
+      "alt": "Exterior render 4 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "image": "/media/adu-11.webp",
+      "alt": "Exterior render 5 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "image": "/media/adu-16.webp",
+      "alt": "Exterior render 6 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "image": "/media/adu-10.webp",
+      "alt": "Exterior render 7 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "image": "/media/adu-13.webp",
+      "alt": "Exterior render 8 of the two storey residence",
+      "width": 1536,
+      "height": 1024
+    }
+  ],
+  "drawings": [
+    {
+      "image": "/media/svc-plan.webp",
+      "title": "Floor plan",
+      "text": "Cut straight from the coordinated Revit model: existing house on the left, the new unit on the right.",
+      "alt": "Floor plan of the residence, from the project model"
+    },
+    {
+      "image": "/media/svc-elevation.webp",
+      "title": "Elevation",
+      "text": "Elevations and sections come from the same model, so they always agree with the plans.",
+      "alt": "Elevation of the residence, from the project model"
+    },
+    {
+      "image": "/media/svc-model.webp",
+      "title": "3D model",
+      "text": "The existing house and the new two storey addition, modeled together.",
+      "alt": "3D model of the residence, from the project model"
+    },
+    {
+      "image": "/media/svc-bim.webp",
+      "title": "BIM detail",
+      "text": "434 model elements across architecture, structure, electrical, plumbing and ventilation.",
+      "alt": "BIM detail of the residence, from the project model"
+    }
+  ]
+}
