@@ -50,13 +50,6 @@
       "visible": true
     },
     {
-      "title": "Product visualization",
-      "kind": "Product animation",
-      "clip": "/media/product.mp4",
-      "film": "/media/product-full.mp4",
-      "visible": true
-    },
-    {
       "title": "Two storey residence",
       "kind": "Exterior film",
       "clip": "/media/exterior.mp4",
