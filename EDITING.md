@@ -46,7 +46,7 @@ If the first publish stops at "Upload to Hostinger" with a message about TLS or 
 **E. Connect the editor**
 1. Go to **app.pagescms.org** and choose **Sign in with GitHub**.
 2. When asked, allow Pages CMS to see **only** the `axys3d-site` repository.
-3. Open `axys3d-site`, branch `main`. You now see the editor: Work page, Home page, Text pages, Contact and profile links.
+3. Open `axys3d-site`, branch `main`. You now see the editor: Work page, Home page, Text pages, Team on the Hire us page, Contact and profile links.
 4. Bookmark **yourdomain/admin**. That is your way in from now on.
 
 ---
@@ -82,6 +82,7 @@ The rule for every picture: **upload a new file**. You do not need to resize or 
 - Home page figures and questions: **Home page**, **Opening film, figures and questions**.
 - Services, industries, guides, About and Contact: **Text pages**.
 - Email, Upwork, Fiverr and social links: **Contact and profile links**. An empty link is simply not shown.
+- Team photos, badges, figures and profile links on the Hire us page: **Team on the Hire us page**. Open a person, click the photo to upload a new one (any size; it shows as a small circle), change the figures from their Upwork profile, and update "When the figures were last copied". Untick **Show on the website** to hide someone.
 
 **Replace a virtual tour room picture**
 1. **Work page**, **Virtual tours**, open the tour, open the room under **Rooms**.

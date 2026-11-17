@@ -800,6 +800,92 @@ content:
           - { name: seoTitle, label: Title in Google, type: string, options: { maxlength: 70 } }
           - { name: seoDescription, label: Description in Google, type: text, options: { maxlength: 160 } }
 
+  # ------------------------------------------------------------------ TEAM
+  - name: team
+    label: Team on the Hire us page
+    description: "The profile cards in Hire one of us by name. Change a photo, a figure or a link here; drag to reorder; untick Show to hide a person. Copy the figures from each Upwork profile."
+    type: file
+    path: src/content/team/index.json
+    format: json
+    fields:
+      - name: checked
+        label: When the figures were last copied
+        type: string
+        description: "Shown under the cards, for example: November 2026."
+      - name: members
+        label: People
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{name}"
+        fields:
+          - name: name
+            label: Name
+            type: string
+            required: true
+            description: "As on Upwork: first name and the first letter of the surname, for example: Attiq R."
+          - name: photo
+            label: Photo
+            type: image
+            description: "A square head and shoulders photo, JPG, PNG or WebP of any size; it is shown as a small circle and the site makes the web size itself."
+            options:
+              media: media
+              path: public/media/uploads
+              extensions: [jpg, jpeg, png, webp]
+          - name: role
+            label: One line about what they do
+            component: line
+            required: true
+          - name: upwork
+            label: Upwork profile link
+            type: string
+            description: "The full address, starting with https://. Leave empty if none."
+          - name: fiverr
+            label: Fiverr profile link
+            type: string
+            description: "The full address, starting with https://. Leave empty if none."
+          - name: verified
+            label: Verified on Upwork (blue tick)
+            type: boolean
+            default: true
+          - name: badge
+            label: Upwork badge
+            type: select
+            options:
+              values: ["Top Rated Plus", "Top Rated", "Rising Talent"]
+            description: "Leave empty for no badge."
+          - name: jobSuccess
+            label: Job Success, percent
+            type: number
+            description: "For example 100. Leave empty to hide it."
+          - name: rating
+            label: Rating out of 5
+            type: number
+            description: "For example 5. Leave empty to hide it."
+          - name: reviews
+            label: Number of reviews
+            type: number
+          - name: jobs
+            label: Total jobs
+            type: number
+          - name: hours
+            label: Total hours
+            type: number
+            description: "Written in full, for example 1700."
+          - name: earned
+            label: Total earned on Upwork, US dollars
+            type: number
+            description: "Numbers only, for example 35000."
+          - name: rate
+            label: Hourly rate
+            type: string
+            description: "For example: $25"
+          - name: visible
+            label: Show on the website
+            type: boolean
+            default: true
+
   # ------------------------------------------------------------------ SETTINGS
   - name: siteSettings
     label: Contact and profile links
