@@ -67,7 +67,21 @@ jobs:
       - name: Build the site
         run: npx astro build
 
+      # until the three FTP secrets are saved, the site is still built (so mistakes show up) but not uploaded
+      - name: Check the Hostinger details are set
+        id: ftp
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        run: |
+          if [ -z "$FTP_SERVER" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Built, but not uploaded: add the FTP_SERVER, FTP_USERNAME and FTP_PASSWORD secrets (see EDITING.md)."
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Upload to Hostinger
+        if: steps.ftp.outputs.ready == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
